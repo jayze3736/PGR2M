@@ -19,7 +19,7 @@ class FocalFrequencyLossWrapper(BaseLossWrapper):
             loss = loss + self.ffl(de_feat[i], en_feat[i])
             loss_terms.append(self.ffl(de_feat[i], en_feat[i]))
 
-        loss = loss / len(en_feat) # 평균
+        loss = loss / len(en_feat) 
         self.avg_loss += self.weight['loss_ffl'] * loss
 
         losses = {} 
@@ -51,7 +51,7 @@ class HTDLossWrapper(BaseLossWrapper):
 
     def update(self, pred_motion, pred_rel_pose, gt_motion):
         # forward
-        # vel loss를 사용할 경우
+        
         mocons_loss = self.weight['loss_mocons'] * self.loss(pred_motion, gt_motion)
         pocons_loss = self.weight['loss_pocons'] * self.loss.forward_pose_diff(pred_rel_pose, gt_motion[:, ::self.unit_length, 4:4+3 * (self.joints_num - 1)])
         self.avg_loss += mocons_loss
@@ -86,7 +86,7 @@ class DisentangleLossBatchWrapper(BaseLossWrapper):
 
     def update(self, pose_code, codebook):
         # forward
-        # vel loss를 사용할 경우
+        
         loss = self.weight['loss_disentangle_batch'] * self.loss(pose_code, codebook)
         self.avg_loss += loss
 
@@ -116,7 +116,7 @@ class DisentangleLossWrapper(BaseLossWrapper):
 
     def update(self, codebook):
         # forward
-        # vel loss를 사용할 경우
+        
         loss = self.weight['loss_disentangle'] * self.loss(codebook)
         self.avg_loss += loss
 
@@ -146,7 +146,7 @@ class GroupAwareContrastiveLossWrapper(BaseLossWrapper):
 
     def update(self, codebook):
         # forward
-        # vel loss를 사용할 경우
+        
         loss = self.weight['loss_contrastive'] * self.loss(codebook)
         self.avg_loss += loss
 
@@ -180,7 +180,7 @@ class ReConsLossWrapper(BaseLossWrapper):
         
     def update(self, pred, gt, mask=None):
         # forward
-        # vel loss를 사용할 경우
+        
         loss = self.weight['loss_recons'] * self.loss(pred, gt, mask, self.mean_by_sample)
         self.avg_loss += loss
         
@@ -235,7 +235,7 @@ class ReconsJointFormatLossWrapper(BaseLossWrapper):
             gt = recover_from_ric(gt_denorm.float().cuda(), joints_num=self.nb_joints)
 
         # forward
-        # vel loss를 사용할 경우
+        
         loss = self.weight['loss_recons'] * self.loss(pred, gt, mask, self.mean_by_sample)
         self.avg_loss += loss
         
@@ -282,7 +282,7 @@ class ReconsJointWiseLossWrapper(BaseLossWrapper):
             
     def update(self, pred, gt, mask=None):
         # forward
-        # vel loss를 사용할 경우
+        
         joint_losses = self.loss(pred, gt, mask, out_list=False)
         joint_vel_losses = self.loss.forward_vel(pred, gt, self.vel_mode, mask, out_list=False)
 
@@ -435,7 +435,7 @@ class GroupWiseL1LossWrapper(BaseLossWrapper):
         
     def update(self, pred_motion, gt_codes, mask=None):
         # forward
-        # vel loss를 사용할 경우
+        
 
         pred_codes = self.code_ext(pred_motion)
 
@@ -467,7 +467,7 @@ class OrthogonalLossWrapper(BaseLossWrapper):
         
     def update(self, codebook):
         # forward
-        # vel loss를 사용할 경우
+        
         loss_orthogonal, self.centroid_gram_mat = self.loss(codebook)
         loss = self.weight['ortho_loss'] * loss_orthogonal
         self.avg_loss += loss

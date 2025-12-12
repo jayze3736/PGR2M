@@ -102,7 +102,7 @@ class QuanizerBasedAttention(nn.Module):
         one_hot = hard_one_hot - soft_one_hot.detach() + soft_one_hot
 
         # latent feature
-        z_q = einsum('b n, n d -> b d', one_hot, value) # (B * N_seq, C) -> hard label로 만들어진 
+        z_q = einsum('b n, n d -> b d', one_hot, value) # (B * N_seq, C)
         z_q_2 = einsum('b n, n d -> b d', hard_one_hot, value) # (B * N_seq, C)
 
         return logits, idx_N, z_q, z_q_2

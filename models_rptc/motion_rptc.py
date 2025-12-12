@@ -25,7 +25,7 @@ class ResidualPoseTemporalComplementor(nn.Module):
                  shared_codebook=False,
                  quantize_dropout_prob=0.2,
                  quantize_dropout_cutoff_index=0,
-                 rvq_nb_code=64,           # RVQ 전용 nb_code
+                 rvq_nb_code=64,           
                  mu=0.99,
                  resi_beta=1.0,
                  vq_loss_beta=1.0,
@@ -92,7 +92,6 @@ class ResidualPoseTemporalComplementor(nn.Module):
             p_latent = self.pose_reps(code_indices)
             B, T, C = p_latent.shape
             
-            # gt_motion -> Encoder -> z_latent(일종의 Latent Guidance)
             z_latent = self.encoder(motion)
 
             if detach_p_latent:
@@ -143,11 +142,10 @@ class ResidualPoseTemporalComplementor(nn.Module):
             p_latent = p_latent.view(B, T, -1).permute(0, 2, 1).contiguous()
             z_c_latent = p_latent
         else:
-            # gt_motion -> Encoder -> z_latent(일종의 Latent Guidance)
             z_latent = self.encoder(motion)
 
             if detach_p_latent:
-                r_latent = z_latent - p_latent.detach() # vq loss를 계산하는데 gradient가 사용되지 않으며, 오로지 residual code를 업데이트하고 pose code는 오로지 reconstruction loss로부터 pose semantic을 학습
+                r_latent = z_latent - p_latent.detach() 
             else:
                 r_latent = z_latent - p_latent 
 
@@ -155,19 +153,14 @@ class ResidualPoseTemporalComplementor(nn.Module):
             p_latent = p_latent.view(B, T, -1).permute(0, 2, 1).contiguous()
 
             # Retrieve latent representation as linear combination of codes
-            # residual -> Quantizer -> 최종 latent
             # r_quatized, indices, loss, perplexity, all_codes = self.rvq(r_latent, return_all_codes=True, sample_codebook_temp=1.0)
             out = self.rvq(r_latent, return_all_codes=True, sample_codebook_temp=1.0, force_dropout_index=force_dropout_index)
 
             r_quatized = out['quantized_out']
-            
-            # complemented(보상, 보완)
-            # 최종 latent + p_latent -> Decoder
 
             z_c_latent = p_latent + self.resi_beta * r_quatized
         
         ## decoder
-        # p_latent -> mlp projection -> 512 -> 63차원으로 변경(relative joint position 차원)
 
         x_decoder = self.decoder(z_c_latent)
         x_out = self.postprocess(x_decoder)

@@ -361,13 +361,12 @@ ONGROUND_POSECODES = [
 ## ALL ELEMENTARY POSECODES ##
 ##############################
 
-# REC: 계산해야하는 pose code의 string 정보를 저장
 ALL_ELEMENTARY_POSECODES = {
     "angle": ANGLE_POSECODES,
     "distance": DISTANCE_POSECODES,
-    "relativePosX": [[p[0], p[1], p[2][0], p[3][0], p[4][0]] for p in RELATIVEPOS_POSECODES if p[2][0]], # p[2][0] -> x(왼쪽 오른쪽 방향) 관련(at right, at left)
-    "relativePosY": [[p[0], p[1], p[2][1], p[3][1], p[4][1]] for p in RELATIVEPOS_POSECODES if p[2][1]], # p[2][1] -> y(앞,뒤 방향) 관련(front, behind)
-    "relativePosZ": [[p[0], p[1], p[2][2], p[3][2], p[4][2]] for p in RELATIVEPOS_POSECODES if p[2][2]], # p[2][2] -> z(위, 아래 방향) 관련(above, below)
+    "relativePosX": [[p[0], p[1], p[2][0], p[3][0], p[4][0]] for p in RELATIVEPOS_POSECODES if p[2][0]], # p[2][0]
+    "relativePosY": [[p[0], p[1], p[2][1], p[3][1], p[4][1]] for p in RELATIVEPOS_POSECODES if p[2][1]], # p[2][1]
+    "relativePosZ": [[p[0], p[1], p[2][2], p[3][2], p[4][2]] for p in RELATIVEPOS_POSECODES if p[2][2]], # p[2][2]
     "relativeVAxis": RELATIVEVAXIS_POSECODES,
     "onGround": ONGROUND_POSECODES,
     # ADD_POSECODE_KIND

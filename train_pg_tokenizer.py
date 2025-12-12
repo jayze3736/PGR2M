@@ -65,12 +65,10 @@ WRAPPER_CLASS_MAP = {
     'HTDLossWrapper': HTDLossWrapper
 }
 
-##### ---- Directory Folder 설정 ---- #####
 args = option_vq.get_args_parser()
 torch.manual_seed(args.seed)
 np.random.seed(args.seed)
 
-# 현재 날짜와 시각을 지정된 형식으로 얻음
 date_time = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
 
 args.out_dir = os.path.join(args.out_dir, f'{args.exp_name}')
@@ -180,7 +178,6 @@ def gram(codebook):
     code_range = list(vq_to_range.items())[:-2]
     cat_centroid = []
     
-    # category 그룹 별 centroid 구하기
     for idx, cat_range in code_range:
         end, start = cat_range
 
@@ -196,7 +193,7 @@ def gram(codebook):
     norms = torch.norm(cat_centroid, dim=1, keepdim=True)
 
     # norm2
-    normalized_cat_centroid = cat_centroid / norms # 방향 벡터(원점 기준)
+    normalized_cat_centroid = cat_centroid / norms 
 
     # 
     gram_matrix = normalized_cat_centroid @ normalized_cat_centroid.T  # shape [K, K]
@@ -282,10 +279,10 @@ if args.resume_pth:
         loaded_nb_iter = ckpt['nb_iter']
         logger.info(f"Resumed at iteration {loaded_nb_iter}")
     else:
-        loaded_nb_iter = 1  # 혹은 초기값
+        loaded_nb_iter = 1  
         logger.warning("nb_iter not found in checkpoint, starting from 1")
 else:
-    loaded_nb_iter = 1  # 혹은 초기값
+    loaded_nb_iter = 1  
     logger.warning("nb_iter not found in checkpoint, starting from 1")
     
 net.train()
@@ -296,8 +293,6 @@ optimizer = optim.AdamW(net.parameters(), lr=args.lr, betas=(0.9, 0.99), weight_
 scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones=args.lr_scheduler, gamma=args.gamma)
 
 ### Define Loss ###
-
-# template 1. loss를 측정
 
 # if args.loss_format == 'h3d':
 #     Loss = losses.ReConsLoss(args.recons_loss, args.nb_joints)
@@ -311,8 +306,6 @@ def load_loss_wrappers(logger, cfg, external_params=None):
         name = item.get('name', wrapper_type)
         params = item.get('params', {})
 
-        # val_loader 같은 외부 주입
-
         cls = WRAPPER_CLASS_MAP.get(wrapper_type)
         if cls is None:
             raise ValueError(f"Unknown wrapper type: {wrapper_type}")
@@ -323,20 +316,6 @@ def load_loss_wrappers(logger, cfg, external_params=None):
         wrappers[name] = cls(**params)
 
     return wrappers
-
-# def flatten_and_sum_losses(losses, is_use_in_loss):
-#     total = 0
-
-#     for loss, use_in_loss in zip(losses, is_use_in_loss):
-#         # 실제 loss 반영이 되지 않을 경우
-#         if not use_in_loss:
-#             continue
-
-#         if isinstance(loss, (list, tuple)):
-#             total += flatten_and_sum_losses(loss)
-#         else:
-#             total += loss
-#     return total
 
 def flatten_and_sum_losses(losses, is_use_in_loss):
     total = 0.0
@@ -350,8 +329,6 @@ wrappers = load_loss_wrappers(logger, loss_cfg)
 eval_loss_wrapper = load_loss_wrappers(logger, loss_cfg)
 
 ##### ------ warm-up ------- #####
-
-# template 2. avg를 측정하는 변수가 존재
 
 avg_loss_total = 0.
 avg_rvq_commit = 0.
@@ -429,7 +406,6 @@ for nb_iter in range(loaded_nb_iter, args.warm_up_iter):
 
     loss_dict = {}
     is_use_in_loss = []
-    # change 1. loss 계산 및 업데이트
     for name, wrapper in wrappers.items():
         loss_name = str(wrapper)
         use_in_loss = wrapper.is_use_in_loss()
@@ -454,7 +430,7 @@ for nb_iter in range(loaded_nb_iter, args.warm_up_iter):
             else:
                 loss_ = wrapper.update(pred_motion, gt_motion)
 
-        loss_dict.update(loss_) # vel loss도 추가됨
+        loss_dict.update(loss_) 
 
         if use_in_loss:
             is_use_in_loss += [True for _ in range(len(list(loss_.values())))]
@@ -463,10 +439,8 @@ for nb_iter in range(loaded_nb_iter, args.warm_up_iter):
 
     loss_list = list(loss_dict.values())
 
-    # change 2. loss 종합
     loss = flatten_and_sum_losses(loss_list, is_use_in_loss)
 
-    # 외부 loss
     if args.use_rvq and not p_drop_res:
         loss += args.rvq_commit * rvq_commit_loss
         loss += args.params_soft_ent_loss * ent_loss
@@ -493,10 +467,7 @@ for nb_iter in range(loaded_nb_iter, args.warm_up_iter):
 
     ## record ##
     
-    # template 4. avg에 합산 + args.loss를 저장
-    
     if nb_iter % args.print_iter == 0:
-    # if True:
 
         for met_name, met_val in avg_metrics_dict.items():
             print_value = met_val / args.print_iter
@@ -517,18 +488,11 @@ for nb_iter in range(loaded_nb_iter, args.warm_up_iter):
             # if args.use_rvq:
             #     logger.info(f"Warmup. Iter {nb_iter} : lr {current_lr:.5f} \t RVQ_Commit_Loss .  {avg_rvq_commit:.5f}")
             #     logger.info(f"Warmup. Iter {nb_iter} : lr {current_lr:.5f} \t Perplexity .  {avg_perplexity:.5f}")
-        
-        # template 5. 외부 변수로부터 값을 출력할 수 있도록 접근 가능해야함
-
-        # change 3. wrapper에서 weight() 호출하여 값 얻기 + print_iter로 나누기
+    
 
         for name, wrapper in wrappers.items():
             avg_loss_dict = wrapper.state()
             loss_name = str(wrapper)
-
-            # print(f"# DEBUG: wrapper name:{str(wrapper)}")
-            # print(f"# DEBUG: wrapper avg_loss_dict:{avg_loss_dict}")
-            # print()
 
             centroid_gram_mat = gram(codebook)
             tensorboard_add_image_pw_sim(writer=writer, codebook=codebook, tag="./Image/Codebook_pairwise_similarity(warm_up)", nb_iter=nb_iter)
@@ -541,19 +505,8 @@ for nb_iter in range(loaded_nb_iter, args.warm_up_iter):
                 logger.info(f"Warmup. Iter {nb_iter} :  lr {current_lr:.5f} \t {name}.  {avg_loss:.5f}")
                 # wandb.log({"Rec Loss": avg_loss})
 
-
-        # template 6. 외부에서 참조시 __str__에 해당하는 id가 필요하며 반복적인 코드를 최소화
-        # change 4. wrapper에서 state() 호출하여 현재 loss 이름과 loss 값 출력
-
-        # template 7. 외부에서 정해진 타이밍에 따라 0으로 초기화
-
-        # change 5. wrapper에서 reset() 호출
             wrapper.reset()
             avg_loss_dict = wrapper.state()
-
-            # print("# DEBUG: avg_loss_dict reset")
-            # print(f"# DEBUG: avg_loss_dict:{avg_loss_dict}")
-            # print()
 
         avg_metrics_dict = reset(avg_metrics_dict)
         avg_residual_metric_dict = reset(avg_residual_metric_dict)
@@ -564,7 +517,6 @@ def inv_transform(data, mean, std):
 
 ##### ---- Training ---- #####
 
-# change 6. wrapper에서 reset() 호출 
 for name, wrapper in wrappers.items():
     avg_loss_dict = wrapper.reset()
 
@@ -610,7 +562,6 @@ for nb_iter in range(1, args.total_iter + 1):
     loss_dict = {}
     is_use_in_loss = []
 
-    # change 7. wrapper에서 update() 호출
     for name, wrapper in wrappers.items():
         loss_name = str(wrapper)
         use_in_loss = wrapper.is_use_in_loss()
@@ -642,10 +593,8 @@ for nb_iter in range(1, args.total_iter + 1):
         else:
             is_use_in_loss += [False for _ in range(len(list(loss_.values())))]
     
-    # change 2. loss 종합
     loss_list = list(loss_dict.values())
     # print(f"#DEBUG loss_list:{loss_list}")
-    # change 2. loss 종합
     loss = flatten_and_sum_losses(loss_list, is_use_in_loss)
 
     # print(f"#DEBUG loss:{loss}")
@@ -695,8 +644,6 @@ for nb_iter in range(1, args.total_iter + 1):
             writer.add_scalar(f'./Train/{met_name}', print_value, nb_iter)
             logger.info(f"Train. Iter {nb_iter} :  \t {met_name}.  {print_value:.5f}")
 
-        
-        # change 9. wrapper에서 state() 호출 및 나누기
         for name, wrapper in wrappers.items():
             avg_loss_dict = wrapper.state()
             weight_dict = wrapper.return_weights()
@@ -707,7 +654,6 @@ for nb_iter in range(1, args.total_iter + 1):
                 avg_loss /= args.print_iter
 
                 if is_use_in_loss:
-                    # change 10. wrapper list에 대해서 logging
                     writer.add_scalar(f'./Train/{name}', avg_loss, nb_iter)
                     logger.info(f"Train. Iter {nb_iter} : \t {name}.  {avg_loss:.5f}")
                 else:
@@ -760,8 +706,6 @@ for nb_iter in range(1, args.total_iter + 1):
             with torch.no_grad():
                 net.eval()
 
-                # change 13. evaluation만 측정하는 wrapper가 필요할 듯
-
                 batch_iter = 0.
                 for batch in val_loader:
                     
@@ -791,14 +735,12 @@ for nb_iter in range(1, args.total_iter + 1):
                     sub_batch_ent_loss = torch.tensor(0., device=eval_gt_motion.device)
                     ent_loss = torch.tensor(0., device=eval_gt_motion.device)
 
-                    """
-                    #Warning: validation loss를 뽑을땐, motion sample의 실제 길이를 참조하여 입력하지 않음. 즉, padding도 같이 고려되어 입력된다는 뜻이기에, padding의 영향이 존재함
-                    """
+                
                     if args.use_rvq:
                         if args.rvq_name == 'vanilla':
-                            eval_pred_motion, codebook_eval, eval_rvq_commit_loss = net(eval_code_indices[:,::unit_length,:].cuda().float(), fw_mask=fw_attn_mask) # padding mask 쪽 입력
+                            eval_pred_motion, codebook_eval, eval_rvq_commit_loss = net(eval_code_indices[:,::unit_length,:].cuda().float(), fw_mask=fw_attn_mask) 
                         elif args.rvq_name == 'rptc':
-                            eval_pred_motion, codebook_eval, eval_out, eval_proj_rel_pos = net(eval_code_indices[:,::unit_length,:].cuda().float(), eval_gt_motion, detach_p_latent=args.detach_p_latent, drop_out_residual_quantization=pdrop_res) # padding mask 쪽 입력
+                            eval_pred_motion, codebook_eval, eval_out, eval_proj_rel_pos = net(eval_code_indices[:,::unit_length,:].cuda().float(), eval_gt_motion, detach_p_latent=args.detach_p_latent, drop_out_residual_quantization=pdrop_res) 
                             
                             if not pdrop_res:
                                 perplexity = eval_out['perplexity']
@@ -807,7 +749,7 @@ for nb_iter in range(1, args.total_iter + 1):
                                 sub_batch_ent_loss = eval_out['all_ent_sub_avg_loss']
                                 ent_loss = eval_out['all_ent_loss']
                     else:
-                        eval_pred_motion, codebook_eval = net(eval_code_indices[:,::unit_length,:].cuda().float(), fw_mask=fw_attn_mask) # padding mask 쪽 입력
+                        eval_pred_motion, codebook_eval = net(eval_code_indices[:,::unit_length,:].cuda().float(), fw_mask=fw_attn_mask) 
                     
                     print_log = True
                     for name, wrapper in eval_loss_wrapper.items():
@@ -841,7 +783,6 @@ for nb_iter in range(1, args.total_iter + 1):
                             is_use_in_loss += [False for _ in range(len(list(eval_loss_.values())))]
                 
                     eval_loss_list = list(eval_loss_dict.values())
-                    # change 2. loss 종합
                     eval_loss = flatten_and_sum_losses(eval_loss_list, is_use_in_loss)
 
                     if args.use_rvq and not pdrop_res:
@@ -898,23 +839,10 @@ for nb_iter in range(1, args.total_iter + 1):
             avg_eval_metrics_dict = reset(avg_eval_metrics_dict)
             
             return eval_loss_log_list
-            # avg_eval_rvq_commit = 0.
-            # avg_eval_loss_total = 0.
-            # avg_eval_perplexity = 0.
-            
-            
 
-            # Validation
-
-        # 사용하지 않는 경우
         if args.use_rvq:
             eval_loss_log_list = eval(args, net, val_loader, writer, logger, eval_loss_wrapper, pdrop_res=True, unit_length=2**args.down_t, use_aggregator=use_aggregator)
             eval_trans.evaluation_dec(args, args.out_dir, val_loader, net, logger, writer, nb_iter, best_fid, best_iter, best_div, best_top1, best_top2, best_top3, best_matching, best_mpjpe, best_pampjpe, best_accel, use_rvq=args.use_rvq, eval_wrapper=eval_wrapper, unit_length=2**args.down_t, max_motion_len=args.max_motion_len, use_aggregator=use_aggregator, eval_loss_list=None, num_joints=args.nb_joints, align_root=(not args.disable_align_root), split='No RVQ Validation', save=False, drop_out_residual_quantization=True)
 
-        # residual quantization을 사용하는 경우
         eval_loss_log_list = eval(args, net, val_loader, writer, logger, eval_loss_wrapper, pdrop_res=False, unit_length=2**args.down_t, use_aggregator=use_aggregator)
         best_fid, best_iter, best_div, best_top1, best_top2, best_top3, best_matching, best_mpjpe, best_pampjpe, best_accel, writer, logger = eval_trans.evaluation_dec(args, args.out_dir, val_loader, net, logger, writer, nb_iter, best_fid, best_iter, best_div, best_top1, best_top2, best_top3, best_matching, best_mpjpe, best_pampjpe, best_accel, use_rvq=args.use_rvq, eval_wrapper=eval_wrapper, unit_length=2**args.down_t, max_motion_len=args.max_motion_len, use_aggregator=use_aggregator, eval_loss_list=None, num_joints=args.nb_joints, align_root=(not args.disable_align_root), split='Validation', drop_out_residual_quantization=False)
-        
-        
-
-# wandb.finish()

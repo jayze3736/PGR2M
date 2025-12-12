@@ -13,7 +13,7 @@ import os, sys
 import torch
 import numpy as np
 
-sys.path.append(os.path.dirname(os.path.abspath(__file__))) # REC: 2025-02-02 수정, 상위 폴더 경로 추가했으니 나중에 captioning.py 확인
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 from posecodes import POSECODE_OPERATORS, distance_between_joint_pairs
 from captioning_data import *
@@ -163,7 +163,6 @@ class Coder():
 
         p_interpretations, p_eligibility = self.infer_posecodes(coords, p_queries, sp_queries, verbose=verbose, device = device)
         
-        # numpy 기준
         new_vec = []
         for key in p_interpretations:
             new_vec.append((p_interpretations[key].cpu().numpy()))

@@ -39,7 +39,6 @@ class CodeExtractor(nn.Module):
 
             for b in range(bs):
                 
-                # # kit 일 경우
                 if self.dataname == "kit":
                     motion[b] = self.posecoder.format_kit(motion[b])
 

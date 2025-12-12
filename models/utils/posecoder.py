@@ -37,7 +37,6 @@ class PoseCoder(nn.Module):
 
                 for b in range(bs):
                     
-                    # # kit 일 경우
                     if self.dataname == "kit":
                         x[b] = self.posecoder.format_kit(x[b])
 
@@ -78,7 +77,7 @@ class PoseCoder(nn.Module):
         mask_idx = (_sum == 1).bool() 
         code_seqs = torch.arange(n_cat, device=self.device).repeat(bs, seq_len, 1) 
 
-        dummy_tensor = torch.tensor(([0] * (n_cat - sel_cat) + [1] * sel_cat), dtype=bool, device=self.device) # 1이 n_cat 개수만큼 존재하는 텐서
+        dummy_tensor = torch.tensor(([0] * (n_cat - sel_cat) + [1] * sel_cat), dtype=bool, device=self.device) 
         kh_pose_codes = kh_pose_codes.bool() 
         kh_pose_codes[mask_idx, :] = dummy_tensor.repeat(mask_idx.sum(), 1) # advanced indexing & insert dummy tensor for fitting the number of selected categories
         

@@ -29,7 +29,7 @@ class MotionDec(nn.Module):
 
     def forward(self, code_indices = None):
         B, T, C = code_indices.shape # bs, T, code_num
-        codes_flattened = code_indices.contiguous().view(-1, self.num_code) # REC: 사전에 저장된 pose code를 flatten
+        codes_flattened = code_indices.contiguous().view(-1, self.num_code) 
         
         z = torch.matmul(codes_flattened, self.codebook.weight).view((-1, self.code_dim))
         z = z.view(B, T, -1).permute(0, 2, 1).contiguous()

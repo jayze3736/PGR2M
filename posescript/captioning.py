@@ -13,7 +13,7 @@ import os, sys
 import torch
 import numpy as np
 
-sys.path.append(os.path.dirname(os.path.abspath(__file__))) # REC: 2025-02-02 수정, 상위 폴더 경로 추가했으니 나중에 captioning.py 확인
+sys.path.append(os.path.dirname(os.path.abspath(__file__))) 
 
 from posecodes import POSECODE_OPERATORS, distance_between_joint_pairs
 from captioning_data import *
@@ -184,9 +184,9 @@ def main(coords, verbose=True, file_path = None):
     for t in range(new_vec.shape[0]):
         for i in vq_to_trans: #
             idx = vq_to_trans[i][int(new_vec[t][i])] 
-            new_vec_formatted[t][idx] = 1 # 해당하는 pose code 부분을 1로
+            new_vec_formatted[t][idx] = 1 
     f = open(file_path,"wb")
-    np.save(f, new_vec_formatted.astype(bool)) # bool type으로 pose code sequence를 저장
+    np.save(f, new_vec_formatted.astype(bool)) 
     f.close()
     return
     
@@ -360,7 +360,7 @@ if __name__ == "__main__" :
     import glob
     from tqdm import tqdm
     print(len(findAllFile(args.in_dir)))
-    for filename in tqdm(findAllFile(args.in_dir)): # npy 데이터
+    for filename in tqdm(findAllFile(args.in_dir)): 
 
         # npy load
         file_id = filename.split("/")[-1]

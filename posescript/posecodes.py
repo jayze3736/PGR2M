@@ -260,9 +260,7 @@ class PosecodeRelativePos(Posecode):
         """
         return joint_coords[:, joint_ids[:,0], self.axis] - joint_coords[:, joint_ids[:,1], self.axis]
 
-
-# 두 joint로 이루어진 벡터와 y축간의 이루어진 각도를 측정하여 수평인지, 수직인지를 결정
-# vertical, ignored, horizontal -> 특별한 상황인 경우에 vertical 또는 horizontal이고, 나머지는 무시한다는 뜻(특별하지 않다는 뜻)
+# vertical, ignored, horizontal
 class PosecodeRelativeVAxis(Posecode):
 
     def __init__(self):
@@ -339,50 +337,7 @@ class PosecodeOnGround(Posecode):
 
 
 
-## 2025-06-08 JSH Updated ##
-# local pos x 
-# 특정 관절 쌍의 상대 속도 크기
-# 특정 관절 쌍의 상대 속도 방향
-# 일반 관절의 속도 방향
-# 일반 관절의 속도의 크기 
-# root joint의 속도
-# root joint의 속도 방향
-# class PosecodeAngle(Posecode):
 
-#     def __init__(self):
-#         pov = POSECODE_OPERATORS_VALUES['angle']
-#         # define interpretable categories
-#         self.category_names = pov['category_names']
-#         # thresholds to fall into each categories
-#         self.category_thresholds = pov['category_thresholds'] # angles in degree
-#         # maximum random offset that can be added or substracted from the
-#         # thresholds values to represent human subjectivity at pose interpretation
-#         self.random_max_offset = pov['random_max_offset'] # in degree
-
-#     def eval(self, joint_ids, joint_coords):
-#         """Evaluate the posecode for each of the provided joint sets and each
-#         pose.
-        
-#         Args:
-#             joint_ids (torch.tensor): size (nb of joint sets, 3), ids of the
-#                 joints to study. For each joint set, the posecode studies the
-#                 angle at the level of the 2nd joint, with the two other joints
-#                 being considered as neighbor joints.
-#             joint_coords (torch.tensor): size (nb of poses, nb of joints, 3),
-#                 coordinates of the different joints, for several poses.
-
-#         Returns:
-#             (torch.tensor): size (nb of poses, nb of joint sets), value of the
-#             posecode for each joint set and each pose. Yield angle values in
-#             degree, to easily apply a random offset afterwards (degrees are
-#             'linearly scaled', conversely to cosine values).
-#         """
-#         # define two vectors, starting from the studied joint to the neighbor joints
-#         # compute the cosine similarity between the two vector to get hold of the angle
-#         v1 = torch.nn.functional.normalize(joint_coords[:,joint_ids[:,2]] - joint_coords[:,joint_ids[:,1]], dim=2)
-#         v2 = torch.nn.functional.normalize(joint_coords[:,joint_ids[:,0]] - joint_coords[:,joint_ids[:,1]], dim=2)
-#         c = (v1*v2).sum(2) # cosine of the studied angle
-#         return torch_cos2deg(c) # value of the angle in degree
 
 
 
@@ -390,7 +345,6 @@ class PosecodeOnGround(Posecode):
 ################################################################################
 
 # ADD_POSECODE_KIND
-# REC: POSE CODE를 계산하는 카테고리 정의
 POSECODE_OPERATORS = {
     "angle": PosecodeAngle(),
     "distance": PosecodeDistance(),

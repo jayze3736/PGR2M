@@ -216,7 +216,7 @@ class CrossCondTransBase(nn.Module):
 
         self.blocks = nn.Sequential(*[Block(embed_dim, block_size, n_head, drop_out_rate, fc_rate) for _ in range(num_layers)])
 
-        self.pos_embed = pos_encoding.PositionEmbedding(block_size, embed_dim, 0.0, False) # 전통적인 Sine Positional Encoding
+        self.pos_embed = pos_encoding.PositionEmbedding(block_size, embed_dim, 0.0, False)
         
         self.block_size = block_size
 

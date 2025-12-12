@@ -66,7 +66,7 @@ eval_wrapper = EvaluatorModelWrapper(wrapper_opt)
 
 ## load clip model and datasets
 clip_model, clip_preprocess = clip.load("ViT-B/32", device=torch.device('cuda'), jit=False)  # Must set jit=False for training
-clip_model.eval() # 평가 모드 진입: batch 정규화나 드롭아웃과 같은 출력에 있어서 영향을 주는 랜덤 요소를 제거
+clip_model.eval() 
 
 for p in clip_model.parameters():
     p.requires_grad = False
@@ -115,15 +115,15 @@ trans_net = t2m.MotionTrans(num_vq=t2m_args.nb_code,
                                 token_emb_name=t2m_args.token_emb_layer,
                                 pos_emb_additional=getattr(
                                     t2m_args, "pos_emb_additional",
-                                    not getattr(t2m_args, "disable_pos_emb_additional", True)  # 과거 플래그 호환
+                                    not getattr(t2m_args, "disable_pos_emb_additional", True) 
                                 ),
                                 pos_emb_rope=getattr(
                                     t2m_args, "pos_emb_rope",
-                                    getattr(t2m_args, "use_rope_pos_emb", False)  # 과거 이름 호환
+                                    getattr(t2m_args, "use_rope_pos_emb", False) 
                                 ),
                                 pos_emb_offset=getattr(
                                     t2m_args, "pos_emb_offset",
-                                    getattr(t2m_args, "pos_emb_rope_offset", 11)  # 둘 다 없으면 11
+                                    getattr(t2m_args, "pos_emb_rope_offset", 11) 
                                 ),
                                 mask_only_motion_tokens=getattr(t2m_args, "mask_only_motion_tokens", False),
                                 init_prior=getattr(t2m_args, "init_prior", False),
@@ -139,11 +139,11 @@ print ('loading transformer checkpoint from {}'.format(t2m_checkpoint_path))
 trans_ckpt = torch.load(t2m_checkpoint_path, map_location='cpu')
 trans_net.load_state_dict(trans_ckpt['trans'], strict=True)
 
-# eval mode로 고정
+
 trans_net.cuda()
 trans_net.eval()
 
-# trans_net의 파라메터는 업데이트 하지 않음
+
 for p in trans_net.parameters():
     p.requires_grad = False
 
@@ -228,7 +228,6 @@ print ('loading residual transformer checkpoint from {}'.format(r_trans_checkpoi
 r_trans_ckpt = torch.load(r_trans_checkpoint_path, map_location='cpu')
 res_trans_net.load_state_dict(r_trans_ckpt['r_trans'], strict=True)
 
-# eval mode로 고정
 res_trans_net.cuda()
 res_trans_net.eval()
 
