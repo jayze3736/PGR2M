@@ -1,0 +1,660 @@
+nohup python train_rptc.py \
+--batch-size 256 \
+--lr 1e-4 \
+--total-iter 300000 \
+--lr-scheduler 200000 \
+--nb-code 392 \
+--down-t 2 \
+--depth 3 \
+--warm-up-iter 1000 \
+--dilation-growth-rate 3 \
+--out-dir my_exp_result \
+--dataname t2m \
+--vq-act relu \
+--loss-cfg-path /data/CoMo/configs/exp_dec/losses_v5.yaml \
+--exp-name 2025_11_22_Dec_ver_using_residual_pose_temporal_complementor_ver_detach_p_latent_with_soft_quantizer_try_12_unuse_ema_cb_size_512_num_quantizer_6 \
+--use-keywords \
+--output-emb-width 392 \
+--use-rvq \
+--rvq-name rptc \
+--rvq-num-quantizers 6 \
+--rvq-quantize-dropout-prob 0.2 \
+--rvq-quantize-dropout-cutoff-index 0 \
+--rvq-nb-code 512 \
+--rvq-mu 0.99 \
+--detach-p-latent \
+--rvq-quantizer-type soft \
+--params-soft-ent-loss 0.01 \
+--rvq-vq-loss-beta 0.05 \
+--unuse-ema \
+--pdrop-res 0.0 \
+--rvq-commit 0.02 > log_2025_11_22_Dec_ver_using_residual_pose_temporal_complementor_ver_detach_p_latent_with_soft_quantizer_try_12_unuse_ema_cb_size_512_num_quantizer_6.log &
+
+nohup python train_rptc.py \
+--batch-size 256 \
+--lr 1e-4 \
+--total-iter 300000 \
+--lr-scheduler 200000 \
+--nb-code 392 \
+--down-t 2 \
+--depth 3 \
+--warm-up-iter 1000 \
+--dilation-growth-rate 3 \
+--out-dir my_exp_result \
+--dataname t2m \
+--vq-act relu \
+--loss-cfg-path /data/CoMo/configs/exp_dec/losses_v5.yaml \
+--exp-name 2025_11_21_Dec_ver_using_residual_pose_temporal_complementor_ver_res_drop_detach_p_latent_with_soft_quantizer_try_12_unuse_ema_cb_size_512_num_quantizer_1_drop_p_ver_2 \
+--use-keywords \
+--output-emb-width 392 \
+--use-rvq \
+--rvq-name rptc \
+--rvq-num-quantizers 1 \
+--rvq-quantize-dropout-prob 0.0 \
+--rvq-quantize-dropout-cutoff-index 0 \
+--rvq-nb-code 512 \
+--rvq-mu 0.99 \
+--detach-p-latent \
+--rvq-quantizer-type soft \
+--params-soft-ent-loss 0.01 \
+--rvq-vq-loss-beta 0.05 \
+--unuse-ema \
+--pdrop-res 0.1 \
+--rvq-commit 0.02 > log_2025_11_21_Dec_ver_using_residual_pose_temporal_complementor_ver_res_drop_detach_p_latent_with_soft_quantizer_try_12_unuse_ema_cb_size_512_num_quantizer_1_drop_p_ver_2.log &
+
+
+
+nohup python train_rptc.py \
+--batch-size 256 \
+--lr 1e-4 \
+--total-iter 300000 \
+--lr-scheduler 200000 \
+--nb-code 392 \
+--down-t 2 \
+--depth 3 \
+--warm-up-iter 1000 \
+--dilation-growth-rate 3 \
+--out-dir my_exp_result \
+--dataname t2m \
+--vq-act relu \
+--dataname kit \
+--loss-cfg-path /data/CoMo/configs/exp_dec/losses_basic.yaml \
+--exp-name 2025_11_14_Dec_ver_baseline_using_basic_loss_dataset_kit \
+--output-emb-width 392 \
+--unuse-ema > log_2025_11_14_Dec_ver_baseline_using_basic_loss_dataset_kit.log &
+
+nohup python train_rptc.py \
+--batch-size 256 \
+--lr 1e-4 \
+--total-iter 300000 \
+--lr-scheduler 200000 \
+--nb-code 392 \
+--down-t 2 \
+--depth 3 \
+--warm-up-iter 1000 \
+--dilation-growth-rate 3 \
+--out-dir my_exp_result \
+--dataname kit \
+--vq-act relu \
+--loss-cfg-path /data/CoMo/configs/exp_dec/losses_v5.yaml \
+--exp-name 2025_11_13_Dec_ver_using_residual_pose_temporal_complementor_ver_res_drop_detach_p_latent_with_soft_quantizer_try_12_unuse_ema_cb_size_512_num_quantizer_6_drop_p_ver_2_dataname_kit \
+--output-emb-width 392 \
+--use-rvq \
+--rvq-name rptc \
+--rvq-num-quantizers 6 \
+--rvq-quantize-dropout-prob 0.2 \
+--rvq-quantize-dropout-cutoff-index 0 \
+--rvq-nb-code 512 \
+--rvq-mu 0.99 \
+--detach-p-latent \
+--rvq-quantizer-type soft \
+--params-soft-ent-loss 0.01 \
+--rvq-vq-loss-beta 0.25 \
+--unuse-ema \
+--pdrop-res 0.1 \
+--rvq-commit 0.02 > log_2025_11_13_Dec_ver_using_residual_pose_temporal_complementor_ver_res_drop_detach_p_latent_with_soft_quantizer_try_12_unuse_ema_cb_size_512_num_quantizer_6_drop_p_ver_2_dataname_kit.log &
+
+
+nohup python train_rptc.py \
+--batch-size 256 \
+--lr 1e-4 \
+--total-iter 300000 \
+--lr-scheduler 200000 \
+--nb-code 392 \
+--down-t 2 \
+--depth 3 \
+--warm-up-iter 1000 \
+--dilation-growth-rate 3 \
+--out-dir my_exp_result \
+--dataname kit \
+--vq-act relu \
+--loss-cfg-path /data/CoMo/configs/exp_dec/losses_v5.yaml \
+--exp-name 2025_11_13_Dec_ver_using_residual_pose_temporal_complementor_ver_res_drop_detach_p_latent_with_soft_quantizer_try_12_unuse_ema_cb_size_512_num_quantizer_6_drop_p_ver_1_dataname_kit \
+--output-emb-width 392 \
+--use-rvq \
+--rvq-name rptc \
+--rvq-num-quantizers 6 \
+--rvq-quantize-dropout-prob 0.2 \
+--rvq-quantize-dropout-cutoff-index 0 \
+--rvq-nb-code 512 \
+--rvq-mu 0.99 \
+--detach-p-latent \
+--rvq-quantizer-type soft \
+--params-soft-ent-loss 0.01 \
+--rvq-vq-loss-beta 0.25 \
+--unuse-ema \
+--pdrop-res 0.5 \
+--rvq-commit 0.02 > log_2025_11_13_Dec_ver_using_residual_pose_temporal_complementor_ver_res_drop_detach_p_latent_with_soft_quantizer_try_12_unuse_ema_cb_size_512_num_quantizer_6_drop_p_ver_1_dataname_kit.log &
+
+# --use-keywords \ <- 이거 배제
+
+nohup python train_rptc.py \
+--batch-size 256 \
+--lr 1e-4 \
+--total-iter 300000 \
+--lr-scheduler 200000 \
+--nb-code 392 \
+--down-t 2 \
+--depth 3 \
+--warm-up-iter 1000 \
+--dilation-growth-rate 3 \
+--out-dir my_exp_result \
+--dataname kit \
+--vq-act relu \
+--loss-cfg-path /data/CoMo/configs/exp_dec/losses_v5.yaml \
+--exp-name 2025_11_13_Dec_ver_using_residual_pose_temporal_complementor_ver_res_drop_detach_p_latent_with_soft_quantizer_try_12_unuse_ema_cb_size_512_num_quantizer_6_drop_p_ver_2_dataname_kit \
+--use-keywords \
+--output-emb-width 392 \
+--use-rvq \
+--rvq-name rptc \
+--rvq-num-quantizers 6 \
+--rvq-quantize-dropout-prob 0.2 \
+--rvq-quantize-dropout-cutoff-index 0 \
+--rvq-nb-code 512 \
+--rvq-mu 0.99 \
+--detach-p-latent \
+--rvq-quantizer-type soft \
+--params-soft-ent-loss 0.01 \
+--rvq-vq-loss-beta 0.25 \
+--unuse-ema \
+--pdrop-res 0.1 \
+--rvq-commit 0.02 > log_2025_11_13_Dec_ver_using_residual_pose_temporal_complemento_ver_res_drop_detach_p_latent_with_soft_quantizer_try_12_unuse_ema_cb_size_512_num_quantizer_6_drop_p_ver_2_dataname_kit.log &
+
+
+nohup python train_rptc.py \
+--batch-size 256 \
+--lr 1e-4 \
+--total-iter 300000 \
+--lr-scheduler 200000 \
+--nb-code 392 \
+--down-t 2 \
+--depth 3 \
+--warm-up-iter 1000 \
+--dilation-growth-rate 3 \
+--out-dir my_exp_result \
+--dataname t2m \
+--vq-act relu \
+--loss-cfg-path /data/CoMo/configs/exp_dec/losses_v17.yaml \
+--exp-name 2025_11_12_Dec_ver_using_residual_pose_temporal_complementor_ver_soft_quantizer_res_drop_detach_p_latent_cb_size_512_num_quantizer_6_no_drop_with_group_orthogonal_loss_v17 \
+--use-keywords \
+--output-emb-width 392 \
+--use-rvq \
+--rvq-name rptc \
+--rvq-num-quantizers 6 \
+--rvq-quantize-dropout-prob 0.2 \
+--rvq-quantize-dropout-cutoff-index 0 \
+--rvq-nb-code 512 \
+--rvq-mu 0.99 \
+--detach-p-latent \
+--rvq-quantizer-type soft \
+--params-soft-ent-loss 0.01 \
+--rvq-vq-loss-beta 0.25 \
+--unuse-ema \
+--pdrop-res 0.0 \
+--rvq-commit 0.02 > log_2025_11_12_Dec_ver_using_residual_pose_temporal_complementor_ver_soft_quantizer_res_drop_detach_p_latent_cb_size_512_num_quantizer_6_no_drop_with_group_orthogonal_loss_v17.log &
+
+
+nohup python train_rptc.py \
+--batch-size 256 \
+--lr 1e-4 \
+--total-iter 300000 \
+--lr-scheduler 200000 \
+--nb-code 392 \
+--down-t 2 \
+--depth 3 \
+--warm-up-iter 1000 \
+--dilation-growth-rate 3 \
+--out-dir my_exp_result \
+--dataname t2m \
+--vq-act relu \
+--loss-cfg-path /data/CoMo/configs/exp_dec/losses_v15.yaml \
+--exp-name 2025_11_12_Dec_ver_using_residual_pose_temporal_complementor_ver_soft_quantizer_res_drop_detach_p_latent_cb_size_512_num_quantizer_6_no_drop_with_htd_loss_v2_pose_code_proj_on_rel_pos_dim_loss_v15 \
+--use-keywords \
+--output-emb-width 392 \
+--use-rvq \
+--rvq-name rptc \
+--rvq-num-quantizers 6 \
+--rvq-quantize-dropout-prob 0.2 \
+--rvq-quantize-dropout-cutoff-index 0 \
+--rvq-nb-code 512 \
+--rvq-mu 0.99 \
+--detach-p-latent \
+--rvq-quantizer-type soft \
+--params-soft-ent-loss 0.01 \
+--rvq-vq-loss-beta 0.25 \
+--unuse-ema \
+--pdrop-res 0.0 \
+--rvq-commit 0.02 > log_2025_11_12_Dec_ver_using_residual_pose_temporal_complementor_ver_soft_quantizer_res_drop_detach_p_latent_cb_size_512_num_quantizer_6_with_htd_loss_v2_pose_code_proj_on_rel_pos_dim_loss_v15.log &
+
+nohup python train_rptc.py \
+--batch-size 256 \
+--lr 1e-4 \
+--total-iter 300000 \
+--lr-scheduler 200000 \
+--nb-code 392 \
+--down-t 2 \
+--depth 3 \
+--warm-up-iter 1000 \
+--dilation-growth-rate 3 \
+--out-dir my_exp_result \
+--dataname t2m \
+--vq-act relu \
+--loss-cfg-path /data/CoMo/configs/exp_dec/losses_v14.yaml \
+--exp-name 2025_11_12_Dec_ver_using_residual_pose_temporal_complementor_ver_soft_quantizer_res_drop_detach_p_latent_cb_size_512_num_quantizer_6_no_drop_with_htd_loss_v2_pose_code_proj_on_rel_pos_dim_loss_v14 \
+--use-keywords \
+--output-emb-width 392 \
+--use-rvq \
+--rvq-name rptc \
+--rvq-num-quantizers 6 \
+--rvq-quantize-dropout-prob 0.2 \
+--rvq-quantize-dropout-cutoff-index 0 \
+--rvq-nb-code 512 \
+--rvq-mu 0.99 \
+--detach-p-latent \
+--rvq-quantizer-type soft \
+--params-soft-ent-loss 0.01 \
+--rvq-vq-loss-beta 0.25 \
+--unuse-ema \
+--pdrop-res 0.0 \
+--rvq-commit 0.05 > log_2025_11_12_Dec_ver_using_residual_pose_temporal_complementor_ver_soft_quantizer_res_drop_detach_p_latent_cb_size_512_num_quantizer_6_with_htd_loss_v2_pose_code_proj_on_rel_pos_dim_loss_v14.log &
+
+
+nohup python train_rptc.py \
+--batch-size 256 \
+--lr 1e-4 \
+--total-iter 300000 \
+--lr-scheduler 200000 \
+--nb-code 392 \
+--down-t 2 \
+--depth 3 \
+--warm-up-iter 1000 \
+--dilation-growth-rate 3 \
+--out-dir my_exp_result \
+--dataname t2m \
+--vq-act relu \
+--loss-cfg-path /data/CoMo/configs/exp_dec/losses_v12.yaml \
+--exp-name 2025_11_12_Dec_ver_using_residual_pose_temporal_complementor_ver_soft_quantizer_res_drop_detach_p_latent_cb_size_512_num_quantizer_6_no_drop_with_htd_loss_v2_pose_code_proj_on_rel_pos_dim \
+--use-keywords \
+--output-emb-width 392 \
+--use-rvq \
+--rvq-name rptc \
+--rvq-num-quantizers 6 \
+--rvq-quantize-dropout-prob 0.2 \
+--rvq-quantize-dropout-cutoff-index 0 \
+--rvq-nb-code 512 \
+--rvq-mu 0.99 \
+--detach-p-latent \
+--rvq-quantizer-type soft \
+--params-soft-ent-loss 0.01 \
+--rvq-vq-loss-beta 0.25 \
+--unuse-ema \
+--pdrop-res 0.0 \
+--rvq-commit 0.05 > log_2025_11_12_Dec_ver_using_residual_pose_temporal_complementor_ver_soft_quantizer_res_drop_detach_p_latent_cb_size_512_num_quantizer_6_with_htd_loss_v2_pose_code_proj_on_rel_pos_dim.log &
+
+
+nohup python train_rptc.py \
+--batch-size 256 \
+--lr 1e-4 \
+--total-iter 300000 \
+--lr-scheduler 200000 \
+--nb-code 392 \
+--down-t 2 \
+--depth 3 \
+--warm-up-iter 1000 \
+--dilation-growth-rate 3 \
+--out-dir my_exp_result \
+--dataname t2m \
+--vq-act relu \
+--loss-cfg-path /data/CoMo/configs/exp_dec/losses_basic.yaml \
+--exp-name 2025_11_10_Dec_ver_baseline_using_basic_loss \
+--use-keywords \
+--output-emb-width 392 \
+--unuse-ema > log_2025_11_10_Dec_ver_baseline_using_basic_loss.log &
+
+
+nohup python train_rptc.py \
+--batch-size 256 \
+--lr 1e-4 \
+--total-iter 300000 \
+--lr-scheduler 200000 \
+--nb-code 392 \
+--down-t 2 \
+--depth 3 \
+--warm-up-iter 1000 \
+--dilation-growth-rate 3 \
+--out-dir my_exp_result \
+--dataname t2m \
+--vq-act relu \
+--loss-cfg-path /data/CoMo/configs/exp_dec/losses_v12.yaml \
+--exp-name 2025_11_10_Dec_ver_using_residual_pose_temporal_complementor_ver_soft_quantizer_res_drop_detach_p_latent_cb_size_512_num_quantizer_6_no_drop_and_gated_residual_with_htd_loss_v2 \
+--use-keywords \
+--output-emb-width 392 \
+--use-rvq \
+--rvq-name rptc \
+--rvq-num-quantizers 6 \
+--rvq-quantize-dropout-prob 0.2 \
+--rvq-quantize-dropout-cutoff-index 0 \
+--rvq-nb-code 512 \
+--rvq-mu 0.99 \
+--detach-p-latent \
+--rvq-quantizer-type soft \
+--params-soft-ent-loss 0.01 \
+--rvq-vq-loss-beta 0.25 \
+--unuse-ema \
+--pdrop-res 0.0 \
+--rvq-commit 0.05 > log_2025_11_10_Dec_ver_using_residual_pose_temporal_complementor_ver_soft_quantizer_res_drop_detach_p_latent_cb_size_512_num_quantizer_6_no_drop_and_gated_residual_with_htd_loss_v2.log &
+
+
+nohup python train_rptc.py \
+--batch-size 256 \
+--lr 1e-4 \
+--total-iter 300000 \
+--lr-scheduler 200000 \
+--nb-code 392 \
+--down-t 2 \
+--depth 3 \
+--warm-up-iter 1000 \
+--dilation-growth-rate 3 \
+--out-dir my_exp_result \
+--dataname t2m \
+--vq-act relu \
+--loss-cfg-path /data/CoMo/configs/exp_dec/losses_v11.yaml \
+--exp-name 2025_11_10_Dec_ver_baseline_using_htd_loss_disentangle_loss \
+--use-keywords \
+--output-emb-width 392 \
+--unuse-ema > log_2025_11_10_Dec_ver_baseline_using_htd_loss_disentangle_loss.log &
+
+
+
+nohup python train_rptc.py \
+--batch-size 256 \
+--lr 1e-4 \
+--total-iter 300000 \
+--lr-scheduler 200000 \
+--nb-code 392 \
+--down-t 2 \
+--depth 3 \
+--warm-up-iter 1000 \
+--dilation-growth-rate 3 \
+--out-dir my_exp_result \
+--dataname t2m \
+--vq-act relu \
+--loss-cfg-path /data/CoMo/configs/exp_dec/losses_v12.yaml \
+--exp-name 2025_11_10_Dec_ver_using_residual_pose_temporal_complementor_ver_soft_quantizer_res_drop_detach_p_latent_cb_size_512_num_quantizer_6_drop_p_ver_2_with_htd_loss \
+--use-keywords \
+--output-emb-width 392 \
+--use-rvq \
+--rvq-name rptc \
+--rvq-num-quantizers 6 \
+--rvq-quantize-dropout-prob 0.2 \
+--rvq-quantize-dropout-cutoff-index 0 \
+--rvq-nb-code 512 \
+--rvq-mu 0.99 \
+--detach-p-latent \
+--rvq-quantizer-type soft \
+--params-soft-ent-loss 0.01 \
+--rvq-vq-loss-beta 0.25 \
+--unuse-ema \
+--pdrop-res 0.1 \
+--rvq-commit 0.05 > log_2025_11_10_Dec_ver_using_residual_pose_temporal_complementor_ver_soft_quantizer_res_drop_detach_p_latent_cb_size_512_num_quantizer_6_drop_p_ver_2_with_htd_loss.log &
+
+
+nohup python train_rptc.py \
+--batch-size 256 \
+--lr 1e-4 \
+--total-iter 300000 \
+--lr-scheduler 200000 \
+--nb-code 392 \
+--down-t 2 \
+--depth 3 \
+--warm-up-iter 1000 \
+--dilation-growth-rate 3 \
+--out-dir my_exp_result \
+--dataname t2m \
+--vq-act relu \
+--loss-cfg-path /data/CoMo/configs/exp_dec/losses_v10.yaml \
+--exp-name 2025_11_09_Dec_ver_baseline_using_htd_loss \
+--use-keywords \
+--output-emb-width 392 \
+--unuse-ema > log_2025_11_09_Dec_ver_baseline_using_htd_loss.log &
+
+
+nohup python train_rptc.py \
+--batch-size 256 \
+--lr 1e-4 \
+--total-iter 300000 \
+--lr-scheduler 200000 \
+--nb-code 392 \
+--down-t 2 \
+--depth 3 \
+--warm-up-iter 1000 \
+--dilation-growth-rate 3 \
+--out-dir my_exp_result \
+--dataname t2m \
+--vq-act relu \
+--loss-cfg-path /data/CoMo/configs/exp_dec/losses_v11.yaml \
+--exp-name 2025_11_09_Dec_ver_using_residual_pose_temporal_complementor_ver_soft_quantizer_res_drop_detach_p_latent_cb_size_512_num_quantizer_6_drop_p_ver_2_ver_disentangle_loss_v4_with_htd_loss \
+--use-keywords \
+--output-emb-width 392 \
+--use-rvq \
+--rvq-name rptc \
+--rvq-num-quantizers 6 \
+--rvq-quantize-dropout-prob 0.2 \
+--rvq-quantize-dropout-cutoff-index 0 \
+--rvq-nb-code 512 \
+--rvq-mu 0.99 \
+--detach-p-latent \
+--rvq-quantizer-type soft \
+--params-soft-ent-loss 0.01 \
+--rvq-vq-loss-beta 0.25 \
+--unuse-ema \
+--pdrop-res 0.1 \
+--rvq-commit 0.1 > log_2025_11_09_Dec_ver_using_residual_pose_temporal_complementor_ver_soft_quantizer_res_drop_detach_p_latent_cb_size_512_num_quantizer_6_drop_p_ver_2_ver_disentangle_loss_v4_with_htd_loss.log &
+
+nohup python train_rptc.py \
+--batch-size 256 \
+--lr 1e-4 \
+--total-iter 300000 \
+--lr-scheduler 200000 \
+--nb-code 392 \
+--down-t 2 \
+--depth 3 \
+--warm-up-iter 1000 \
+--dilation-growth-rate 3 \
+--out-dir my_exp_result \
+--dataname t2m \
+--vq-act relu \
+--loss-cfg-path /data/CoMo/configs/exp_dec/losses_v8.yaml \
+--exp-name 2025_11_04_Dec_ver_using_residual_pose_temporal_complementor_ver_soft_quantizer_res_drop_detach_p_latent_cb_size_512_num_quantizer_6_drop_p_ver_2_ver_disentangle_loss_v2 \
+--use-keywords \
+--output-emb-width 392 \
+--use-rvq \
+--rvq-name rptc \
+--rvq-num-quantizers 6 \
+--rvq-quantize-dropout-prob 0.2 \
+--rvq-quantize-dropout-cutoff-index 0 \
+--rvq-nb-code 512 \
+--rvq-mu 0.99 \
+--detach-p-latent \
+--rvq-quantizer-type soft \
+--params-soft-ent-loss 0.01 \
+--rvq-vq-loss-beta 0.25 \
+--unuse-ema \
+--pdrop-res 0.1 \
+--rvq-commit 0.05 > log_2025_11_04_Dec_ver_using_residual_pose_temporal_complementor_ver_soft_quantizer_res_drop_detach_p_latent_cb_size_512_num_quantizer_6_drop_p_ver_2_ver_disentangle_loss_v2.log &
+
+nohup python train_rptc.py \
+--batch-size 256 \
+--lr 1e-4 \
+--total-iter 300000 \
+--lr-scheduler 200000 \
+--nb-code 392 \
+--down-t 2 \
+--depth 3 \
+--warm-up-iter 1000 \
+--dilation-growth-rate 3 \
+--out-dir my_exp_result \
+--dataname t2m \
+--vq-act relu \
+--loss-cfg-path /data/CoMo/configs/exp_dec/losses_v6.yaml \
+--exp-name 2025_10_31_Dec_ver_using_residual_pose_temporal_complementor_ver_soft_quantizer_res_drop_detach_p_latent_cb_size_512_num_quantizer_6_drop_p_ver_3_ver_disentangle_loss \
+--use-keywords \
+--output-emb-width 392 \
+--use-rvq \
+--rvq-name rptc \
+--rvq-num-quantizers 6 \
+--rvq-quantize-dropout-prob 0.2 \
+--rvq-quantize-dropout-cutoff-index 0 \
+--rvq-nb-code 512 \
+--rvq-mu 0.99 \
+--detach-p-latent \
+--rvq-quantizer-type soft \
+--params-soft-ent-loss 0.01 \
+--rvq-vq-loss-beta 0.25 \
+--unuse-ema \
+--pdrop-res 0.2 \
+--rvq-commit 0.05 > log_2025_10_31_Dec_ver_using_residual_pose_temporal_complementor_ver_soft_quantizer_res_drop_detach_p_latent_cb_size_512_num_quantizer_6_drop_p_ver_3_ver_disentangle_loss.log &
+
+
+nohup python train_rptc.py \
+--batch-size 256 \
+--lr 1e-4 \
+--total-iter 300000 \
+--lr-scheduler 200000 \
+--nb-code 392 \
+--down-t 2 \
+--depth 3 \
+--warm-up-iter 1000 \
+--dilation-growth-rate 3 \
+--out-dir my_exp_result \
+--dataname t2m \
+--vq-act relu \
+--loss-cfg-path /data/CoMo/configs/exp_dec/losses_v6.yaml \
+--exp-name 2025_10_31_Dec_ver_using_residual_pose_temporal_complementor_ver_soft_quantizer_res_drop_detach_p_latent_cb_size_512_num_quantizer_6_drop_p_ver_2_ver_disentangle_loss \
+--use-keywords \
+--output-emb-width 392 \
+--use-rvq \
+--rvq-name rptc \
+--rvq-num-quantizers 6 \
+--rvq-quantize-dropout-prob 0.2 \
+--rvq-quantize-dropout-cutoff-index 0 \
+--rvq-nb-code 512 \
+--rvq-mu 0.99 \
+--detach-p-latent \
+--rvq-quantizer-type soft \
+--params-soft-ent-loss 0.01 \
+--rvq-vq-loss-beta 0.25 \
+--unuse-ema \
+--pdrop-res 0.1 \
+--rvq-commit 0.02 > log_2025_10_31_Dec_ver_using_residual_pose_temporal_complementor_ver_soft_quantizer_res_drop_detach_p_latent_cb_size_512_num_quantizer_6_drop_p_ver_2_ver_disentangle_loss.log &
+
+# soft quantizer + disentanglement loss
+
+nohup python train_rptc.py \
+--batch-size 256 \
+--lr 1e-4 \
+--total-iter 300000 \
+--lr-scheduler 200000 \
+--nb-code 392 \
+--down-t 2 \
+--depth 3 \
+--warm-up-iter 1000 \
+--dilation-growth-rate 3 \
+--out-dir my_exp_result \
+--dataname t2m \
+--vq-act relu \
+--loss-cfg-path /data/CoMo/configs/exp_dec/losses_v7.yaml \
+--exp-name 2025_10_31_Dec_ver_using_residual_pose_temporal_complementor_ver_soft_quantizer_res_drop_detach_p_latent_cb_size_512_num_quantizer_6_drop_p_ver_2_ver_disentangle_batch_loss \
+--use-keywords \
+--output-emb-width 392 \
+--use-rvq \
+--rvq-name rptc \
+--rvq-num-quantizers 6 \
+--rvq-quantize-dropout-prob 0.2 \
+--rvq-quantize-dropout-cutoff-index 0 \
+--rvq-nb-code 512 \
+--rvq-mu 0.99 \
+--detach-p-latent \
+--rvq-quantizer-type soft \
+--params-soft-ent-loss 0.01 \
+--rvq-vq-loss-beta 0.25 \
+--unuse-ema \
+--pdrop-res 0.1 \
+--rvq-commit 0.02 > log_2025_10_31_Dec_ver_using_residual_pose_temporal_complementor_ver_soft_quantizer_res_drop_detach_p_latent_cb_size_512_num_quantizer_6_drop_p_ver_2_ver_disentangle_batch_loss.log &
+
+# soft quantizer + disentanglement batch loss
+
+nohup python train_rptc.py \
+--batch-size 256 \
+--lr 1e-4 \
+--total-iter 300000 \
+--lr-scheduler 200000 \
+--nb-code 392 \
+--down-t 2 \
+--depth 3 \
+--dilation-growth-rate 3 \
+--out-dir my_exp_result \
+--dataname t2m \
+--vq-act relu \
+--loss-cfg-path /data/CoMo/configs/exp_dec/losses_v7.yaml \
+--exp-name 2025_10_31_Dec_ver_using_residual_pose_temporal_complementor_ver_res_drop_detach_p_latent_cb_size_512_num_quantizer_6_drop_p_ver_1_ver_disentangle_batch_loss_v1 \
+--use-keywords \
+--output-emb-width 392 \
+--use-rvq \
+--rvq-name rptc \
+--rvq-num-quantizers 6 \
+--rvq-quantize-dropout-prob 0.2 \
+--rvq-quantize-dropout-cutoff-index 0 \
+--rvq-nb-code 512 \
+--rvq-mu 0.99 \
+--detach-p-latent \
+--pdrop-res 0.5 \
+--rvq-commit 0.02 > log_2025_10_31_Dec_ver_using_residual_pose_temporal_complementor_ver_res_drop_detach_p_latent_cb_size_512_num_quantizer_6_drop_p_ver_1_ver_disentangle_batch_loss_v1.log &
+
+
+nohup python train_rptc.py \
+--batch-size 256 \
+--lr 1e-4 \
+--total-iter 300000 \
+--lr-scheduler 200000 \
+--nb-code 392 \
+--down-t 2 \
+--depth 3 \
+--dilation-growth-rate 3 \
+--out-dir my_exp_result \
+--dataname t2m \
+--vq-act relu \
+--loss-cfg-path /data/CoMo/configs/exp_dec/losses_v6.yaml \
+--exp-name 2025_10_31_Dec_ver_using_residual_pose_temporal_complementor_ver_res_drop_detach_p_latent_cb_size_512_num_quantizer_6_drop_p_ver_1_ver_disentangle_loss_v3 \
+--use-keywords \
+--output-emb-width 392 \
+--use-rvq \
+--rvq-name rptc \
+--rvq-num-quantizers 6 \
+--rvq-quantize-dropout-prob 0.2 \
+--rvq-quantize-dropout-cutoff-index 0 \
+--rvq-nb-code 512 \
+--rvq-mu 0.99 \
+--detach-p-latent \
+--pdrop-res 0.5 \
+--rvq-commit 0.02 > log_2025_09_27_Dec_ver_using_residual_pose_temporal_complementor_ver_res_drop_detach_p_latent_cb_size_256_num_quantizer_6_drop_p_ver_1_ver_disentangle_loss_v3.log &

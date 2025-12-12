@@ -1,0 +1,1125 @@
+nohup python eval_dec.py \
+--batch-size 256 \
+--lr 2e-4 \
+--total-iter 300000 \
+--lr-scheduler 200000 \
+--nb-code 392 \
+--down-t 2 \
+--depth 3 \
+--dilation-growth-rate 3 \
+--out-dir eval_output \
+--dataname t2m \
+--vq-act relu \
+--exp-name TEST_Dec/2025_11_22_Dec_ver_using_residual_pose_temporal_complementor_ver_detach_p_latent_with_soft_quantizer_try_12_unuse_ema_cb_size_512_num_quantizer_6 \
+--use-keywords \
+--dec-checkpoint-folder ./my_exp_result/2025_11_22_Dec_ver_using_residual_pose_temporal_complementor_ver_detach_p_latent_with_soft_quantizer_try_12_unuse_ema_cb_size_512_num_quantizer_6/2025-11-22_17-10-09 \
+--output-emb-width 392 > log_eval_2025_11_22_Dec_ver_using_residual_pose_temporal_complementor_ver_detach_p_latent_with_soft_quantizer_try_12_unuse_ema_cb_size_512_num_quantizer_6.log &
+
+nohup python eval_rt2m.py \
+--exp-name TEST_exp_2025_12_04_rt2m_transformer_ver_dec_cb_size_512_res_drop_ver_1_ver_w_share_weight_v9_ver_pre_pose_code_emb_ver_stage_3_fast_test \
+--batch-size 256 \
+--num-layers 9 \
+--embed-dim-gpt 1024 \
+--nb-code 392 \
+--n-head-gpt 8 \
+--block-size 62 \
+--ff-rate 4 \
+--drop-out-rate 0.1 \
+--vq-name VQVAE_2025_11_19 \
+--out-dir output_evaluation \
+--total-iter 300000 \
+--lr-scheduler 150000 \
+--lr 0.0001 \
+--dataname t2m \
+--down-t 2 \
+--depth 3 \
+--eval-iter 10000 \
+--pkeep 0.5 \
+--dilation-growth-rate 3 \
+--vq-act relu \
+--eval-mode fast \
+--output-emb-width 392 \
+--dec-checkpoint-folder ./important_result/Ours/Dec/2025_09_27_Dec_ver_using_residual_pose_temporal_complementor_ver_res_drop_detach_p_latent_with_soft_quantizer_try_12_unuse_ema_cb_size_512_num_quantizer_6 \
+--t2m-checkpoint-folder ./important_result/Ours/Trans/exp_2025_11_15_t2m_transformer_vanilla_original_ver_dec_cb_512_q_layer_6_drop_ver_1 \
+--residual-t2m-checkpoint-folder ./important_result/Ours/Res_Trans/exp_2025_11_17_rt2m_transformer_ver_dec_cb_size_512_res_drop_ver_1_ver_w_share_weight_v9_ver_pre_pose_code_emb \
+--use-keywords > log_eval_exp_2025_12_04_rt2m_transformer_ver_dec_cb_size_512_res_drop_ver_1_ver_w_share_weight_v9_ver_pre_pose_code_emb_ver_stage_3_fast_test.log &
+
+
+nohup python eval_t2m.py \
+--exp-name TEST_exp_2025_11_21_t2m_transformer_ver_dec_cb_size_512_res_drop_ver_2_stage_2_eval_fast_mode_mm_mode \
+--batch-size 256 \
+--num-layers 9 \
+--embed-dim-gpt 1024 \
+--nb-code 392 \
+--n-head-gpt 16 \
+--block-size 62 \
+--ff-rate 4 \
+--drop-out-rate 0.1 \
+--vq-name VQVAE_2025_10_15 \
+--out-dir output_evaluation \
+--total-iter 300000 \
+--lr-scheduler 150000 \
+--lr 0.0001 \
+--dataname t2m \
+--down-t 2 \
+--depth 3 \
+--eval-iter 10000 \
+--pkeep 0.5 \
+--dilation-growth-rate 3 \
+--vq-act relu \
+--eval-mode fast \
+--mm_mode \
+--output-emb-width 392 \
+--dec-checkpoint-folder ./important_result/Ours/Dec/2025_09_27_Dec_ver_using_residual_pose_temporal_complementor_ver_res_drop_detach_p_latent_with_soft_quantizer_try_12_unuse_ema_cb_size_512_num_quantizer_6_drop_p_ver_2 \
+--t2m-checkpoint-folder ./important_result/Ours/Trans/exp_2025_10_31_t2m_transformer_vanilla_original_ver_dec_cb_512_q_layer_6_drop_ver_2 \
+--use-keywords > TEST_exp_2025_11_21_t2m_transformer_ver_dec_cb_size_512_res_drop_ver_2_stage_2_eval_fast_mode_mm_mode.log &
+
+
+nohup python eval_t2m.py \
+--exp-name TEST_exp_2025_11_19_kit_transformer_ver_dec_cb_size_512_res_drop_ver_2_stage_2_eval_fast_mode_mm_mode \
+--batch-size 256 \
+--num-layers 9 \
+--embed-dim-gpt 1024 \
+--nb-code 392 \
+--n-head-gpt 16 \
+--block-size 62 \
+--ff-rate 4 \
+--drop-out-rate 0.1 \
+--vq-name VQVAE_2025_10_15 \
+--out-dir output_evaluation \
+--total-iter 300000 \
+--lr-scheduler 150000 \
+--lr 0.0001 \
+--dataname kit \
+--down-t 2 \
+--depth 3 \
+--eval-iter 10000 \
+--pkeep 0.5 \
+--dilation-growth-rate 3 \
+--vq-act relu \
+--output-emb-width 392 \
+--mm_mode \
+--dec-checkpoint-folder ./my_exp_result/2025_11_13_Dec_ver_using_residual_pose_temporal_complementor_ver_res_drop_detach_p_latent_with_soft_quantizer_try_12_unuse_ema_cb_size_512_num_quantizer_6_drop_p_ver_2_dataname_kit/2025-11-13_11-06-05 \
+--t2m-checkpoint-folder ./output/exp_2025_11_13_kit_transformer_vanilla_original_ver_dec_cb_512_q_layer_6_drop_ver_2/2025-11-14_02-46-57 \
+--eval-mode fast > TEST_exp_2025_11_19_kit_transformer_ver_dec_cb_size_512_res_drop_ver_2_stage_2_eval_fast_mode_mm_mode.log &
+
+
+
+nohup python eval_rt2m.py \
+--exp-name TEST_exp_2025_11_19_rt2m_transformer_ver_dec_cb_size_512_res_drop_ver_1_ver_w_share_weight_v9_ver_pre_pose_code_emb_ver_stage_3_fast_test \
+--batch-size 32 \
+--num-layers 6 \
+--nb-code 392 \
+--n-head-gpt 8 \
+--block-size 62 \
+--ff-rate 4 \
+--embed-dim-gpt 1024 \
+--drop-out-rate 0.1 \
+--vq-name VQVAE_2025_11_19 \
+--out-dir output_evaluation \
+--total-iter 300000 \
+--lr-scheduler 150000 \
+--lr 0.0002 \
+--dataname t2m \
+--down-t 2 \
+--depth 3 \
+--eval-iter 10000 \
+--pkeep 0.5 \
+--num_workers 4 \
+--dilation-growth-rate 3 \
+--vq-act relu \
+--share-weight \
+--codes-folder-name codes \
+--output-emb-width 392 \
+--eval-mode fast \
+--mm_mode \
+--dec-checkpoint-folder ./important_result/Ours/Dec/2025_09_27_Dec_ver_using_residual_pose_temporal_complementor_ver_res_drop_detach_p_latent_with_soft_quantizer_try_12_unuse_ema_cb_size_512_num_quantizer_6 \
+--t2m-checkpoint-folder ./important_result/Ours/Trans/exp_2025_11_15_t2m_transformer_vanilla_original_ver_dec_cb_512_q_layer_6_drop_ver_1 \
+--residual-t2m-checkpoint-folder ./important_result/Ours/Res_Trans/exp_2025_11_17_rt2m_transformer_ver_dec_cb_size_512_res_drop_ver_1_ver_w_share_weight_v9_ver_pre_pose_code_emb \
+--use-keywords > log_eval_exp_2025_11_19_rt2m_transformer_ver_dec_cb_size_512_res_drop_ver_1_ver_w_share_weight_v9_ver_pre_pose_code_emb_ver_stage_3_fast_test.log &
+
+
+nohup python eval_rt2m.py \
+--exp-name TEST_exp_2025_11_17_rt2m_transformer_ver_dec_cb_size_512_res_drop_ver_2_ver_w_share_weight_v9_ver_pre_pose_code_emb_ver_stage_3_fast_test \
+--batch-size 32 \
+--num-layers 6 \
+--nb-code 392 \
+--n-head-gpt 8 \
+--block-size 51 \
+--ff-rate 4 \
+--embed-dim-gpt 1024 \
+--drop-out-rate 0.1 \
+--vq-name VQVAE_2025_11_17 \
+--out-dir output_evaluation \
+--total-iter 300000 \
+--lr-scheduler 150000 \
+--lr 0.0002 \
+--dataname kit \
+--down-t 2 \
+--depth 3 \
+--eval-iter 10000 \
+--pkeep 0.5 \
+--num_workers 4 \
+--dilation-growth-rate 3 \
+--vq-act relu \
+--share-weight \
+--codes-folder-name codes \
+--output-emb-width 392 \
+--eval-mode fast \
+--dec-checkpoint-folder ./my_exp_result/2025_11_13_Dec_ver_using_residual_pose_temporal_complementor_ver_res_drop_detach_p_latent_with_soft_quantizer_try_12_unuse_ema_cb_size_512_num_quantizer_6_drop_p_ver_2_dataname_kit/2025-11-13_11-06-05 \
+--t2m-checkpoint-folder ./output/exp_2025_11_13_kit_transformer_vanilla_original_ver_dec_cb_512_q_layer_6_drop_ver_2/2025-11-14_02-46-57 \
+--residual-t2m-checkpoint-folder ./output_residual_transformer/exp_2025_11_16_rt2m_transformer_ver_dec_cb_size_512_res_drop_ver_2_ver_w_share_weight_v9_ver_pre_pose_code_emb_w_dataset_kit/2025-11-16_02-12-09 \
+--mm_mode > log_eval_TEST_exp_2025_11_17_rt2m_transformer_ver_dec_cb_size_512_res_drop_ver_2_ver_w_share_weight_v9_ver_pre_pose_code_emb_ver_stage_3_fast_test.log &
+
+
+nohup python eval_rt2m.py \
+--exp-name DEBUG_exp_2025_11_15_rt2m_transformer_ver_dec_cb_size_512_res_drop_ver_2_ver_w_share_weight_v9_ver_pre_pose_code_emb_ver_stage_3_fast_test \
+--batch-size 32 \
+--num-layers 6 \
+--nb-code 392 \
+--n-head-gpt 8 \
+--block-size 62 \
+--ff-rate 4 \
+--embed-dim-gpt 1024 \
+--drop-out-rate 0.1 \
+--vq-name VQVAE_2025_11_07 \
+--out-dir output_evaluation \
+--total-iter 300000 \
+--lr-scheduler 150000 \
+--lr 0.0002 \
+--dataname t2m \
+--down-t 2 \
+--depth 3 \
+--eval-iter 10000 \
+--pkeep 0.5 \
+--num_workers 4 \
+--dilation-growth-rate 3 \
+--vq-act relu \
+--share-weight \
+--codes-folder-name codes \
+--output-emb-width 392 \
+--eval-mode fast \
+--mm_mode \
+--dec-checkpoint-folder ./important_result/Ours/Dec/2025_09_27_Dec_ver_using_residual_pose_temporal_complementor_ver_res_drop_detach_p_latent_with_soft_quantizer_try_12_unuse_ema_cb_size_512_num_quantizer_6_drop_p_ver_2 \
+--t2m-checkpoint-folder ./important_result/Ours/Trans/exp_2025_10_31_t2m_transformer_vanilla_original_ver_dec_cb_512_q_layer_6_drop_ver_2 \
+--residual-t2m-checkpoint-folder ./important_result/Ours/Res_Trans/exp_2025_11_02_rt2m_transformer_ver_dec_cb_size_512_res_drop_ver_2_ver_w_share_weight_v9_ver_pre_pose_code_emb \
+--use-keywords > log_eval_DEBUG_exp_2025_11_15_rt2m_transformer_ver_dec_cb_size_512_res_drop_ver_2_ver_w_share_weight_v9_ver_pre_pose_code_emb_ver_stage_3_fast_test.log &
+
+nohup python eval_rt2m.py \
+--exp-name TEST_exp_2025_11_15_rt2m_transformer_ver_dec_cb_size_512_res_drop_ver_2_ver_w_share_weight_v9_ver_pre_pose_code_emb_ver_stage_3_fast_test \
+--batch-size 32 \
+--num-layers 6 \
+--nb-code 392 \
+--n-head-gpt 8 \
+--block-size 62 \
+--ff-rate 4 \
+--embed-dim-gpt 1024 \
+--drop-out-rate 0.1 \
+--vq-name VQVAE_2025_11_07 \
+--out-dir output_evaluation \
+--total-iter 300000 \
+--lr-scheduler 150000 \
+--lr 0.0002 \
+--dataname t2m \
+--down-t 2 \
+--depth 3 \
+--eval-iter 10000 \
+--pkeep 0.5 \
+--num_workers 4 \
+--dilation-growth-rate 3 \
+--vq-act relu \
+--share-weight \
+--codes-folder-name codes \
+--output-emb-width 392 \
+--eval-mode fast \
+--mm_mode \
+--dec-checkpoint-folder ./important_result/Ours/Dec/2025_09_27_Dec_ver_using_residual_pose_temporal_complementor_ver_res_drop_detach_p_latent_with_soft_quantizer_try_12_unuse_ema_cb_size_512_num_quantizer_6_drop_p_ver_2 \
+--t2m-checkpoint-folder ./important_result/Ours/Trans/exp_2025_10_31_t2m_transformer_vanilla_original_ver_dec_cb_512_q_layer_6_drop_ver_2 \
+--residual-t2m-checkpoint-folder ./important_result/Ours/Res_Trans/exp_2025_11_02_rt2m_transformer_ver_dec_cb_size_512_res_drop_ver_2_ver_w_share_weight_v9_ver_pre_pose_code_emb \
+--use-keywords > log_eval_exp_2025_11_15_rt2m_transformer_ver_dec_cb_size_512_res_drop_ver_2_ver_w_share_weight_v9_ver_pre_pose_code_emb_ver_stage_3_fast_test.log &
+
+nohup python eval_dec.py \
+--batch-size 256 \
+--lr 2e-4 \
+--total-iter 300000 \
+--lr-scheduler 200000 \
+--nb-code 392 \
+--down-t 2 \
+--depth 3 \
+--dilation-growth-rate 3 \
+--out-dir output_evaluation \
+--dataname kit \
+--vq-act relu \
+--exp-name TEST_Dec/Baseline_Dec_Dataname_KIT \
+--force-drop-residual-quantization \
+--dec-checkpoint-folder ./my_exp_result/2025_11_14_Dec_ver_baseline_using_basic_loss_dataset_kit/2025-11-13_15-10-33 \
+--output-emb-width 392 > log_eval_2025_11_14_Dec_ver_baseline_using_basic_loss_dataset_kit.log &
+
+
+nohup python eval_dec.py \
+--batch-size 256 \
+--lr 2e-4 \
+--total-iter 300000 \
+--lr-scheduler 200000 \
+--nb-code 392 \
+--down-t 2 \
+--depth 3 \
+--dilation-growth-rate 3 \
+--out-dir output_evaluation \
+--dataname kit \
+--vq-act relu \
+--exp-name TEST_Dec/2025_11_13_Dec_ver_using_residual_pose_temporal_complementor_ver_res_drop_detach_p_latent_with_soft_quantizer_try_12_unuse_ema_cb_size_512_num_quantizer_6_drop_p_ver_1_dataname_kit \
+--dec-checkpoint-folder ./my_exp_result/2025_11_13_Dec_ver_using_residual_pose_temporal_complementor_ver_res_drop_detach_p_latent_with_soft_quantizer_try_12_unuse_ema_cb_size_512_num_quantizer_6_drop_p_ver_1_dataname_kit/2025-11-13_11-06-03 \
+--output-emb-width 392 > log_eval_2025_11_13_Dec_ver_using_residual_pose_temporal_complementor_ver_res_drop_detach_p_latent_with_soft_quantizer_try_12_unuse_ema_cb_size_512_num_quantizer_6_drop_p_ver_1_dataname_kit.log &
+
+nohup python eval_dec.py \
+--batch-size 256 \
+--lr 2e-4 \
+--total-iter 300000 \
+--lr-scheduler 200000 \
+--nb-code 392 \
+--down-t 2 \
+--depth 3 \
+--dilation-growth-rate 3 \
+--out-dir output_evaluation \
+--dataname kit \
+--vq-act relu \
+--exp-name TEST_Dec/2025_11_13_Dec_ver_using_residual_pose_temporal_complementor_ver_res_drop_detach_p_latent_with_soft_quantizer_try_12_unuse_ema_cb_size_512_num_quantizer_6_drop_p_ver_2_dataname_kit \
+--dec-checkpoint-folder ./my_exp_result/2025_11_13_Dec_ver_using_residual_pose_temporal_complementor_ver_res_drop_detach_p_latent_with_soft_quantizer_try_12_unuse_ema_cb_size_512_num_quantizer_6_drop_p_ver_2_dataname_kit/2025-11-13_11-06-05 \
+--output-emb-width 392 > log_eval_2025_11_13_Dec_ver_using_residual_pose_temporal_complementor_ver_res_drop_detach_p_latent_with_soft_quantizer_try_12_unuse_ema_cb_size_512_num_quantizer_6_drop_p_ver_2_dataname_kit.log &
+
+
+
+
+nohup python eval_t2m.py \
+--exp-name TEST_exp_2025_11_08_t2m_transformer_baseline_stage_2_eval_fast_mode \
+--batch-size 256 \
+--num-layers 9 \
+--embed-dim-gpt 1024 \
+--nb-code 392 \
+--n-head-gpt 16 \
+--block-size 62 \
+--ff-rate 4 \
+--drop-out-rate 0.1 \
+--vq-name VQVAE_2025_10_15 \
+--out-dir output_evaluation \
+--total-iter 300000 \
+--lr-scheduler 150000 \
+--lr 0.0001 \
+--dataname t2m \
+--down-t 2 \
+--depth 3 \
+--eval-iter 10000 \
+--pkeep 0.5 \
+--dilation-growth-rate 3 \
+--vq-act relu \
+--eval-mode fast \
+--output-emb-width 392 \
+--dec-checkpoint-folder ./important_result/Baseline/Dec \
+--t2m-checkpoint-folder ./important_result/Baseline/Trans \
+--use-keywords > TEST_exp_2025_11_07_t2m_transformer_baseline_stage_2_eval_fast_mode.log &
+
+
+nohup python eval_rt2m.py \
+--exp-name TEST_exp_2025_11_13_rt2m_transformer_ver_dec_cb_size_512_res_drop_ver_2_ver_w_share_weight_v9_ver_pre_pose_code_emb_ver_stage_3_fast_test \
+--batch-size 32 \
+--num-layers 6 \
+--nb-code 392 \
+--n-head-gpt 8 \
+--block-size 62 \
+--ff-rate 4 \
+--embed-dim-gpt 1024 \
+--drop-out-rate 0.1 \
+--vq-name VQVAE_2025_11_07 \
+--out-dir output_evaluation \
+--total-iter 300000 \
+--lr-scheduler 150000 \
+--lr 0.0002 \
+--dataname t2m \
+--down-t 2 \
+--depth 3 \
+--eval-iter 10000 \
+--pkeep 0.5 \
+--num_workers 4 \
+--dilation-growth-rate 3 \
+--vq-act relu \
+--share-weight \
+--codes-folder-name codes \
+--output-emb-width 392 \
+--eval-mode fast \
+--dec-checkpoint-folder ./important_result/Ours/Dec/2025_09_27_Dec_ver_using_residual_pose_temporal_complementor_ver_res_drop_detach_p_latent_with_soft_quantizer_try_12_unuse_ema_cb_size_512_num_quantizer_6_drop_p_ver_2 \
+--t2m-checkpoint-folder ./important_result/Ours/Trans/exp_2025_10_31_t2m_transformer_vanilla_original_ver_dec_cb_512_q_layer_6_drop_ver_2 \
+--residual-t2m-checkpoint-folder ./important_result/Ours/Res_Trans/exp_2025_11_02_rt2m_transformer_ver_dec_cb_size_512_res_drop_ver_2_ver_w_share_weight_v9_ver_pre_pose_code_emb \
+--use-keywords > log_eval_exp_2025_11_13_rt2m_transformer_ver_dec_cb_size_512_res_drop_ver_2_ver_w_share_weight_v9_ver_pre_pose_code_emb_ver_stage_3_fast_test.log &
+
+# --mm_mode \
+
+
+nohup python eval_t2m.py \
+--exp-name TEST_exp_2025_11_08_t2m_transformer_baseline_stage_2 \
+--batch-size 256 \
+--num-layers 9 \
+--embed-dim-gpt 1024 \
+--nb-code 392 \
+--n-head-gpt 16 \
+--block-size 62 \
+--ff-rate 4 \
+--drop-out-rate 0.1 \
+--vq-name VQVAE_2025_10_15 \
+--out-dir output_evaluation \
+--total-iter 300000 \
+--lr-scheduler 150000 \
+--lr 0.0001 \
+--dataname t2m \
+--down-t 2 \
+--depth 3 \
+--eval-iter 10000 \
+--pkeep 0.5 \
+--dilation-growth-rate 3 \
+--vq-act relu \
+--output-emb-width 392 \
+--dec-checkpoint-folder ./important_result/Baseline/Dec \
+--t2m-checkpoint-folder ./important_result/Baseline/Trans \
+--use-keywords > TEST_exp_2025_11_07_t2m_transformer_baseline_stage_2.log &
+
+nohup python eval_rt2m.py \
+--exp-name TEST_exp_2025_11_08_rt2m_transformer_ver_dec_cb_size_512_res_drop_ver_2_ver_w_share_weight_v9_ver_pre_pose_code_emb_ver_stage_3 \
+--batch-size 32 \
+--num-layers 6 \
+--nb-code 392 \
+--n-head-gpt 8 \
+--block-size 62 \
+--ff-rate 4 \
+--embed-dim-gpt 1024 \
+--drop-out-rate 0.1 \
+--vq-name VQVAE_2025_11_07 \
+--out-dir output_evaluation \
+--total-iter 300000 \
+--lr-scheduler 150000 \
+--lr 0.0002 \
+--dataname t2m \
+--down-t 2 \
+--depth 3 \
+--eval-iter 10000 \
+--pkeep 0.5 \
+--num_workers 4 \
+--dilation-growth-rate 3 \
+--vq-act relu \
+--share-weight \
+--codes-folder-name codes \
+--output-emb-width 392 \
+--dec-checkpoint-folder ./important_result/Ours/Dec/2025_09_27_Dec_ver_using_residual_pose_temporal_complementor_ver_res_drop_detach_p_latent_with_soft_quantizer_try_12_unuse_ema_cb_size_512_num_quantizer_6_drop_p_ver_2 \
+--t2m-checkpoint-folder ./important_result/Ours/Trans/exp_2025_10_31_t2m_transformer_vanilla_original_ver_dec_cb_512_q_layer_6_drop_ver_2 \
+--residual-t2m-checkpoint-folder ./important_result/Ours/Res_Trans/exp_2025_11_02_rt2m_transformer_ver_dec_cb_size_512_res_drop_ver_2_ver_w_share_weight_v9_ver_pre_pose_code_emb \
+--use-keywords > log_eval_exp_2025_11_07_rt2m_transformer_ver_dec_cb_size_512_res_drop_ver_2_ver_w_share_weight_v9_ver_pre_pose_code_emb_ver_stage_3.log &
+
+nohup python eval_t2m.py \
+--exp-name TEST_exp_2025_11_08_t2m_transformer_ver_dec_cb_size_512_res_drop_ver_2_ver_w_share_weight_v9_ver_pre_pose_code_emb_ver_stage_2 \
+--batch-size 32 \
+--num-layers 9 \
+--embed-dim-gpt 1024 \
+--nb-code 392 \
+--n-head-gpt 16 \
+--block-size 62 \
+--ff-rate 4 \
+--drop-out-rate 0.1 \
+--vq-name VQVAE_2025_10_15 \
+--out-dir output_evaluation \
+--total-iter 300000 \
+--lr-scheduler 150000 \
+--lr 0.0001 \
+--dataname t2m \
+--down-t 2 \
+--depth 3 \
+--eval-iter 10000 \
+--pkeep 0.5 \
+--dilation-growth-rate 3 \
+--vq-act relu \
+--codes-folder-name codes \
+--output-emb-width 392 \
+--dec-checkpoint-folder ./important_result/Ours/Dec/2025_09_27_Dec_ver_using_residual_pose_temporal_complementor_ver_res_drop_detach_p_latent_with_soft_quantizer_try_12_unuse_ema_cb_size_512_num_quantizer_6_drop_p_ver_2 \
+--t2m-checkpoint-folder ./important_result/Ours/Trans/exp_2025_10_31_t2m_transformer_vanilla_original_ver_dec_cb_512_q_layer_6_drop_ver_2 \
+--use-keywords > TEST_exp_2025_11_08_t2m_transformer_ver_dec_cb_size_512_res_drop_ver_2_ver_w_share_weight_v9_ver_pre_pose_code_emb_ver_stage_2.log &
+
+nohup python eval_t2m.py \
+--exp-name TEST_exp_2025_11_08_t2m_transformer_vanilla_original_ver_dec_cb_512_q_layer_6_drop_ver_2_really_fixed_seed_why_real_value_differ \
+--batch-size 32 \
+--num-layers 9 \
+--embed-dim-gpt 1024 \
+--nb-code 392 \
+--n-head-gpt 16 \
+--block-size 62 \
+--ff-rate 4 \
+--drop-out-rate 0.1 \
+--vq-name VQVAE_2025_10_15 \
+--out-dir eval_output \
+--total-iter 300000 \
+--lr-scheduler 150000 \
+--lr 0.0001 \
+--dataname t2m \
+--down-t 2 \
+--depth 3 \
+--eval-iter 10000 \
+--pkeep 0.5 \
+--dilation-growth-rate 3 \
+--vq-act relu \
+--codes-folder-name codes \
+--output-emb-width 392 \
+--dec-checkpoint-folder ./my_exp_result/2025_09_27_Dec_ver_using_residual_pose_temporal_complementor_ver_res_drop_detach_p_latent_with_soft_quantizer_try_12_unuse_ema_cb_size_512_num_quantizer_6_drop_p_ver_2/2025-09-27_12-49-50 \
+--resume-trans ./output/exp_2025_10_31_t2m_transformer_vanilla_original_ver_dec_cb_512_q_layer_6_drop_ver_2/2025-10-30_23-41-47/net_best_fid.pth \
+--use-keywords > log_2025_11_08_eval_t2m_transformer_vanilla_original_ver_dec_cb_512_q_layer_6_drop_ver_2_really_fixed_seed_why_real_value_differ.log &
+
+
+nohup python eval_rt2m.py \
+--exp-name TEST_exp_2025_11_07_rt2m_transformer_ver_dec_cb_size_512_res_drop_ver_2_ver_w_share_weight_v9_ver_pre_pose_code_emb_ver_really_fixed_seed \
+--batch-size 32 \
+--num-layers 6 \
+--nb-code 392 \
+--n-head-gpt 8 \
+--block-size 62 \
+--ff-rate 4 \
+--embed-dim-gpt 1024 \
+--drop-out-rate 0.1 \
+--vq-name VQVAE_2025_11_07 \
+--out-dir eval_residual_trans_output \
+--total-iter 300000 \
+--lr-scheduler 150000 \
+--lr 0.0002 \
+--dataname t2m \
+--down-t 2 \
+--depth 3 \
+--eval-iter 10000 \
+--pkeep 0.5 \
+--num_workers 4 \
+--dilation-growth-rate 3 \
+--vq-act relu \
+--share-weight \
+--codes-folder-name codes \
+--output-emb-width 392 \
+--dec-checkpoint-folder ./important_result/Ours/Dec/2025_09_27_Dec_ver_using_residual_pose_temporal_complementor_ver_res_drop_detach_p_latent_with_soft_quantizer_try_12_unuse_ema_cb_size_512_num_quantizer_6_drop_p_ver_2 \
+--t2m-checkpoint-folder ./important_result/Ours/Trans/exp_2025_10_31_t2m_transformer_vanilla_original_ver_dec_cb_512_q_layer_6_drop_ver_2 \
+--residual-t2m-checkpoint-folder ./important_result/Ours/Res_Trans/exp_2025_11_02_rt2m_transformer_ver_dec_cb_size_512_res_drop_ver_2_ver_w_share_weight_v9_ver_pre_pose_code_emb \
+--use-keywords > log_eval_exp_2025_11_07_rt2m_transformer_ver_dec_cb_size_512_res_drop_ver_2_ver_w_share_weight_v9_ver_pre_pose_code_emb_ver_really_fixed_seed.log &
+
+nohup python eval_rt2m.py \
+--exp-name TEST_exp_2025_11_07_rt2m_transformer_ver_dec_cb_size_512_res_drop_ver_2_ver_follow_baseline_w_share_weight_v9_ver_really_fixed_seed \
+--batch-size 32 \
+--num-layers 6 \
+--nb-code 392 \
+--n-head-gpt 8 \
+--block-size 62 \
+--ff-rate 4 \
+--embed-dim-gpt 1024 \
+--drop-out-rate 0.1 \
+--vq-name VQVAE_2025_10_25 \
+--out-dir eval_residual_trans_output \
+--total-iter 300000 \
+--lr-scheduler 150000 \
+--lr 0.0002 \
+--dataname t2m \
+--down-t 2 \
+--depth 3 \
+--eval-iter 10000 \
+--pkeep 0.5 \
+--num_workers 16 \
+--dilation-growth-rate 3 \
+--vq-act relu \
+--share-weight \
+--codes-folder-name codes \
+--output-emb-width 392 \
+--t2m-checkpoint-folder ./output/exp_2025_10_25_t2m_transformer_vanilla_update_loss_ver_dec_res_drop_cb_size_512_q_layer_6_res_drop_ver_2/2025-10-25_12-37-34 \
+--dec-checkpoint-folder ./my_exp_result/2025_09_27_Dec_ver_using_residual_pose_temporal_complementor_ver_res_drop_detach_p_latent_with_soft_quantizer_try_12_unuse_ema_cb_size_512_num_quantizer_6_drop_p_ver_2/2025-09-27_12-49-50 \
+--resume-r-trans ./temp_model/exp_2025_10_26_rt2m_transformer_ver_dec_cb_size_512_res_drop_ver_2_ver_follow_baseline_w_share_weight_v9_ver_real_2/2025-10-29_12-38-32/net_best_fid.pth \
+--use-keywords > log_eval_exp_2025_11_07_rt2m_transformer_ver_dec_cb_size_512_res_drop_ver_2_ver_follow_baseline_w_share_weight_v9_ver_really_fixed_seed.log &
+
+nohup python eval_t2m.py \
+--exp-name TEST_exp_2025_11_07_t2m_transformer_vanilla_original_ver_dec_cb_512_q_layer_6_drop_ver_2_really_fixed_seed \
+--batch-size 32 \
+--num-layers 9 \
+--embed-dim-gpt 1024 \
+--nb-code 392 \
+--n-head-gpt 16 \
+--block-size 62 \
+--ff-rate 4 \
+--drop-out-rate 0.1 \
+--vq-name VQVAE_2025_10_15 \
+--out-dir eval_output \
+--total-iter 300000 \
+--lr-scheduler 150000 \
+--lr 0.0001 \
+--dataname t2m \
+--down-t 2 \
+--depth 3 \
+--eval-iter 10000 \
+--pkeep 0.5 \
+--dilation-growth-rate 3 \
+--vq-act relu \
+--codes-folder-name codes \
+--output-emb-width 392 \
+--dec-checkpoint-folder ./my_exp_result/2025_09_27_Dec_ver_using_residual_pose_temporal_complementor_ver_res_drop_detach_p_latent_with_soft_quantizer_try_12_unuse_ema_cb_size_512_num_quantizer_6_drop_p_ver_2/2025-09-27_12-49-50 \
+--resume-trans ./output/exp_2025_10_31_t2m_transformer_vanilla_original_ver_dec_cb_512_q_layer_6_drop_ver_2/2025-10-30_23-41-47/net_best_fid.pth \
+--use-keywords > log_2025_11_07_eval_t2m_transformer_vanilla_original_ver_dec_cb_512_q_layer_6_drop_ver_2_really_fixed_seed.log &
+
+
+nohup python eval_t2m.py \
+--exp-name TEST_exp_2025_11_07_t2m_transformer_baseline_test_v2_only_change_resume_trans_resume_pth \
+--batch-size 256 \
+--num-layers 9 \
+--embed-dim-gpt 1024 \
+--nb-code 392 \
+--n-head-gpt 16 \
+--block-size 62 \
+--ff-rate 4 \
+--drop-out-rate 0.1 \
+--vq-name VQVAE_2025_10_15 \
+--out-dir eval_output \
+--total-iter 300000 \
+--lr-scheduler 150000 \
+--lr 0.0001 \
+--dataname t2m \
+--down-t 2 \
+--depth 3 \
+--eval-iter 10000 \
+--pkeep 0.5 \
+--dilation-growth-rate 3 \
+--vq-act relu \
+--output-emb-width 392 \
+--resume-pth ./pretrained/t2m/Dec/model.pth \
+--resume-trans ./pretrained/t2m/Trans/model.pth \
+--use-keywords > TEST_exp_2025_11_07_t2m_transformer_baseline_test_v2_only_change_resume_trans_resume_pth.log &
+
+nohup python eval_t2m.py \
+--exp-name TEST_exp_2025_11_06_t2m_transformer_baseline_test_v2_only_change_resume_trans \
+--batch-size 256 \
+--num-layers 9 \
+--embed-dim-gpt 1024 \
+--nb-code 392 \
+--n-head-gpt 16 \
+--block-size 62 \
+--ff-rate 4 \
+--drop-out-rate 0.1 \
+--vq-name VQVAE_2025_10_15 \
+--out-dir eval_output \
+--total-iter 300000 \
+--lr-scheduler 150000 \
+--lr 0.0001 \
+--dataname t2m \
+--down-t 2 \
+--depth 3 \
+--eval-iter 10000 \
+--pkeep 0.5 \
+--dilation-growth-rate 3 \
+--vq-act relu \
+--output-emb-width 392 \
+--dec-checkpoint-folder /data/CoMo/important_result/Baseline/Dec \
+--resume-trans ./pretrained/t2m/Trans/model.pth \
+--use-keywords > log_eval_exp_2025_11_06_t2m_transformer_baseline_test_v2_only_change_resume_trans.log &
+
+
+nohup python eval_t2m.py \
+--exp-name DEBUG_exp_2025_11_08_t2m_transformer_vanilla_original_ver_dec_cb_512_q_layer_6_drop_ver_2_really_fixed_seed_why_real_value_differ_bs_dec \
+--batch-size 256 \
+--num-layers 9 \
+--embed-dim-gpt 1024 \
+--nb-code 392 \
+--n-head-gpt 16 \
+--block-size 62 \
+--ff-rate 4 \
+--drop-out-rate 0.1 \
+--vq-name VQVAE_2025_10_15 \
+--out-dir eval_output \
+--total-iter 300000 \
+--lr-scheduler 150000 \
+--lr 0.0001 \
+--dataname t2m \
+--down-t 2 \
+--depth 3 \
+--eval-iter 10000 \
+--pkeep 0.5 \
+--dilation-growth-rate 3 \
+--vq-act relu \
+--output-emb-width 392 \
+--dec-checkpoint-folder /data/CoMo/important_result/Baseline/Dec \
+--resume-trans ./output/exp_2025_10_31_t2m_transformer_vanilla_original_ver_dec_cb_512_q_layer_6_drop_ver_2/2025-10-30_23-41-47/net_best_fid.pth \
+--use-keywords > DEBUG_exp_2025_11_08_eval_t2m_transformer_vanilla_original_ver_dec_cb_512_q_layer_6_drop_ver_2_really_fixed_seed_why_real_value_differ_bs_dec.log &
+
+
+nohup python eval_t2m.py \
+--exp-name DEBUG_exp_2025_11_08_t2m_transformer_vanilla_original_ver_dec_cb_512_q_layer_6_drop_ver_2_really_fixed_seed_why_real_value_differ \
+--batch-size 256 \
+--num-layers 9 \
+--embed-dim-gpt 1024 \
+--nb-code 392 \
+--n-head-gpt 16 \
+--block-size 62 \
+--ff-rate 4 \
+--drop-out-rate 0.1 \
+--vq-name VQVAE_2025_10_15 \
+--out-dir eval_output \
+--total-iter 300000 \
+--lr-scheduler 150000 \
+--lr 0.0001 \
+--dataname t2m \
+--down-t 2 \
+--depth 3 \
+--eval-iter 10000 \
+--pkeep 0.5 \
+--dilation-growth-rate 3 \
+--vq-act relu \
+--output-emb-width 392 \
+--dec-checkpoint-folder ./my_exp_result/2025_09_27_Dec_ver_using_residual_pose_temporal_complementor_ver_res_drop_detach_p_latent_with_soft_quantizer_try_12_unuse_ema_cb_size_512_num_quantizer_6_drop_p_ver_2/2025-09-27_12-49-50 \
+--resume-trans ./output/exp_2025_10_31_t2m_transformer_vanilla_original_ver_dec_cb_512_q_layer_6_drop_ver_2/2025-10-30_23-41-47/net_best_fid.pth \
+--use-keywords > DEBUG_exp_2025_11_08_eval_t2m_transformer_vanilla_original_ver_dec_cb_512_q_layer_6_drop_ver_2_really_fixed_seed_why_real_value_differ.log &
+
+nohup python eval_t2m.py \
+--exp-name DEBUG_exp_2025_11_08_t2m_transformer_baseline_test_v2_only_change_resume_trans_resume_pth_why_value_differ \
+--batch-size 256 \
+--num-layers 9 \
+--embed-dim-gpt 1024 \
+--nb-code 392 \
+--n-head-gpt 16 \
+--block-size 62 \
+--ff-rate 4 \
+--drop-out-rate 0.1 \
+--vq-name VQVAE_2025_10_15 \
+--out-dir eval_output \
+--total-iter 300000 \
+--lr-scheduler 150000 \
+--lr 0.0001 \
+--dataname t2m \
+--down-t 2 \
+--depth 3 \
+--eval-iter 10000 \
+--pkeep 0.5 \
+--dilation-growth-rate 3 \
+--vq-act relu \
+--output-emb-width 392 \
+--dec-checkpoint-folder /data/CoMo/important_result/Baseline/Dec \
+--resume-trans ./pretrained/t2m/Trans/model.pth \
+--use-keywords > DEBUG_exp_2025_11_08_t2m_transformer_baseline_test_v2_only_change_resume_trans_resume_pth_why_value_differ.log &
+
+
+nohup python eval_t2m_original.py  \
+--exp-name DEBUG_exp_2025_11_05_TEST_Trans_original \
+--batch-size 256 \
+--num-layers 9 \
+--embed-dim-gpt 1024 \
+--nb-code 392 \
+--n-head-gpt 16 \
+--block-size 62 \
+--ff-rate 4 \
+--drop-out-rate 0.1 \
+--resume-pth ./pretrained/t2m/Dec/model.pth \
+--vq-name VQVAE \
+--out-dir output \
+--total-iter 300000 \
+--lr-scheduler 150000 \
+--lr 0.0001 \
+--dataname t2m \
+--down-t 2 \
+--depth 3 \
+--eval-iter 10000 \
+--pkeep 0.5 \
+--dilation-growth-rate 3 \
+--vq-act relu \
+--output-emb-width 392 \
+--resume-trans ./pretrained/t2m/Trans/model.pth > DEBUG_exp_log_eval_2025_11_05_TEST_Trans_original.log &
+
+nohup python eval_t2m.py \
+--exp-name TEST_exp_2025_11_04_t2m_transformer_baseline_original_ver_dec_cb_512_q_layer_6_drop_ver_2_fixed_seed_with_totally_baseline_after_some_unusable_code_deleted \
+--batch-size 256 \
+--num-layers 9 \
+--embed-dim-gpt 1024 \
+--nb-code 392 \
+--n-head-gpt 16 \
+--block-size 62 \
+--ff-rate 4 \
+--drop-out-rate 0.1 \
+--vq-name VQVAE_2025_10_15 \
+--out-dir eval_output \
+--total-iter 300000 \
+--lr-scheduler 150000 \
+--lr 0.0001 \
+--dataname t2m \
+--down-t 2 \
+--depth 3 \
+--eval-iter 10000 \
+--pkeep 0.5 \
+--dilation-growth-rate 3 \
+--vq-act relu \
+--codes-folder-name codes \
+--output-emb-width 392 \
+--dec-checkpoint-folder /data/CoMo/important_result/Baseline/Dec \
+--resume-trans ./important_result/Baseline/Trans/net_best_fid.pth \
+--use-keywords > log_eval_t2m_transformer_baseline_original_ver_dec_cb_512_q_layer_6_drop_ver_2_fixed_seed_with_totally_baseline_after_some_unusable_code_deleted.log &
+
+nohup python eval_t2m.py \
+--exp-name TEST_exp_2025_11_04_t2m_transformer_baseline_original_ver_dec_cb_512_q_layer_6_drop_ver_2_fixed_seed_with_totally_baseline \
+--batch-size 32 \
+--num-layers 9 \
+--embed-dim-gpt 1024 \
+--nb-code 392 \
+--n-head-gpt 16 \
+--block-size 62 \
+--ff-rate 4 \
+--drop-out-rate 0.1 \
+--vq-name VQVAE_2025_10_15 \
+--out-dir eval_output \
+--total-iter 300000 \
+--lr-scheduler 150000 \
+--lr 0.0001 \
+--dataname t2m \
+--down-t 2 \
+--depth 3 \
+--eval-iter 10000 \
+--pkeep 0.5 \
+--dilation-growth-rate 3 \
+--vq-act relu \
+--codes-folder-name codes \
+--output-emb-width 392 \
+--dec-checkpoint-folder /data/CoMo/important_result/Baseline/Dec \
+--resume-trans ./important_result/Baseline/Trans/net_best_fid.pth \
+--use-keywords > log_eval_t2m_transformer_baseline_original_ver_dec_cb_512_q_layer_6_drop_ver_2_fixed_seed_with_totally_baseline.log &
+
+nohup python eval_t2m.py \
+--exp-name TEST_exp_2025_11_04_t2m_transformer_baseline_original_ver_dec_cb_512_q_layer_6_drop_ver_2_fixed_seed_with_our_decoder \
+--batch-size 32 \
+--num-layers 9 \
+--embed-dim-gpt 1024 \
+--nb-code 392 \
+--n-head-gpt 16 \
+--block-size 62 \
+--ff-rate 4 \
+--drop-out-rate 0.1 \
+--vq-name VQVAE_2025_10_15 \
+--out-dir eval_output \
+--total-iter 300000 \
+--lr-scheduler 150000 \
+--lr 0.0001 \
+--dataname t2m \
+--down-t 2 \
+--depth 3 \
+--eval-iter 10000 \
+--pkeep 0.5 \
+--dilation-growth-rate 3 \
+--vq-act relu \
+--codes-folder-name codes \
+--output-emb-width 392 \
+--dec-checkpoint-folder ./my_exp_result/2025_09_27_Dec_ver_using_residual_pose_temporal_complementor_ver_res_drop_detach_p_latent_with_soft_quantizer_try_12_unuse_ema_cb_size_512_num_quantizer_6_drop_p_ver_2/2025-09-27_12-49-50 \
+--resume-trans ./important_result/Baseline/Trans/net_best_fid.pth \
+--use-keywords > log_eval_t2m_transformer_baseline_original_ver_dec_cb_512_q_layer_6_drop_ver_2_fixed_seed_with_our_decoder.log &
+
+nohup python eval_t2m.py \
+--exp-name TEST_exp_2025_11_04_t2m_transformer_vanilla_original_ver_dec_cb_512_q_layer_6_drop_ver_2_fixed_seed \
+--batch-size 32 \
+--num-layers 9 \
+--embed-dim-gpt 1024 \
+--nb-code 392 \
+--n-head-gpt 16 \
+--block-size 62 \
+--ff-rate 4 \
+--drop-out-rate 0.1 \
+--vq-name VQVAE_2025_10_15 \
+--out-dir eval_output \
+--total-iter 300000 \
+--lr-scheduler 150000 \
+--lr 0.0001 \
+--dataname t2m \
+--down-t 2 \
+--depth 3 \
+--eval-iter 10000 \
+--pkeep 0.5 \
+--dilation-growth-rate 3 \
+--vq-act relu \
+--codes-folder-name codes \
+--output-emb-width 392 \
+--dec-checkpoint-folder ./my_exp_result/2025_09_27_Dec_ver_using_residual_pose_temporal_complementor_ver_res_drop_detach_p_latent_with_soft_quantizer_try_12_unuse_ema_cb_size_512_num_quantizer_6_drop_p_ver_2/2025-09-27_12-49-50 \
+--resume-trans ./output/exp_2025_10_31_t2m_transformer_vanilla_original_ver_dec_cb_512_q_layer_6_drop_ver_2/2025-10-30_23-41-47/net_best_fid.pth \
+--use-keywords > log_eval_t2m_transformer_vanilla_original_ver_dec_cb_512_q_layer_6_drop_ver_2_fixed_seed.log &
+
+nohup python eval_dec.py \
+--batch-size 256 \
+--lr 2e-4 \
+--total-iter 300000 \
+--lr-scheduler 200000 \
+--nb-code 392 \
+--down-t 2 \
+--depth 3 \
+--dilation-growth-rate 3 \
+--out-dir eval_output \
+--dataname t2m \
+--vq-act relu \
+--exp-name TEST_Dec/Baseline_Dec \
+--use-keywords \
+--force-drop-residual-quantization \
+--dec-checkpoint-folder ./important_result/Baseline/Dec \
+--output-emb-width 392 > log_eval_Baseline_Dec.log &
+
+
+nohup python eval_dec.py \
+--batch-size 256 \
+--lr 2e-4 \
+--total-iter 300000 \
+--lr-scheduler 200000 \
+--nb-code 392 \
+--down-t 2 \
+--depth 3 \
+--dilation-growth-rate 3 \
+--out-dir eval_output \
+--dataname t2m \
+--vq-act relu \
+--exp-name TEST_Dec/2025_09_27_Dec_ver_using_residual_pose_temporal_complementor_ver_res_drop_detach_p_latent_with_soft_quantizer_try_12_unuse_ema_cb_size_512_num_quantizer_6_drop_p_ver_2_no_force_drop_residual \
+--use-keywords \
+--dec-checkpoint-folder ./my_exp_result/2025_09_27_Dec_ver_using_residual_pose_temporal_complementor_ver_res_drop_detach_p_latent_with_soft_quantizer_try_12_unuse_ema_cb_size_512_num_quantizer_6_drop_p_ver_2/2025-09-27_12-49-50 \
+--output-emb-width 392 > log_eval_2025_09_27_Dec_ver_using_residual_pose_temporal_complementor_ver_res_drop_detach_p_latent_with_soft_quantizer_try_12_unuse_ema_cb_size_512_num_quantizer_6_drop_p_ver_2_no_force_drop_residual.log &
+
+# --force-drop-residual-quantization \
+
+nohup python eval_rt2m.py \
+--exp-name TEST_exp_2025_11_03_rt2m_transformer_ver_dec_cb_size_512_res_drop_ver_2_ver_w_share_weight_v9_ver_pre_pose_code_emb_ver_residual_categorical_both_True_seed_1234 \
+--batch-size 32 \
+--num-layers 6 \
+--nb-code 392 \
+--n-head-gpt 8 \
+--block-size 62 \
+--ff-rate 4 \
+--embed-dim-gpt 1024 \
+--drop-out-rate 0.1 \
+--vq-name VQVAE_2025_11_03 \
+--out-dir eval_residual_trans_output \
+--total-iter 300000 \
+--lr-scheduler 150000 \
+--lr 0.0002 \
+--dataname t2m \
+--down-t 2 \
+--depth 3 \
+--eval-iter 10000 \
+--pkeep 0.5 \
+--num_workers 4 \
+--dilation-growth-rate 3 \
+--vq-act relu \
+--share-weight \
+--codes-folder-name codes \
+--output-emb-width 392 \
+--seed 1234 \
+--dec-checkpoint-folder ./important_result/Ours/Dec/2025_09_27_Dec_ver_using_residual_pose_temporal_complementor_ver_res_drop_detach_p_latent_with_soft_quantizer_try_12_unuse_ema_cb_size_512_num_quantizer_6_drop_p_ver_2 \
+--t2m-checkpoint-folder ./important_result/Ours/Trans/exp_2025_10_31_t2m_transformer_vanilla_original_ver_dec_cb_512_q_layer_6_drop_ver_2 \
+--residual-t2m-checkpoint-folder ./important_result/Ours/Res_Trans/exp_2025_11_02_rt2m_transformer_ver_dec_cb_size_512_res_drop_ver_2_ver_w_share_weight_v9_ver_pre_pose_code_emb \
+--use-keywords > log_eval_exp_2025_11_03_rt2m_transformer_ver_dec_cb_size_512_res_drop_ver_2_ver_w_share_weight_v9_ver_pre_pose_code_emb_ver_residual_categorical_both_True_seed_1234.log &
+
+nohup python eval_rt2m.py \
+--exp-name TEST_exp_2025_11_03_rt2m_transformer_ver_dec_cb_size_512_res_drop_ver_2_ver_w_share_weight_v9_ver_pre_pose_code_emb_ver_residual_categorical_both_True_seed_123 \
+--batch-size 32 \
+--num-layers 6 \
+--nb-code 392 \
+--n-head-gpt 8 \
+--block-size 62 \
+--ff-rate 4 \
+--embed-dim-gpt 1024 \
+--drop-out-rate 0.1 \
+--vq-name VQVAE_2025_11_03 \
+--out-dir eval_residual_trans_output \
+--total-iter 300000 \
+--lr-scheduler 150000 \
+--lr 0.0002 \
+--dataname t2m \
+--down-t 2 \
+--depth 3 \
+--eval-iter 10000 \
+--pkeep 0.5 \
+--num_workers 4 \
+--dilation-growth-rate 3 \
+--vq-act relu \
+--share-weight \
+--codes-folder-name codes \
+--output-emb-width 392 \
+--dec-checkpoint-folder ./important_result/Ours/Dec/2025_09_27_Dec_ver_using_residual_pose_temporal_complementor_ver_res_drop_detach_p_latent_with_soft_quantizer_try_12_unuse_ema_cb_size_512_num_quantizer_6_drop_p_ver_2 \
+--t2m-checkpoint-folder ./important_result/Ours/Trans/exp_2025_10_31_t2m_transformer_vanilla_original_ver_dec_cb_512_q_layer_6_drop_ver_2 \
+--residual-t2m-checkpoint-folder ./important_result/Ours/Res_Trans/exp_2025_11_02_rt2m_transformer_ver_dec_cb_size_512_res_drop_ver_2_ver_w_share_weight_v9_ver_pre_pose_code_emb \
+--use-keywords > log_eval_exp_2025_11_03_rt2m_transformer_ver_dec_cb_size_512_res_drop_ver_2_ver_w_share_weight_v9_ver_pre_pose_code_emb_ver_residual_categorical_both_True_seed_123.log &
+
+
+nohup python eval_t2m.py \
+--exp-name TEST_exp_2025_11_04_t2m_transformer_vanilla_original_ver_dec_cb_512_q_layer_6_drop_ver_2_fixed_seed \
+--batch-size 32 \
+--num-layers 9 \
+--embed-dim-gpt 1024 \
+--nb-code 392 \
+--n-head-gpt 16 \
+--block-size 62 \
+--ff-rate 4 \
+--drop-out-rate 0.1 \
+--vq-name VQVAE_2025_10_15 \
+--out-dir eval_output \
+--total-iter 300000 \
+--lr-scheduler 150000 \
+--lr 0.0001 \
+--dataname t2m \
+--down-t 2 \
+--depth 3 \
+--eval-iter 10000 \
+--pkeep 0.5 \
+--dilation-growth-rate 3 \
+--vq-act relu \
+--codes-folder-name codes \
+--output-emb-width 392 \
+--dec-checkpoint-folder ./my_exp_result/2025_09_27_Dec_ver_using_residual_pose_temporal_complementor_ver_res_drop_detach_p_latent_with_soft_quantizer_try_12_unuse_ema_cb_size_512_num_quantizer_6_drop_p_ver_2/2025-09-27_12-49-50 \
+--resume-trans ./output/exp_2025_10_31_t2m_transformer_vanilla_original_ver_dec_cb_512_q_layer_6_drop_ver_2/2025-10-30_23-41-47/net_best_fid.pth \
+--use-keywords > log_eval_t2m_transformer_vanilla_original_ver_dec_cb_512_q_layer_6_drop_ver_2_fixed_seed.log &
+
+nohup python eval_rt2m.py \
+--exp-name TEST_exp_2025_11_04_rt2m_transformer_ver_dec_cb_size_512_res_drop_ver_2_ver_w_share_weight_v9_ver_pre_pose_code_emb_v3_ver_residual_categorical_both_True_best_net_best_top1 \
+--batch-size 32 \
+--num-layers 6 \
+--nb-code 392 \
+--n-head-gpt 8 \
+--block-size 62 \
+--ff-rate 4 \
+--embed-dim-gpt 1024 \
+--drop-out-rate 0.1 \
+--vq-name VQVAE_2025_11_03 \
+--out-dir eval_residual_trans_output \
+--total-iter 300000 \
+--lr-scheduler 150000 \
+--lr 0.0002 \
+--dataname t2m \
+--down-t 2 \
+--depth 3 \
+--eval-iter 10000 \
+--pkeep 0.5 \
+--num_workers 16 \
+--dilation-growth-rate 3 \
+--vq-act relu \
+--share-weight \
+--codes-folder-name codes \
+--output-emb-width 392 \
+--dec-checkpoint-folder ./important_result/Ours/Dec/2025_09_27_Dec_ver_using_residual_pose_temporal_complementor_ver_res_drop_detach_p_latent_with_soft_quantizer_try_12_unuse_ema_cb_size_512_num_quantizer_6_drop_p_ver_2 \
+--t2m-checkpoint-folder ./important_result/Ours/Trans/exp_2025_10_31_t2m_transformer_vanilla_original_ver_dec_cb_512_q_layer_6_drop_ver_2 \
+--residual-t2m-checkpoint-folder ./output_residual_transformer/exp_2025_11_02_rt2m_transformer_ver_dec_cb_size_512_res_drop_ver_2_ver_w_share_weight_v9_ver_pre_pose_code_emb_v3/2025-11-03_07-36-23 \
+--eval-reference net_best_top1 \
+--use-keywords > log_eval_exp_2025_11_04_rt2m_transformer_ver_dec_cb_size_512_res_drop_ver_2_ver_w_share_weight_v9_ver_pre_pose_code_emb_v3_ver_residual_categorical_both_True_best_net_best_top1.log &
+
+
+nohup python eval_rt2m.py \
+--exp-name TEST_exp_2025_11_04_rt2m_transformer_ver_dec_cb_size_512_res_drop_ver_2_ver_w_share_weight_v9_ver_pre_pose_code_emb_v3_ver_residual_categorical_both_True_best_net_best_fid \
+--batch-size 32 \
+--num-layers 6 \
+--nb-code 392 \
+--n-head-gpt 8 \
+--block-size 62 \
+--ff-rate 4 \
+--embed-dim-gpt 1024 \
+--drop-out-rate 0.1 \
+--vq-name VQVAE_2025_11_03 \
+--out-dir eval_residual_trans_output \
+--total-iter 300000 \
+--lr-scheduler 150000 \
+--lr 0.0002 \
+--dataname t2m \
+--down-t 2 \
+--depth 3 \
+--eval-iter 10000 \
+--pkeep 0.5 \
+--num_workers 16 \
+--dilation-growth-rate 3 \
+--vq-act relu \
+--share-weight \
+--codes-folder-name codes \
+--output-emb-width 392 \
+--dec-checkpoint-folder ./important_result/Ours/Dec/2025_09_27_Dec_ver_using_residual_pose_temporal_complementor_ver_res_drop_detach_p_latent_with_soft_quantizer_try_12_unuse_ema_cb_size_512_num_quantizer_6_drop_p_ver_2 \
+--t2m-checkpoint-folder ./important_result/Ours/Trans/exp_2025_10_31_t2m_transformer_vanilla_original_ver_dec_cb_512_q_layer_6_drop_ver_2 \
+--residual-t2m-checkpoint-folder ./output_residual_transformer/exp_2025_11_02_rt2m_transformer_ver_dec_cb_size_512_res_drop_ver_2_ver_w_share_weight_v9_ver_pre_pose_code_emb_v3/2025-11-03_07-36-23 \
+--eval-reference net_best_fid \
+--use-keywords > log_eval_exp_2025_11_04_rt2m_transformer_ver_dec_cb_size_512_res_drop_ver_2_ver_w_share_weight_v9_ver_pre_pose_code_emb_v3_ver_residual_categorical_both_True_best_net_best_fid.log &
+
+nohup python eval_rt2m.py \
+--exp-name TEST_exp_2025_11_03_rt2m_transformer_ver_dec_cb_size_512_res_drop_ver_2_ver_w_share_weight_v9_ver_pre_pose_code_emb_ver_residual_categorical \
+--batch-size 32 \
+--num-layers 6 \
+--nb-code 392 \
+--n-head-gpt 8 \
+--block-size 62 \
+--ff-rate 4 \
+--embed-dim-gpt 1024 \
+--drop-out-rate 0.1 \
+--vq-name VQVAE_2025_11_03 \
+--out-dir eval_residual_trans_output \
+--total-iter 300000 \
+--lr-scheduler 150000 \
+--lr 0.0002 \
+--dataname t2m \
+--down-t 2 \
+--depth 3 \
+--eval-iter 10000 \
+--pkeep 0.5 \
+--num_workers 16 \
+--dilation-growth-rate 3 \
+--vq-act relu \
+--share-weight \
+--codes-folder-name codes \
+--output-emb-width 392 \
+--dec-checkpoint-folder ./important_result/Ours/Dec/2025_09_27_Dec_ver_using_residual_pose_temporal_complementor_ver_res_drop_detach_p_latent_with_soft_quantizer_try_12_unuse_ema_cb_size_512_num_quantizer_6_drop_p_ver_2 \
+--t2m-checkpoint-folder ./important_result/Ours/Trans/exp_2025_10_31_t2m_transformer_vanilla_original_ver_dec_cb_512_q_layer_6_drop_ver_2 \
+--residual-t2m-checkpoint-folder ./important_result/Ours/Res_Trans/exp_2025_11_02_rt2m_transformer_ver_dec_cb_size_512_res_drop_ver_2_ver_w_share_weight_v9_ver_pre_pose_code_emb \
+--use-keywords > log_eval_exp_2025_11_03_rt2m_transformer_ver_dec_cb_size_512_res_drop_ver_2_ver_w_share_weight_v9_ver_pre_pose_code_emb_ver_residual_categorical.log &
+
+nohup python eval_t2m.py \
+--exp-name TEST_exp_2025_10_25_t2m_transformer_vanilla_update_loss_ver_dec_res_drop_cb_size_512_q_layer_6_res_drop_ver_2 \
+--batch-size 32 \
+--num-layers 9 \
+--embed-dim-gpt 1024 \
+--nb-code 392 \
+--n-head-gpt 16 \
+--block-size 62 \
+--ff-rate 4 \
+--drop-out-rate 0.1 \
+--dec-checkpoint-folder ./my_exp_result/2025_09_27_Dec_ver_using_residual_pose_temporal_complementor_ver_res_drop_detach_p_latent_with_soft_quantizer_try_12_unuse_ema_cb_size_512_num_quantizer_6_drop_p_ver_2/2025-09-27_12-49-50 \
+--vq-name VQVAE_2025_10_25 \
+--out-dir eval_output \
+--total-iter 300000 \
+--lr-scheduler 150000 \
+--lr 0.0001 \
+--dataname t2m \
+--down-t 2 \
+--depth 3 \
+--eval-iter 10000 \
+--pkeep 0.5 \
+--dilation-growth-rate 3 \
+--vq-act relu \
+--codes-folder-name codes \
+--output-emb-width 392 \
+--resume-trans ./temp_model/exp_2025_10_25_t2m_transformer_vanilla_update_loss_ver_dec_res_drop_cb_size_512_q_layer_6_res_drop_ver_2/2025-10-25_12-37-34/net_best_fid.pth \
+--use-keywords > log_eval_2025_10_25_t2m_transformer_vanilla_update_loss_ver_dec_res_drop_cb_size_512_q_layer_6_res_drop_ver_2.log &
+
+
+nohup python eval_rt2m.py \
+--exp-name TEST_exp_2025_10_26_rt2m_transformer_ver_dec_cb_size_512_res_drop_ver_2_ver_follow_baseline_w_share_weight_v9_ver_real_2 \
+--batch-size 32 \
+--num-layers 6 \
+--nb-code 392 \
+--n-head-gpt 8 \
+--block-size 62 \
+--ff-rate 4 \
+--embed-dim-gpt 1024 \
+--drop-out-rate 0.1 \
+--dec-checkpoint-folder ./my_exp_result/2025_09_27_Dec_ver_using_residual_pose_temporal_complementor_ver_res_drop_detach_p_latent_with_soft_quantizer_try_12_unuse_ema_cb_size_512_num_quantizer_6_drop_p_ver_2/2025-09-27_12-49-50 \
+--vq-name VQVAE_2025_10_25 \
+--out-dir eval_residual_trans_output \
+--total-iter 300000 \
+--lr-scheduler 150000 \
+--lr 0.0002 \
+--dataname t2m \
+--down-t 2 \
+--depth 3 \
+--eval-iter 10000 \
+--pkeep 0.5 \
+--num_workers 16 \
+--dilation-growth-rate 3 \
+--vq-act relu \
+--share-weight \
+--codes-folder-name codes \
+--output-emb-width 392 \
+--t2m-checkpoint-folder ./output/exp_2025_10_25_t2m_transformer_vanilla_update_loss_ver_dec_res_drop_cb_size_512_q_layer_6_res_drop_ver_2/2025-10-25_12-37-34 \
+--dec-checkpoint-folder ./my_exp_result/2025_09_27_Dec_ver_using_residual_pose_temporal_complementor_ver_res_drop_detach_p_latent_with_soft_quantizer_try_12_unuse_ema_cb_size_512_num_quantizer_6_drop_p_ver_2/2025-09-27_12-49-50 \
+--resume-r-trans ./temp_model/exp_2025_10_26_rt2m_transformer_ver_dec_cb_size_512_res_drop_ver_2_ver_follow_baseline_w_share_weight_v9_ver_real_2/2025-10-29_12-38-32/net_best_fid.pth \
+--use-keywords > log_eval_exp_2025_10_26_rt2m_transformer_ver_dec_cb_size_512_res_drop_ver_2_ver_follow_baseline_w_share_weight_v9_ver_real_2.log &

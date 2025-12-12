@@ -1,0 +1,1 @@
+nohup python captioning.py --dataname t2m --in-dir /data/CoMo/dataset/ --out-dir /data/ > log.log &
