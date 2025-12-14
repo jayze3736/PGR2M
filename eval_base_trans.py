@@ -2,32 +2,31 @@
 import os
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 import torch
-import numpy as np
 from torch.utils.tensorboard import SummaryWriter
+import numpy as np
+import random # 
 import json
 import clip
 import utils.utils_model as utils_model
-
-from tqdm import tqdm # 
-import argparse # 
-import yaml # 
+from tqdm import tqdm 
+import argparse 
+import yaml
 
 import options.option_transformer as option_trans
+from options.get_eval_option import get_opt
+
 from utils.codebook import *
-import models.motion_dec as motion_dec
 import utils.eval_trans as eval_trans
 from dataset import dataset_TM_eval
-import models.t2m_trans as trans
 
-from options.get_eval_option import get_opt
+import models.motion_dec as motion_dec
+import models.t2m_trans as trans
 from models.evaluator_wrapper import EvaluatorModelWrapper
-import random # 
+import models.pg_tokenizer as pg_tokenizer
 
 import warnings
 warnings.filterwarnings('ignore')
-
 from os.path import join as pjoin
-import PGR2M.models_rptc.pg_tokenizer as pg_tokenizer
 
 def fixseed(seed): # 
     torch.manual_seed(seed)
@@ -36,6 +35,16 @@ def fixseed(seed): #
     random.seed(seed)
     torch.backends.cudnn.deterministic = True
     torch.backends.cudnn.benchmark = False
+
+def get_cfg_ckpt_path(folder_path): # 
+
+    if folder_path is None:
+        return None, None
+    else:
+        ckpt_path = pjoin(folder_path, 'net_best_fid.pth')
+        config_path = pjoin(folder_path, 'arguments.yaml')
+    
+    return config_path, ckpt_path
 
 ##### ---- Exp dirs ---- #####
 args = option_trans.get_args_parser()
@@ -68,16 +77,6 @@ clip_model.eval()
 for p in clip_model.parameters():
     p.requires_grad = False 
 
-def get_cfg_ckpt_path(folder_path): # 
-
-    if folder_path is None:
-        return None, None
-    else:
-        ckpt_path = pjoin(folder_path, 'net_best_fid.pth')
-        config_path = pjoin(folder_path, 'arguments.yaml')
-    
-    return config_path, ckpt_path
-
 t2m_config, t2m_checkpoint_path = get_cfg_ckpt_path(args.t2m_checkpoint_folder)
 
 if t2m_config is None or t2m_checkpoint_path is None:
@@ -86,8 +85,7 @@ if t2m_config is None or t2m_checkpoint_path is None:
 with open(t2m_config, 'r') as f:
     arg_dict = yaml.safe_load(f)
 t2m_args = argparse.Namespace(**arg_dict)
-
-#################################            
+         
 trans_net = trans.BaseTrans(num_vq=t2m_args.nb_code, 
                                 embed_dim=t2m_args.embed_dim_gpt, 
                                 clip_dim=t2m_args.clip_dim, 
@@ -109,58 +107,40 @@ with open(dec_config, 'r') as f:
     arg_dict = yaml.safe_load(f)
 dec_args = argparse.Namespace(**arg_dict)
 
-if dec_args.use_rvq:
-    net = pg_tokenizer.PoseGuidedTokenizer(
-                    dec_args, 
-                    dec_args.nb_code,                      # nb_code
-                    dec_args.code_dim,                    # code_dim
-                    dec_args.output_emb_width,            # output_emb_width
-                    dec_args.down_t,                      # down_t
-                    dec_args.stride_t,                    # stride_t
-                    dec_args.width,                       # width
-                    dec_args.depth,                       # depth
-                    dec_args.dilation_growth_rate,        # dilation_growth_rate
-                    dec_args.vq_act,                      # activation
-                    dec_args.vq_norm,                     # norm
-                    dec_args.cfg_cla,                     # cfg_cla
-                    aggregate_mode=None,    # aggregate_mode
-                    num_quantizers=dec_args.rvq_num_quantizers,
-                    shared_codebook=dec_args.rvq_shared_codebook,
-                    quantize_dropout_prob=dec_args.rvq_quantize_dropout_prob,
-                    quantize_dropout_cutoff_index=dec_args.rvq_quantize_dropout_cutoff_index,
-                    rvq_nb_code=dec_args.rvq_nb_code,
-                    mu=dec_args.rvq_mu,
-                    resi_beta=dec_args.rvq_resi_beta,
-                    vq_loss_beta=dec_args.rvq_vq_loss_beta,
-                    quantizer_type=dec_args.rvq_quantizer_type,
-                    params_soft_ent_loss=dec_args.params_soft_ent_loss,
-                    use_ema=(not getattr(dec_args, 'unuse_ema', True)),
-                    init_method=getattr(dec_args, 'rvq_init_method', 'enc')
-                    )
-    # codebook = None
-    print ('loading checkpoint from {}'.format(dec_checkpoint_path))
-    ckpt = torch.load(dec_checkpoint_path, map_location='cpu')
-    net.load_state_dict(ckpt['net'], strict=True)
-    net.eval()
-    net.cuda()
-else:
 
-    print(f"Loading baseline decoder")
-    net = motion_dec.MotionDec(dec_args,
-                        dec_args.nb_code,
-                        dec_args.code_dim,
-                        dec_args.output_emb_width,
-                        dec_args.down_t,
-                        dec_args.stride_t,
-                        dec_args.width,
-                        dec_args.depth,
-                        dec_args.dilation_growth_rate)  
+net = pg_tokenizer.PoseGuidedTokenizer(
+                dec_args, 
+                dec_args.nb_code,                      # nb_code
+                dec_args.code_dim,                    # code_dim
+                dec_args.output_emb_width,            # output_emb_width
+                dec_args.down_t,                      # down_t
+                dec_args.stride_t,                    # stride_t
+                dec_args.width,                       # width
+                dec_args.depth,                       # depth
+                dec_args.dilation_growth_rate,        # dilation_growth_rate
+                dec_args.vq_act,                      # activation
+                dec_args.vq_norm,                     # norm
+                aggregate_mode=None,    # aggregate_mode
+                num_quantizers=dec_args.rvq_num_quantizers,
+                shared_codebook=dec_args.rvq_shared_codebook,
+                quantize_dropout_prob=dec_args.rvq_quantize_dropout_prob,
+                quantize_dropout_cutoff_index=dec_args.rvq_quantize_dropout_cutoff_index,
+                rvq_nb_code=dec_args.rvq_nb_code,
+                mu=dec_args.rvq_mu,
+                resi_beta=dec_args.rvq_resi_beta,
+                vq_loss_beta=dec_args.rvq_vq_loss_beta,
+                quantizer_type=dec_args.rvq_quantizer_type,
+                params_soft_ent_loss=dec_args.params_soft_ent_loss,
+                use_ema=(not getattr(dec_args, 'unuse_ema', True)),
+                init_method=getattr(dec_args, 'rvq_init_method', 'enc')
+                )
 
-    print ('loading checkpoint from {}'.format(dec_checkpoint_path))
-    ckpt = torch.load(dec_checkpoint_path, map_location='cpu')
-    net.load_state_dict(ckpt['net'], strict=True)
-    net.eval()
-    net.cuda()
+
+print ('loading checkpoint from {}'.format(dec_checkpoint_path))
+ckpt = torch.load(dec_checkpoint_path, map_location='cpu')
+net.load_state_dict(ckpt['net'], strict=True)
+net.eval()
+net.cuda()
 
 print ('loading transformer checkpoint from {}'.format(t2m_checkpoint_path))
 ckpt = torch.load(t2m_checkpoint_path, map_location='cpu')
@@ -169,7 +149,7 @@ trans_net.load_state_dict(ckpt['trans'], strict=True)
 trans_net.eval()
 trans_net.cuda()
 
-# 시드는 모델 초기화때도 발생함. 따라서 모델 로드 이후에 시드를 고정하는게 맞음
+fixseed(args.seed)
 
 fid = []
 div = []
@@ -179,8 +159,6 @@ top3 = []
 matching = []
 multi = []
 repeat_time = 20
-
-fixseed(args.seed) # seed는 모델 초기화 이후 고정시키도록 하여 배치에서 샘플을 가져올때 동일한 순서로 가져오도록 함
 
 for i in tqdm(range(repeat_time)):
     print(f"{i}th evaluation")
@@ -206,8 +184,7 @@ for i in tqdm(range(repeat_time)):
                                                                                                                                                         save=False, 
                                                                                                                                                         savenpy=False, 
                                                                                                                                                         mm_mode=args.mm_mode,
-                                                                                                                                                        text_encoding_method='baseline', 
-                                                                                                                                                        use_rptc=dec_args.use_rvq,
+                                                                                                                                                        text_encoding_method='baseline',
                                                                                                                                                         text_encoder=clip_model, 
                                                                                                                                                         block_size=args.block_size,
                                                                                                                                                         max_token_len=49,
@@ -235,8 +212,7 @@ for i in tqdm(range(repeat_time)):
                                                                                                                                                         save=False, 
                                                                                                                                                         savenpy=False, 
                                                                                                                                                         mm_mode=args.mm_mode,
-                                                                                                                                                        text_encoding_method='baseline', 
-                                                                                                                                                        use_rptc=dec_args.use_rvq,
+                                                                                                                                                        text_encoding_method='baseline',
                                                                                                                                                         text_encoder=clip_model, 
                                                                                                                                                         block_size=args.block_size,
                                                                                                                                                         use_keywords=args.use_keywords)

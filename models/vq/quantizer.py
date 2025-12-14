@@ -186,11 +186,11 @@ class QuantizeEMA(QuantizeEMAReset):
         return perplexity
     
 class SoftQuantize(nn.Module):
-    def __init__(self, nb_code, code_dim, attn_dim, mu, beta, norm_type, init_method, entropy_temperature=0.01, sample_minimization_weight=1.0, batch_maximization_weight=1.0):
+    def __init__(self, nb_code, code_dim, attn_dim, beta, norm_type, init_method, entropy_temperature=0.01, sample_minimization_weight=1.0, batch_maximization_weight=1.0):
         super(SoftQuantize, self).__init__()
         self.nb_code = nb_code
         self.code_dim = code_dim
-        self.mu = mu
+        
         self.beta = beta
         self.reset_codebook()
         self.attn = AttentionForQuantizer(hidden_dim=code_dim, norm_type=norm_type, attn_dim=attn_dim)

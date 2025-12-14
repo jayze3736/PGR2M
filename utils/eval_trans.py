@@ -25,7 +25,7 @@ import plotly.express as px
 import pandas as pd
 import kaleido
 from dataset.dataset_TM_eval import get_subsamples_loader as get_subsamples_loader_baseline
-from dataset.dataset_TM_eval_rtpc import get_subsamples_loader as get_subsamples_loader_rptc
+from dataset.dataset_RTM_eval import get_subsamples_loader as get_subsamples_loader_rptc
 from utils.graph_utils import prepare_graph_nodes
 
 def tensorboard_add_image_tsne(writer, codebook, tag, nb_iter, title="T-sne of Pose Codebook", mode = None):
@@ -281,7 +281,7 @@ def evaluation_enc(out_dir, val_loader, dec, enc, logger, writer, nb_iter, best_
 
 
 @torch.no_grad()        
-def evaluation_dec(args, out_dir, val_loader, net, logger, writer, nb_iter, best_fid, best_iter, best_div, best_top1, best_top2, best_top3, best_matching, best_mpjpe, best_pampjpe, best_accel, eval_wrapper, num_joints, split, use_rvq=False, max_motion_len=None, draw = True, save = True, savegif=False, savenpy=False, unit_length=4, is_test=False, use_aggregator=False, eval_loss_list=None, align_root=True, drop_out_residual_quantization=False): 
+def evaluation_dec(args, out_dir, val_loader, net, logger, writer, nb_iter, best_fid, best_iter, best_div, best_top1, best_top2, best_top3, best_matching, best_mpjpe, best_pampjpe, best_accel, eval_wrapper, num_joints, split, use_rvq=False, max_motion_len=None, draw = True, save = True, savegif=False, savenpy=False, unit_length=4, is_test=False, eval_loss_list=None, align_root=True, drop_out_residual_quantization=False): 
     net.eval()
 
     nb_sample = 0
@@ -310,13 +310,6 @@ def evaluation_dec(args, out_dir, val_loader, net, logger, writer, nb_iter, best
         word_embeddings, pos_one_hots, caption, sent_len, motion, m_length, _, _, code_indices, _, _ = batch
         motion = motion.cuda()
         
-        # if use_aggregator:
-        #     mask = (torch.arange(max_motion_len).unsqueeze(0) < m_length.unsqueeze(1)) # 
-        #     mask = mask[:, ::unit_length]
-        #     mask = mask.cuda().float() # bs, n_seq
-        # else:
-        #     mask = None
-        
         et, em = eval_wrapper.get_co_embeddings(word_embeddings, pos_one_hots, sent_len, motion, m_length)
 
         bs, seq = motion.shape[0], motion.shape[1]
@@ -324,27 +317,13 @@ def evaluation_dec(args, out_dir, val_loader, net, logger, writer, nb_iter, best
         count += bs
 
         num_joints = 21 if motion.shape[-1] == 251 else 22
-        
         pred_pose_eval = torch.zeros((bs, seq, motion.shape[-1])).cuda()
 
         for i in range(bs):
             # ground truth
             pose = val_loader.dataset.inv_transform(motion[i:i+1, :m_length[i], :].detach().cpu().numpy())
             pose_xyz = recover_from_ric(torch.from_numpy(pose).float().cuda(), num_joints)
-
-            # pred_pose = net(code_indices[i:i+1,:m_length[i]:unit_length].cuda().float(), fw_mask = mask[i, :].unsqueeze(0))
-
-            if args.use_full_sequence: 
-                pred_pose, _ = net(code_indices[i:i+1,::unit_length].cuda().float())
-                pred_pose = pred_pose[:, :m_length[i], :]
-            elif use_rvq:
-                
-                if args.rvq_name == 'vanilla':
-                    pred_pose, *_ = net(code_indices[i:i+1,:m_length[i]:unit_length].cuda().float())
-                elif args.rvq_name == 'rptc':
-                    pred_pose, *_ = net(code_indices[i:i+1,:m_length[i]:unit_length].cuda().float(), motion[i:i+1,:m_length[i]].cuda().float(), detach_p_latent=args.detach_p_latent, drop_out_residual_quantization=drop_out_residual_quantization)
-            else: 
-                pred_pose, _ = net(code_indices[i:i+1,:m_length[i]:unit_length].cuda().float())
+            pred_pose, *_ = net(code_indices[i:i+1,:m_length[i]:unit_length].cuda().float(), motion[i:i+1,:m_length[i]].cuda().float(), detach_p_latent=args.detach_p_latent, drop_out_residual_quantization=drop_out_residual_quantization)
 
             # prediction
             pred_denorm = val_loader.dataset.inv_transform(pred_pose.detach().cpu().numpy())
@@ -356,7 +335,6 @@ def evaluation_dec(args, out_dir, val_loader, net, logger, writer, nb_iter, best
             mpjpe += joint_metrics['mpjpe']
             pampjpe += joint_metrics['pampjpe']
             accel += joint_metrics['accel']
-        
             jpe += joint_metrics['jpe'].detach().cpu() # vector tensor
 
             if i < min(4, bs):
@@ -364,7 +342,6 @@ def evaluation_dec(args, out_dir, val_loader, net, logger, writer, nb_iter, best
                 draw_pred.append(pred_xyz)
                 draw_text.append(caption[i])
         
-       
         et_pred, em_pred = eval_wrapper.get_co_embeddings(word_embeddings, pos_one_hots, sent_len, pred_pose_eval, m_length)
 
         motion_pred_list.append(em_pred)
@@ -510,7 +487,7 @@ def evaluation_dec(args, out_dir, val_loader, net, logger, writer, nb_iter, best
     return best_fid, best_iter, best_div, best_top1, best_top2, best_top3, best_matching, best_mpjpe, best_pampjpe, best_accel, writer, logger
 
 @torch.no_grad()        
-def evaluation_transformer(args, out_dir, val_loader, net, trans, logger, writer, nb_iter, best_fid, best_iter, best_div, best_top1, best_top2, best_top3, best_matching, text_encoder, eval_wrapper, optimizer, scheduler, cat_mode='v1', draw = True, save = True, savegif=False, unit_length = 4, log_cat_right_num=False, num_vq = 392, use_rptc=False): 
+def evaluation_transformer(args, out_dir, val_loader, net, trans, logger, writer, nb_iter, best_fid, best_iter, best_div, best_top1, best_top2, best_top3, best_matching, text_encoder, eval_wrapper, optimizer, scheduler, draw = True, save = True, savegif=False, unit_length = 4): 
 
     trans.eval()
     nb_sample = 0
@@ -544,6 +521,7 @@ def evaluation_transformer(args, out_dir, val_loader, net, trans, logger, writer
             
             # text tokenize
             text = clip.tokenize(text_data, truncate=True).cuda()
+
             # text embedding
             text_feat = text_encoder.encode_text(text).float().unsqueeze(1) #bs x 1 x 512
 
@@ -551,17 +529,12 @@ def evaluation_transformer(args, out_dir, val_loader, net, trans, logger, writer
             if args.use_keywords:
                 text_feat = torch.cat((text_feat, keyword_embeddings.float().cuda()), dim = 1) # bs x 11+1 x 512
 
-            
             pred_pose_eval = torch.zeros((bs, seq, pose.shape[-1])).cuda()
             pred_len = torch.ones(bs).float()
             
             for k in range(bs):        
                 index_motion = trans.sample(text_feat[k:k+1], False, m_length[k]//unit_length) # 1 x t x code_num -> k-hot vector (bs, seq_len, 394)
-
-                if use_rptc:
-                    pred_pose, *_ = net.forward(index_motion[:,:,:-2].float(), drop_out_residual_quantization=True) 
-                else:
-                    pred_pose, *_ = net.forward(index_motion[:,:,:-2].float()) # (1, T, Jx3)
+                pred_pose, *_ = net.forward(index_motion[:,:,:-2].float(), drop_out_residual_quantization=True) 
 
                 cur_len = pred_pose.shape[1]
                 pred_len[k] = min(cur_len, seq)
@@ -570,7 +543,6 @@ def evaluation_transformer(args, out_dir, val_loader, net, trans, logger, writer
             et_pred, em_pred = eval_wrapper.get_co_embeddings(word_embeddings, pos_one_hots, sent_len, pred_pose_eval, pred_len)
             
             if i == 0:
-
                 org_pose = pose.cuda().float()
                 
                 et, em = eval_wrapper.get_co_embeddings(word_embeddings, pos_one_hots, sent_len, org_pose, m_length) #m_length
@@ -605,12 +577,8 @@ def evaluation_transformer(args, out_dir, val_loader, net, trans, logger, writer
 
                 for j in range(bs):
 
-                    index_motion = trans.sample(text_feat[j:j+1], False, m_length[j]//unit_length) # 1 x t x code_num -> k-hot vector (bs, seq_len, 394)
-                    
-                    if use_rptc:
-                        pred_pose, *_ = net.forward(index_motion[:,:,:-2].float(), drop_out_residual_quantization=True) # (1, T, Jx3)
-                    else:
-                        pred_pose, *_ = net.forward(index_motion[:,:,:-2].float()) # (1, T, Jx3)
+                    index_motion = trans.sample(text_feat[j:j+1], False, m_length[j]//unit_length) # 1 x t x code_num -> k-hot vector (bs, seq_len, 394)                   
+                    pred_pose, *_ = net.forward(index_motion[:,:,:-2].float(), drop_out_residual_quantization=True) # (1, T, Jx3)
 
                     org_pose = val_loader.dataset.inv_transform(pose[j:j+1].detach().cpu().numpy())
                     pose_xyz = recover_from_ric(torch.from_numpy(org_pose).float().cuda(), num_joints)
@@ -713,7 +681,6 @@ def evaluation_transformer(args, out_dir, val_loader, net, trans, logger, writer
     trans.train()
     return best_fid, best_iter, best_div, best_top1, best_top2, best_top3, best_matching, writer, logger, val_acc, val_loss
     
-
 
 # net: motion decoder
 @torch.no_grad()        
@@ -1165,7 +1132,7 @@ def calculate_pairwise_similarity(codebook):
 
 
 @torch.no_grad()        
-def evaluation_residual_transformer(args, out_dir, val_loader, net, trans, r_trans, logger, writer, nb_iter, best_fid, best_iter, best_div, best_top1, best_top2, best_top3, best_matching, clip_model, eval_wrapper, optimizer, scheduler, cat_mode='v1', draw = True, save = True, savegif=False, unit_length = 4, log_cat_right_num=False, num_keywords = 11): 
+def evaluation_residual_transformer(args, out_dir, val_loader, net, trans, r_trans, logger, writer, nb_iter, best_fid, best_iter, best_div, best_top1, best_top2, best_top3, best_matching, clip_model, eval_wrapper, optimizer, scheduler, draw = True, save = True, savegif=False, unit_length = 4, num_keywords = 11): 
     
     r_trans.eval()
 
@@ -1202,22 +1169,15 @@ def evaluation_residual_transformer(args, out_dir, val_loader, net, trans, r_tra
             text = clip.tokenize(clip_text, truncate=True).cuda()
             
             # text embedding
-            
-            
             feat_clip_text = clip_model.encode_text(text).float().unsqueeze(1) #bs x 1 x 512
             
             if args.use_keywords:
                 feat_clip_text = torch.cat((feat_clip_text, keyword_embeddings.float().cuda()), dim=1)  # bs x 12 x 512
             
-
-
-            # 예측한 pose template
             pred_pose_eval = torch.zeros((bs, seq, pose.shape[-1])).cuda()
-            # 
             pred_len = torch.ones(bs).float()
             
             # batch index k
-            # 배치 하나하나 마다 
             for k in range(bs):
                 # prediction --> outputs token sequences
                 

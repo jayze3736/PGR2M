@@ -1,31 +1,37 @@
 import os 
 os.environ["CUDA_VISIBLE_DEVICES"] = "2"  
 import torch
-import numpy as np
-
 from torch.utils.tensorboard import SummaryWriter
-from os.path import join as pjoin
 from torch.distributions import Categorical
+import torch.optim as optim
+
+import warnings
+warnings.filterwarnings('ignore')
+
+import numpy as np
+from os.path import join as pjoin
+
 import json
 import clip
 from tqdm import tqdm
 import argparse
-import torch.optim as optim
-import yaml
-import PGR2M.models_rptc.pg_tokenizer as pg_tokenizer
-import options.option_transformer as option_trans
-import models.motion_dec as motion_dec
+
 import utils.utils_model as utils_model
 import utils.eval_trans as eval_trans
 import utils.losses as losses 
 from utils.codebook import *
-from dataset import dataset_TM_train
-from dataset import dataset_TM_eval
+
+import yaml
+from models.pg_tokenizer import PoseGuidedTokenizer
+import models.motion_dec as motion_dec
+import options.option_transformer as option_trans
+
+from dataset import dataset_TM_train, dataset_TM_eval
+
 import models.t2m_trans as trans
 from options.get_eval_option import get_opt
 from models.evaluator_wrapper import EvaluatorModelWrapper
-import warnings
-warnings.filterwarnings('ignore')
+
 from datetime import datetime
 import random
 
@@ -36,10 +42,19 @@ def fixseed(seed):
     random.seed(seed)
     torch.backends.cudnn.deterministic = True
     torch.backends.cudnn.benchmark = False
+    
+def get_dec_cfg_ckpt_path(folder_path):
+
+    if folder_path is None:
+        return None, None
+    else:
+        ckpt_path = pjoin(folder_path, 'net_best_fid.pth')
+        config_path = pjoin(folder_path, 'arguments.yaml')
+    
+    return config_path, ckpt_path
 
 ##### ---- Exp dirs ---- #####
 args = option_trans.get_args_parser()
-# torch.manual_seed(args.seed)
 fixseed(args.seed)
 
 args.out_dir = os.path.join(args.out_dir, f'{args.exp_name}')
@@ -52,17 +67,8 @@ args.out_dir = os.path.join(args.out_dir, date_time)
 os.makedirs(args.out_dir, exist_ok = True)
 json_path = os.path.join(args.out_dir, 'arguments.yaml')
 
-if args.cfg_cla_path:
-    with open(args.cfg_cla_path, 'r') as f:
-        args.cfg_cla = yaml.safe_load(f)
-    use_aggregator = True
-else:
-    args.cfg_cla = None
-    use_aggregator = False
-
 with open(json_path, 'w') as f:
     dict_args = vars(args)
-    dict_args['cfg_cla'] = args.cfg_cla
     json.dump(dict_args, f, indent=2)
 
 ##### ---- Logger ---- #####
@@ -70,9 +76,7 @@ logger = utils_model.get_logger(args.out_dir)
 writer = SummaryWriter(args.out_dir)
 logger.info(json.dumps(vars(args), indent=4, sort_keys=True))
 
-
 ##### ---- Dataloader ---- #####
-
 from utils.word_vectorizer import WordVectorizer
 w_vectorizer = WordVectorizer('./glove', 'our_vab')
 val_loader = dataset_TM_eval.DATALoader(args.dataname, False, 32, w_vectorizer, codebook_size=args.nb_code, use_keywords=args.use_keywords)
@@ -88,19 +92,6 @@ text_encoder.eval()
 for p in text_encoder.parameters():
     p.requires_grad = False
 
-"""
-get_dec_cfg_ckpt_path: Decoder의 체크 포인트를 파싱
-"""
-def get_dec_cfg_ckpt_path(folder_path):
-
-    if folder_path is None:
-        return None, None
-    else:
-        ckpt_path = pjoin(folder_path, 'net_best_fid.pth')
-        config_path = pjoin(folder_path, 'arguments.yaml')
-    
-    return config_path, ckpt_path
-
 dec_config, dec_checkpoint_path = get_dec_cfg_ckpt_path(args.dec_checkpoint_folder)
 
 if dec_config is None or dec_checkpoint_path is None:
@@ -111,7 +102,7 @@ with open(dec_config, 'r') as f:
 
 dec_args = argparse.Namespace(**arg_dict)
 
-net = pg_tokenizer.PoseGuidedTokenizer(
+net = PoseGuidedTokenizer(
                 dec_args, 
                 dec_args.nb_code,                      # nb_code
                 dec_args.code_dim,                    # code_dim
@@ -123,8 +114,6 @@ net = pg_tokenizer.PoseGuidedTokenizer(
                 dec_args.dilation_growth_rate,        # dilation_growth_rate
                 dec_args.vq_act,                      # activation
                 dec_args.vq_norm,                     # norm
-                dec_args.cfg_cla,                     # cfg_cla
-                aggregate_mode=None,    # aggregate_mode
                 num_quantizers=dec_args.rvq_num_quantizers,
                 shared_codebook=dec_args.rvq_shared_codebook,
                 quantize_dropout_prob=dec_args.rvq_quantize_dropout_prob,
@@ -135,8 +124,8 @@ net = pg_tokenizer.PoseGuidedTokenizer(
                 vq_loss_beta=dec_args.rvq_vq_loss_beta,
                 quantizer_type=dec_args.rvq_quantizer_type,
                 params_soft_ent_loss=dec_args.params_soft_ent_loss,
-                use_ema= (not getattr(dec_args, 'unuse_ema', True)),
-                init_method=getattr(dec_args, 'rvq_init_method', 'enc')
+                use_ema= (not args.unuse_ema),
+                init_method=dec_args.init_method
                 )
 
 print ('loading decoder checkpoint from {}'.format(dec_checkpoint_path))
@@ -144,7 +133,6 @@ ckpt = torch.load(dec_checkpoint_path, map_location='cpu')
 net.load_state_dict(ckpt['net'], strict=True)
 net.eval()
 net.cuda()
-
 
 trans_net = trans.BaseTrans(num_vq=args.nb_code, 
                                 embed_dim=args.embed_dim_gpt, 
@@ -159,6 +147,7 @@ if args.resume_trans is not None:
     print ('loading transformer checkpoint from {}'.format(args.resume_trans))
     ckpt = torch.load(args.resume_trans, map_location='cpu')
     trans_net.load_state_dict(ckpt['trans'], strict=True)
+
 trans_net.train()
 trans_net.cuda()
 
@@ -204,7 +193,6 @@ while nb_iter <= args.total_iter:
     m_tokens, m_tokens_len, gt_motion = m_tokens.cuda(), m_tokens_len.cuda(), gt_motion.cuda()
     bs = m_tokens.shape[0]
     target = m_tokens.cuda()   # (bs, t, code_num+2)
-
 
     text = clip.tokenize(clip_text, truncate=True).cuda()
     feat_clip_text = text_encoder.encode_text(text).float().unsqueeze(1)
@@ -304,9 +292,7 @@ while nb_iter <= args.total_iter:
                                                                                                                                                              eval_wrapper=eval_wrapper,
                                                                                                                                                              optimizer=optimizer, 
                                                                                                                                                              scheduler=scheduler, 
-                                                                                                                                                             log_cat_right_num=args.log_cat_right_num, 
-                                                                                                                                                             cat_mode=args.codes_folder_name, 
-                                                                                                                                                             use_rptc=dec_args.use_rvq)
+                                                                                                                                                             cat_mode=args.codes_folder_name)
         
     if nb_iter == args.total_iter: 
         msg_final = f"Train. Iter {best_iter} : FID. {best_fid:.5f}, Diversity. {best_div:.4f}, TOP1. {best_top1:.4f}, TOP2. {best_top2:.4f}, TOP3. {best_top3:.4f}"

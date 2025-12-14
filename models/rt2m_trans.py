@@ -30,23 +30,19 @@ class RefineTrans(nn.Module):
                 shared_codebook=False):
         super().__init__()
 
-        # input: text feature, pose code feature
-
         # output: residual pose code
         self.proc_in = InputProcessor(num_vq, num_rvq, clip_dim, embed_dim, block_size, share_weight, shared_codebook, num_quantizer)
         self.proc_out = OutputProcessor(num_rvq, embed_dim, share_weight, shared_codebook, num_quantizer)
         self.trans_base = TransBase(embed_dim, block_size, num_layers, n_head, drop_out_rate, fc_rate, num_quantizer, input_processor=self.proc_in)
 
-        self.block_size = block_size + 1 # 62 (motion len) / 4(down sampling rate) = 16(code_sequence_length)
+        self.block_size = block_size + 1 
         self.num_vq = num_vq
         self.num_rvq = num_rvq
-        self.num_keywords = num_key # body part 수를 의미(아마도? 10 + 1?)
+        self.num_keywords = num_key
         self.mode = mode
         self.num_quantizer = num_quantizer
         self.cond_num = self.num_keywords + 2
-        self.max_m_token_len = self.block_size - self.cond_num # 63 - 13 = 50
-        print("Note: self.block_size:", self.block_size)
-        print("Note: self.max_m_token_len:", self.max_m_token_len)
+        self.max_m_token_len = self.block_size - self.cond_num 
         self.share_weight = share_weight
 
         if self.share_weight:
@@ -54,10 +50,8 @@ class RefineTrans(nn.Module):
             self.process_embed_proj_weight()
 
     def process_embed_proj_weight(self):
-        if self.share_weight:
-            # if not self.registered:
-            self.proc_out.output_proj_weight = self.embed_proj_shared_weight
-            self.proc_in.token_embed_weight = self.embed_proj_shared_weight
+        self.proc_out.output_proj_weight = self.embed_proj_shared_weight
+        self.proc_in.token_embed_weight = self.embed_proj_shared_weight
 
     def get_block_size(self):
         return self.block_size
@@ -101,9 +95,6 @@ class RefineTrans(nn.Module):
                 idx = torch.argmax(logits, dim=-1)          # [bs, T]
                 pred_r_indice = idx.view(idx.size(0), -1)  
 
-            # pred_r_indice = pred_r_indice[...,] 
-            # pred_r_indices = torch.stack(pred_r_indices, pred_r_indice) if pred_r_indices is not None else pred_r_indice # bs x T x n_q x nb_code
-
             pred_r_indices = torch.cat([pred_r_indices, pred_r_indice.unsqueeze(2)], dim=2) if pred_r_indices is not None else pred_r_indice.unsqueeze(2) # bs x T x n_q -> 정수형 코드
         
         pred_r_codes = F.one_hot(pred_r_indices, num_classes=self.num_rvq).float() # bs x T x code_num x nb_code
@@ -142,8 +133,7 @@ class RefineTrans(nn.Module):
             else:
                 idx = torch.argmax(logits, dim=-1)          # [bs, T]
                 pred_r_indice = idx.view(idx.size(0), -1)
-
-            # pred_r_indice = pred_r_indice[...,]             
+          
             pred_r_indices = torch.cat([pred_r_indices, pred_r_indice.unsqueeze(2)], dim=2) if pred_r_indices is not None else pred_r_indice.unsqueeze(2) 
 
         pred_r_codes = F.one_hot(pred_r_indices, num_classes=self.num_rvq).float() # bs x T x code_num x nb_code -> one-hot 형태로 변환
@@ -170,15 +160,12 @@ class InputProcessor(nn.Module):
         
         self.init_()
     
-    # 임베딩 테이블 초기화
     def init_(self):
         
         if self.shared_codebook:
-            # input embedding
             token_embed = nn.Parameter(torch.normal(mean=0, std=0.02, size=(self.num_rvq+2, self.embed_dim)))
             self.token_embed_weight = token_embed.expand(self.num_quantizers-1, self.num_rvq+2, self.embed_dim)
         else:
-            # projection layer
             if self.share_weight:
                 self.token_embed_weight_ = nn.Parameter(torch.normal(mean=0, std=0.02, size=(1, self.num_rvq+2, self.embed_dim)))
             else:

@@ -10,7 +10,7 @@ from tqdm import tqdm
 import argparse
 import yaml 
 import options.option_residual_transformer as option_res_trans # 
-import models_rptc.pg_tokenizer as motion_dec
+import models.pg_tokenizer as motion_dec
 import utils.utils_model as utils_model
 from utils.codebook import *
 import utils.eval_trans as eval_trans
@@ -19,7 +19,7 @@ import models.t2m_trans as trans
 from options.get_eval_option import get_opt
 from models.evaluator_wrapper import EvaluatorModelWrapper
 import warnings
-import models_rptc.pg_tokenizer as pg_tokenizer
+import models.pg_tokenizer as pg_tokenizer
 import models.rt2m_trans as r_trans
 import models.t2m_trans as t2m
 from utils.file_utils.misc import get_model_parameters_info

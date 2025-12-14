@@ -19,15 +19,13 @@ class PoseGuidedTokenizer(nn.Module):
                  dilation_growth_rate=3,
                  activation='relu',
                  norm=None,
-                 cfg_cla=None,
-                 aggregate_mode=None,
                  num_quantizers=3,
                  shared_codebook=False,
                  quantize_dropout_prob=0.2,
                  quantize_dropout_cutoff_index=0,
                  rvq_nb_code=64,           
                  mu=0.99,
-                 resi_beta=1.0,
+                 residual_ratio=1.0,
                  vq_loss_beta=1.0,
                  quantizer_type='hard',
                  params_soft_ent_loss=0.0,
@@ -40,10 +38,9 @@ class PoseGuidedTokenizer(nn.Module):
         self.num_code = nb_code
         self.rvq_nb_code = rvq_nb_code
         self.nb_joints = 21 if args.dataname == 'kit' else 2
-        self.aggregate_mode = aggregate_mode
 
-        # self.register_buffer("resi_beta", torch.tensor(resi_beta, dtype=torch.float))
-        self.resi_beta = resi_beta
+        # self.register_buffer("residual_ratio", torch.tensor(residual_ratio, dtype=torch.float))
+        self.residual_ratio = residual_ratio
 
         self.encoder = Encoder(251 if args.dataname == 'kit' else 263, code_dim, down_t, stride_t, width, depth, dilation_growth_rate, activation=activation, norm=norm)
         self.decoder = Decoder(251 if args.dataname == 'kit' else 263, code_dim, down_t, stride_t, width, depth, dilation_growth_rate, activation=activation, norm=norm)
@@ -63,7 +60,6 @@ class PoseGuidedTokenizer(nn.Module):
                 nb_code=rvq_nb_code,
                 code_dim=self.code_dim,
                 attn_dim=self.code_dim,
-                mu=mu,
                 quantizer_type=quantizer_type,
                 beta=self.vq_loss_beta,
                 norm_type='rms_norm',
@@ -111,8 +107,6 @@ class PoseGuidedTokenizer(nn.Module):
         return out['all_codes'], out['all_indices']
     
     def inference(self, residual_codes=None, code_indices = None, drop_out_residual_quantization=False):
-        
-        # pose reps
         p_latent = self.pc_encoder(code_indices)
         B, T, C = p_latent.shape
 
@@ -123,7 +117,7 @@ class PoseGuidedTokenizer(nn.Module):
         if drop_out_residual_quantization:
             z_c_latent = p_latent
         else:
-            z_c_latent = p_latent + self.resi_beta * r_latent
+            z_c_latent = p_latent + self.residual_ratio * r_latent
 
         x_decoder = self.decoder(z_c_latent)
         x_out = self.postprocess(x_decoder)
@@ -132,10 +126,8 @@ class PoseGuidedTokenizer(nn.Module):
 
     def forward(self, code_indices, motion=None, detach_p_latent = False, drop_out_residual_quantization=False, force_dropout_index=-1):
     
-        # code_indices -> pose representator -> p_latent
         p_latent = self.pc_encoder(code_indices)
         B, T, C = p_latent.shape
-        # pred_rel_pos = self.proj(p_latent)
         
         if drop_out_residual_quantization:
             out = {}
@@ -158,14 +150,14 @@ class PoseGuidedTokenizer(nn.Module):
 
             r_quatized = out['quantized_out']
 
-            z_c_latent = p_latent + self.resi_beta * r_quatized
+            z_c_latent = p_latent + self.residual_ratio * r_quatized
         
         ## decoder
 
         x_decoder = self.decoder(z_c_latent)
         x_out = self.postprocess(x_decoder)
         
-        return x_out, self.pc_encoder.codebook.weight, out, None
+        return x_out, self.pc_encoder.codebook.weight, out
         
     def preprocess(self, x):
         # (bs, T, Jx3) -> (bs, Jx3, T)
