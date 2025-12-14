@@ -1,20 +1,71 @@
-# PGR2M
+# Pose-Guided Residual Refinement for Interpretable Text-to-Motion Generation and Editing
+This is code repository for "Pose-Guided Residual Refinement for Interpretable Text-to-Motion Generation and Editing"
 
-0. data setup
+## Getting Started
 
-8. pretrained checkpoints
+### Dataset
 
-1. requirements 설치
+HumanML3D dataset
 
-2. train dec
+```
 
-3. train t2m
+```
 
-4. train rt2m
+Fine-grained Keywords
 
-5. eval dec
+```
 
-6. eval t2m
+```
 
-7. eval rt2m
+### Pretrained checkpoints
+
+```
+
+```
+
+### Dependencies
+
+```
+pip install -r requirements.txt
+```
+
+## 4. Train PG(PoseGuided) Tokenizer
+
+```
+
+```
+
+## 5. Train Base Transformer
+
+```
+
+```
+
+## 6. Train Refine Transformer
+
+```
+
+```
+
+## 7. Eval PG(PoseGuided) Tokenizer
+
+```
+
+```
+
+## 8. Eval Base Transformer
+
+```
+
+```
+
+## 9. Eval Refine Transformer
+
+```
+
+```
+
+## References
+
+### Codes
 

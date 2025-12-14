@@ -233,7 +233,7 @@ eval_loss_wrapper = load_loss_wrappers(logger, loss_cfg)
 ##### ------ warm-up ------- #####
 
 avg_loss_total = 0.
-avg_rvq_commit = 0.
+avg_rvq_loss = 0.
 avg_perplexity = 0.
 
 avg_metrics_dict = {
@@ -241,7 +241,7 @@ avg_metrics_dict = {
 }
 
 avg_residual_metric_dict = {
-    "RVQ_Commit_Loss":0.,
+    "RVQ_Loss":0.,
     "Perplexity":0.,
     "Ent_loss_sub_1_samp_loss":0.,
     "Ent_loss_sub_2_avg_loss":0.,
@@ -261,7 +261,7 @@ for nb_iter in range(loaded_nb_iter, args.warm_up_iter):
     
     if not p_drop_res:
         perplexity = output['perplexity']
-        rvq_commit_loss = output['vq_loss']
+        rvq_loss = output['vq_loss']
 
         sub_samp_ent_loss = output['all_ent_sub_samp_loss']
         sub_batch_ent_loss = output['all_ent_sub_avg_loss']
@@ -291,11 +291,11 @@ for nb_iter in range(loaded_nb_iter, args.warm_up_iter):
     loss = flatten_and_sum_losses(loss_list, is_use_in_loss)
 
     if args.use_rvq and not p_drop_res:
-        loss += args.rvq_commit * rvq_commit_loss
+        loss += args.rvq_loss_weight * rvq_loss
         loss += args.params_soft_ent_loss * ent_loss
 
-        avg_residual_metric_dict['RVQ_Commit_Loss'] += args.rvq_commit * rvq_commit_loss.item()
-        avg_residual_metric_dict['Perplexity'] += perplexity.item() if args.use_rvq and args.rvq_name == 'rptc' else 0.
+        avg_residual_metric_dict['RVQ_Loss'] += args.rvq_loss_weight * rvq_loss.item()
+        avg_residual_metric_dict['Perplexity'] += perplexity.item()
         avg_residual_metric_dict['Ent_loss_sub_1_samp_loss'] += args.params_soft_ent_loss * sub_samp_ent_loss.item()
         avg_residual_metric_dict['Ent_loss_sub_2_avg_loss'] += args.params_soft_ent_loss * sub_batch_ent_loss.item()
         avg_residual_metric_dict['Ent_loss_total'] += args.params_soft_ent_loss * ent_loss.item()
@@ -366,23 +366,15 @@ for nb_iter in range(1, args.total_iter + 1):
     gt_motion, code_indices = next(train_loader_iter)
     gt_motion = gt_motion.cuda().float() # bs, nb_joints, joints_dim, seq_len
     
-
-    if args.use_rvq:
-        if args.rvq_name == 'vanilla':
-            pred_motion, codebook, rvq_commit_loss = net(code_indices.cuda().float())
-        elif args.rvq_name == 'rptc':
-            p_drop_res = drop_out_residual(args.pdrop_res)
-            pred_motion, codebook, output, proj_rel_pos = net(code_indices.cuda().float(), gt_motion.cuda().float(),  detach_p_latent=args.detach_p_latent, drop_out_residual_quantization=p_drop_res)
-            
-            if not p_drop_res:
-                perplexity = output['perplexity']
-                rvq_commit_loss = output['vq_loss']
-                
-                sub_samp_ent_loss = output['all_ent_sub_samp_loss']
-                sub_batch_ent_loss = output['all_ent_sub_avg_loss']
-                ent_loss = output['all_ent_loss']
-    else:
-        pred_motion, codebook = net(code_indices.cuda().float())
+    p_drop_res = drop_out_residual(args.pdrop_res)
+    pred_motion, codebook, output, proj_rel_pos = net(code_indices.cuda().float(), gt_motion.cuda().float(),  detach_p_latent=args.detach_p_latent, drop_out_residual_quantization=p_drop_res)
+    
+    if not p_drop_res:
+        perplexity = output['perplexity']
+        rvq_loss = output['vq_loss']
+        sub_samp_ent_loss = output['all_ent_sub_samp_loss']
+        sub_batch_ent_loss = output['all_ent_sub_avg_loss']
+        ent_loss = output['all_ent_loss']
 
     loss_dict = {}
     is_use_in_loss = []
@@ -402,10 +394,10 @@ for nb_iter in range(1, args.total_iter + 1):
     loss = flatten_and_sum_losses(loss_list, is_use_in_loss)
 
     if args.use_rvq and not p_drop_res:
-        loss += args.rvq_commit * rvq_commit_loss
+        loss += args.rvq_loss_weight * rvq_loss
         loss += args.params_soft_ent_loss * ent_loss
 
-        avg_residual_metric_dict['RVQ_Commit_Loss'] += args.rvq_commit * rvq_commit_loss.item()
+        avg_residual_metric_dict['RVQ_Loss'] += args.rvq_loss_weight * rvq_loss.item()
         avg_residual_metric_dict['Perplexity'] += perplexity.item()
         avg_residual_metric_dict['Ent_loss_sub_1_samp_loss'] += args.params_soft_ent_loss * sub_samp_ent_loss.item()
         avg_residual_metric_dict['Ent_loss_sub_2_avg_loss'] += args.params_soft_ent_loss * sub_batch_ent_loss.item()
@@ -481,7 +473,7 @@ for nb_iter in range(1, args.total_iter + 1):
             else:
                 avg_eval_metrics_dict = {
                     "Loss_Total":0.,
-                    "RVQ_Commit_Loss":0.,
+                    "RVQ_Loss":0.,
                     "Perplexity":0.,
                     "Ent_loss_sub_1_samp_loss":0.,
                     "Ent_loss_sub_2_avg_loss":0.,
@@ -506,7 +498,7 @@ for nb_iter in range(1, args.total_iter + 1):
                     eval_gt_motion = eval_gt_motion.cuda().float()
 
                     perplexity = torch.tensor(0., device=eval_gt_motion.device)
-                    eval_rvq_commit_loss = torch.tensor(0., device=eval_gt_motion.device)
+                    eval_rvq_loss = torch.tensor(0., device=eval_gt_motion.device)
                     sub_samp_ent_loss = torch.tensor(0., device=eval_gt_motion.device)
                     sub_batch_ent_loss = torch.tensor(0., device=eval_gt_motion.device)
                     ent_loss = torch.tensor(0., device=eval_gt_motion.device)
@@ -516,7 +508,7 @@ for nb_iter in range(1, args.total_iter + 1):
                         
                         if not pdrop_res:
                             perplexity = eval_out['perplexity']
-                            eval_rvq_commit_loss = eval_out['vq_loss']
+                            eval_rvq_loss = eval_out['vq_loss']
                             sub_samp_ent_loss = eval_out['all_ent_sub_samp_loss']
                             sub_batch_ent_loss = eval_out['all_ent_sub_avg_loss']
                             ent_loss = eval_out['all_ent_loss']
@@ -536,10 +528,10 @@ for nb_iter in range(1, args.total_iter + 1):
                     eval_loss = flatten_and_sum_losses(eval_loss_list, is_use_in_loss)
 
                     if args.use_rvq and not pdrop_res:
-                        eval_loss += args.rvq_commit * eval_rvq_commit_loss
+                        eval_loss += args.rvq_loss_weight * eval_rvq_loss
                         eval_loss += args.params_soft_ent_loss * ent_loss
 
-                        avg_eval_metrics_dict['RVQ_Commit_Loss'] += args.rvq_commit * eval_rvq_commit_loss.item()
+                        avg_eval_metrics_dict['RVQ_Loss'] += args.rvq_loss_weight * eval_rvq_loss.item()
                         avg_eval_metrics_dict['Perplexity'] += perplexity.item()
                         avg_eval_metrics_dict['Ent_loss_sub_1_samp_loss'] += args.params_soft_ent_loss * sub_samp_ent_loss.item()
                         avg_eval_metrics_dict['Ent_loss_sub_2_avg_loss'] += args.params_soft_ent_loss * sub_batch_ent_loss.item()

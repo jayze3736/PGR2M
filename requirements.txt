@@ -17,10 +17,12 @@ charset-normalizer==2.0.4
 choreographer==1.0.9
 chumpy==0.70
 click==8.1.7
-# clip==1.0
+clip @ git+https://github.com/openai/CLIP.git@dcba3cb2e2827b402d2701e7e1c7d9fed8a20ef1
 colorama==0.4.6
 colorlog==6.8.0
 comm==0.2.2
+configer @ git+https://github.com/MPI-IS/configer@8cd1e3e556d9697298907800a743e120be57ac36
+configparser==7.1.0
 cycler==0.10.0
 dataclasses-json==0.6.3
 datasets==3.1.0
@@ -36,6 +38,7 @@ fastapi==0.109.2
 fastjsonschema==2.21.1
 ffmpy==0.3.1
 filelock==3.13.1
+flash-attn==2.7.0.post2
 freetype-py==2.4.0
 frozenlist==1.4.1
 fsspec==2023.12.2
@@ -44,26 +47,26 @@ gdown==5.2.0
 gitdb==4.0.11
 GitPython==3.1.40
 google-auth==1.35.0
-google-auth-oauthlib==0.4.5
+google-auth-oauthlib==0.4.6
 GPUtil==1.4.0
 gradio==4.17.0
-gradio-client==0.9.0
-gradio-multimodalchatbot==0.0.1
+gradio_client==0.9.0
+gradio_multimodalchatbot==0.0.1
 greenlet==3.0.3
-grpcio==1.48.2 # grpcio==1.39.0
+grpcio==1.48.2
 h11==0.14.0
 h5py==3.10.0
 httpcore==1.0.2
 httpx==0.26.0
 huggingface-hub==0.30.2
-# human-body-prior==2.2.2.0(일단 완)
+human_body_prior==0.8.5.0
 hydra-colorlog==1.2.0
 hydra-core==1.3.2
 idna==3.2
 imageio==2.9.0
 imageio-ffmpeg==0.4.9
-importlib-metadata==8.5.0
 importlib-resources==6.1.1
+importlib_metadata==8.5.0
 ipdb==0.13.9
 ipykernel==6.29.5
 ipython==7.26.0
@@ -75,14 +78,15 @@ jsonpatch==1.33
 jsonpointer==2.4
 jsonschema==4.21.1
 jsonschema-specifications==2023.12.1
-jupyter-client==8.6.3
-jupyter-core==5.7.2
+jupyter_client==8.6.3
+jupyter_core==5.7.2
 kaleido==1.0.0
 kiwisolver==1.3.1
 langchain==0.1.0
 langchain-community==0.0.12
 langchain-core==0.1.10
 langsmith==0.0.80
+lazy_loader==0.4
 lightning-utilities==0.10.1
 lmdb==1.6.2
 logistro==1.1.0
@@ -95,7 +99,7 @@ matplotlib==3.4.3
 matplotlib-inline==0.1.2
 mdurl==0.1.2
 moviepy==0.2.3.1
-mpl-axes-aligner==1.3
+mpl_axes_aligner==1.3
 mpmath==1.3.0
 multidict==6.0.4
 multiprocess==0.70.16
@@ -105,7 +109,7 @@ natsort==8.4.0
 nbformat==5.10.4
 nest-asyncio==1.6.0
 networkx==3.1
-numpy==1.21.0
+numpy==1.21.1
 nvidia-cublas-cu11==11.11.3.6
 nvidia-cublas-cu12==12.1.3.1
 nvidia-cuda-cupti-cu11==11.8.87
@@ -140,22 +144,23 @@ parso==0.8.2
 pexpect==4.8.0
 pickleshare==0.7.5
 pillow==10.2.0
-pkgutil-resolve-name==1.3.10
+pkg_resources==0.0.0
+pkgutil_resolve_name==1.3.10
 platformdirs==4.3.6
 plotly==6.2.0
 prompt-toolkit==3.0.20
-protobuf==3.19.6
+protobuf==3.17.3
 psutil==5.9.7
 ptyprocess==0.7.0
 pyarrow==17.0.0
 pyasn1==0.4.8
 pyasn1-modules==0.2.8
 pydantic==2.5.3
-pydantic-core==2.14.6
+pydantic_core==2.14.6
 pyDeprecate==0.3.2
 pydub==0.25.1
 pyglet==2.0.10
-pygments==2.17.2
+Pygments==2.17.2
 PyOpenGL==3.1.0
 pyparsing==2.4.7
 pyrender==0.1.45
@@ -164,6 +169,7 @@ python-dateutil==2.8.2
 python-multipart==0.0.7
 pytorch-lightning==2.1.3
 pytz==2021.1
+PyWavelets==1.4.1
 PyYAML==5.4.1
 pyzmq==26.2.0
 referencing==0.33.0
@@ -175,8 +181,9 @@ rpds-py==0.17.1
 rsa==4.7.2
 ruff==0.2.1
 safetensors==0.4.1
-scikit-learn==0.24.2 # 만약에 scikit-image==0.19.3 에러나면 보셈
-scipy==1.7.1
+scikit-image==0.21.0
+scikit-learn==0.24.2
+scipy==1.10.1
 seaborn==0.13.2
 semantic-version==2.10.0
 sentry-sdk==1.39.1
@@ -194,30 +201,35 @@ soupsieve==2.5
 SQLAlchemy==2.0.25
 starlette==0.36.3
 sympy==1.12
-tbparse==0.0.9
+tbparse==0.0.8
 tenacity==8.2.3
-tensorboard==2.6.0 
-# tensorboard==2.12.0
-# tensorboard-data-server==0.6.1
-# tensorboard-plugin-wit==1.8.0
+tensorboard==2.6.0
+tensorboard-data-server==0.6.1
+tensorboard-plugin-wit==1.8.0
+tensorboardX==2.6.2.2
 threadpoolctl==2.2.0
+tifffile==2023.7.10
 timm==0.3.4
 tokenizers==0.15.0
 toml==0.10.2
 tomlkit==0.12.0
 toolz==0.12.1
-# torch==2.4.1+cu121(O)
+torch==2.4.1+cu121
+torch-dct==0.1.6
+torchaudio==2.4.1+cu121
+torchgeometry==0.1.2
 torchmetrics==0.7.0
-# torchvision==0.19.1+cu121(O)
+torchvision==0.19.1+cu121
 tornado==6.4.2
 tqdm==4.67.1
 traitlets==5.14.3
 transformers==4.36.2
+transforms3d==0.4.2
 trimesh==4.0.9
 triton==3.0.0
 typer==0.9.0
-typing-extensions==4.9.0
 typing-inspect==0.9.0
+typing_extensions==4.9.0
 urllib3==1.26.18
 uvicorn==0.27.0.post1
 wandb==0.16.1

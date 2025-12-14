@@ -18,28 +18,13 @@ def get_args_parser():
     parser.add_argument('--gamma', default=0.05, type=float, help="learning rate decay")
 
     parser.add_argument('--weight-decay', default=0.0, type=float, help='weight decay')
-    # parser.add_argument("--commit", type=float, default=0.02, help="hyper-parameter for the commitment loss")
     parser.add_argument("--delete-mode", type=str, default='delete', choices=['delete', 'trim', 'del_super_posecode'], help="지울 semantic code(full name)")
     parser.add_argument("--target-del-semantic-code", type=str, default=None, help="지울 semantic code(full name)")
     parser.add_argument("--codes-folder-name", type=str, default='codes', help="code foler 이름")
-    # parser.add_argument('--loss-recons', type=float, default=1.0, help='hyper-parameter for the main reconstruction loss')
-    # parser.add_argument('--loss-vel', type=float, default=0.1, help='hyper-parameter for the velocity loss')
-    # parser.add_argument('--loss-ortho', type=float, default=0.0, help='hyper-parameter for the codebook orthogonal loss')
-    # parser.add_argument('--loss-gw', type=float, default=0.0, help='hyper-parameter for the group wise code reconstruction loss') #
-    # parser.add_argument('--loss-plv', type=float, default=0.0, help='hyper-parameter for pelvis joint loss')
-    # parser.add_argument('--loss-jt', type=float, default=0.0, help='hyper-parameter for normal joint group loss')
-    # parser.add_argument('--loss-cjt', type=float, default=0.0, help='hyper-parameter for contact joint group loss')
-    # parser.add_argument('--loss-plv-vel', type=float, default=0.0, help='hyper-parameter for pelvis joint loss')
-    # parser.add_argument('--loss-jt-vel', type=float, default=0.0, help='hyper-parameter for normal joint group loss')
-    # parser.add_argument('--loss-cjt-vel', type=float, default=0.0, help='hyper-parameter for contact joint group loss')
-    # parser.add_argument('--recons-loss', type=str, default='l2', help='reconstruction loss')
-    # parser.add_argument('--code-recons-loss', type=str, default='l1_smooth', help='code recons reconstruction loss')
-    # parser.add_argument('--use-dynamic-weight', action='store_true', help='dynamic parameter for loss')
-    # parser.add_argument('--norm-dynamic-weight', action='store_true', help='normalize dynamic parameter for loss to summation one')
+    
     parser.add_argument('--disable-vel-loss', action='store_true', help='not to use velocity loss')
     parser.add_argument('--disable-align-root', action='store_true', help='align root joint to calculate mpjpe')
     parser.add_argument('--loss-format', choices=['joint', 'h3d'], default='h3d', help='h3d format or joint feature format')
-    parser.add_argument('--loss-cfg-path', type=str, help='loss config file path')
     
     ## encdec arch
     parser.add_argument("--code-dim", type=int, default=512, help="embedding dimension")
@@ -58,7 +43,6 @@ def get_args_parser():
     parser.add_argument("--resume-pth", type=str, default=None, help='resume pth for VQ')
     parser.add_argument("--resume-gpt", type=str, default=None, help='resume pth for GPT')
     
-    
     ## output directory 
     parser.add_argument('--out-dir', type=str, default='output_vqfinal/', help='output directory')
     parser.add_argument('--results-dir', type=str, default='visual_results/', help='output directory')
@@ -74,7 +58,6 @@ def get_args_parser():
     parser.add_argument('--nb-vis', default=20, type=int, help='nb of visualizations')
     parser.add_argument('--num_workers', default=4, type=int, help='number of workers')
 
-
     parser.add_argument('--use-keywords', action='store_true', help='whether to use fine-grained keyword')
     parser.add_argument('--use-word-only', action='store_true', help='whether to use POS in word embedding')
     parser.add_argument('--cfg-cla-path', type=str, default=None, help='Configuration file path of category aggregator')
@@ -85,7 +68,6 @@ def get_args_parser():
     parser.add_argument('--aggregate-mode', type=str, default=None, choices=[None, 'hadamard'])
     parser.add_argument('--randomize-window-size', action='store_true', help='randomize window size')
 
-
     parser.add_argument('--use-rvq', action='store_true', help='RVQ를 사용할지 여부 (사용 시 True)')
     parser.add_argument('--rvq-name', type=str, default='rptc')
     parser.add_argument('--rvq-num-quantizers', type=int, default=3)
@@ -94,7 +76,7 @@ def get_args_parser():
     parser.add_argument('--rvq-quantize-dropout-cutoff-index', type=int, default=0)
     parser.add_argument('--rvq-nb-code', type=int, default=64)
     parser.add_argument('--rvq-mu', type=float, default=0.99)
-    parser.add_argument('--rvq-commit', type=float, default=0.02)
+    parser.add_argument('--rvq-loss-weight', type=float, default=0.02)
     parser.add_argument('--rvq-resi-beta', type=float, default=1.0)
     parser.add_argument('--detach-p-latent', action='store_true')
 
