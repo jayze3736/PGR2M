@@ -12,7 +12,7 @@ from tqdm import tqdm
 import argparse
 import torch.optim as optim
 import yaml
-import models_rptc.motion_rptc as motion_rptc
+import PGR2M.models_rptc.pg_tokenizer as pg_tokenizer
 import options.option_transformer as option_trans
 import models.motion_dec as motion_dec
 import utils.utils_model as utils_model
@@ -111,7 +111,7 @@ with open(dec_config, 'r') as f:
 
 dec_args = argparse.Namespace(**arg_dict)
 
-net = motion_rptc.ResidualPoseTemporalComplementor(
+net = pg_tokenizer.PoseGuidedTokenizer(
                 dec_args, 
                 dec_args.nb_code,                      # nb_code
                 dec_args.code_dim,                    # code_dim
@@ -146,7 +146,7 @@ net.eval()
 net.cuda()
 
 
-trans_net = trans.MotionTrans(num_vq=args.nb_code, 
+trans_net = trans.BaseTrans(num_vq=args.nb_code, 
                                 embed_dim=args.embed_dim_gpt, 
                                 clip_dim=args.clip_dim, 
                                 block_size=args.block_size, 

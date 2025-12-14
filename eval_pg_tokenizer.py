@@ -129,7 +129,7 @@ if dec_args.use_rvq:
     elif dec_args.rvq_name == 'rptc':
 
         print(f"## NOTE: rvq_resi_beta:{dec_args.rvq_resi_beta}")
-        net = motion_rptc.ResidualPoseTemporalComplementor(
+        net = motion_rptc.PoseGuidedTokenizer(
                     dec_args, 
                     dec_args.nb_code,                      # nb_code
                     dec_args.code_dim,                    # code_dim

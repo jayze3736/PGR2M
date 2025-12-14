@@ -7,8 +7,7 @@ from torch import einsum
 import torch
 from torch import nn
 import torch.nn.functional as F
-from models_rptc.quantizer import QuantizeEMAReset, QuantizeEMA
-from models_rptc.soft_quantizer import SoftQuantizeEMAReset, SoftQuantizeEMA, SoftQuantize
+from models.vq.quantizer import QuantizeEMAReset, SoftQuantize
 from einops import rearrange, repeat, pack, unpack
 
 # helper functions
@@ -42,10 +41,7 @@ class ResidualVQ(nn.Module):
         self.num_quantizers = num_quantizers
 
         if quantizer_type == 'soft':
-            if use_ema:
-                self.quantizer = SoftQuantizeEMAReset
-            else:
-                self.quantizer = SoftQuantize
+            self.quantizer = SoftQuantize
         else:
             self.quantizer = QuantizeEMAReset
 
@@ -54,6 +50,7 @@ class ResidualVQ(nn.Module):
             self.layers = nn.ModuleList([layer for _ in range(num_quantizers)])
         else:
             self.layers = nn.ModuleList([self.quantizer(**kwargs) for _ in range(num_quantizers)])
+        
         assert quantize_dropout_cutoff_index >= 0 and quantize_dropout_prob >= 0
 
         self.quantize_dropout_cutoff_index = quantize_dropout_cutoff_index

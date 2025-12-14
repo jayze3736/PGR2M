@@ -31,7 +31,6 @@ from datetime import datetime
 from utils.motion_process import recover_from_ric
 
 ### 2025_05_20 ###
-from posescript.code_extractor import CodeExtractor
 from utils.trainUtil import update_lr_warm_up, gradient_based_dynamic_weighting
 from utils.loss_wrapper import *
 
@@ -163,9 +162,6 @@ val_loader = dataset_TM_eval.DATALoader(args.dataname,
                                         target_del_semantic_code=args.target_del_semantic_code,
                                         delete_mode=args.delete_mode)
 
-#### Code Extractor ###
-code_ext = CodeExtractor('t2m')
-
 aggregate_mode = args.aggregate_mode
 
 
@@ -226,7 +222,7 @@ if args.use_rvq:
     elif args.rvq_name == 'rptc':
 
         print(f"## NOTE: rvq_resi_beta:{args.rvq_resi_beta}")
-        net = motion_rptc.ResidualPoseTemporalComplementor(
+        net = motion_rptc.PoseGuidedTokenizer(
                         args, 
                         args.nb_code,                      # nb_code
                         args.code_dim,                    # code_dim

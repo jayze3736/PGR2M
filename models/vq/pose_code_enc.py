@@ -1,9 +1,8 @@
-# 입력으로 motion code
+
 import torch.nn as nn
 import torch
 
-# pose latent를 출력
-class PoseRepresentator(nn.Module):
+class PoseCodeEncoder(nn.Module):
     def __init__(self,
                  args,
                  nb_code=512,

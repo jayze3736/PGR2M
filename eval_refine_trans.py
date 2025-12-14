@@ -10,7 +10,7 @@ from tqdm import tqdm
 import argparse
 import yaml 
 import options.option_residual_transformer as option_res_trans # 
-import models_rptc.motion_rptc as motion_dec
+import models_rptc.pg_tokenizer as motion_dec
 import utils.utils_model as utils_model
 from utils.codebook import *
 import utils.eval_trans as eval_trans
@@ -19,8 +19,8 @@ import models.t2m_trans as trans
 from options.get_eval_option import get_opt
 from models.evaluator_wrapper import EvaluatorModelWrapper
 import warnings
-import models_rptc.motion_rptc as motion_rptc
-import models_rptc.rt2m_trans as r_trans
+import models_rptc.pg_tokenizer as pg_tokenizer
+import models.rt2m_trans as r_trans
 import models.t2m_trans as t2m
 from utils.file_utils.misc import get_model_parameters_info
 import random
@@ -59,7 +59,6 @@ dataset_opt_path = 'checkpoints/kit/Comp_v6_KLD005/opt.txt' if args.dataname == 
 wrapper_opt = get_opt(dataset_opt_path, torch.device('cuda'))
 eval_wrapper = EvaluatorModelWrapper(wrapper_opt)
 
-# print(f"eval_wrapper device: {eval_wrapper.device}")
 
 
 ##### ---- Network ---- #####
@@ -102,7 +101,7 @@ if args.use_keywords:
 else:
     num_keywords = 0
 
-trans_net = t2m.MotionTrans(num_vq=t2m_args.nb_code, 
+trans_net = t2m.BaseTrans(num_vq=t2m_args.nb_code, 
                                 embed_dim=t2m_args.embed_dim_gpt, 
                                 clip_dim=t2m_args.clip_dim, 
                                 block_size=t2m_args.block_size, 
@@ -160,7 +159,7 @@ with open(dec_config, 'r') as f:
     arg_dict = yaml.safe_load(f)
 
 dec_args = argparse.Namespace(**arg_dict)
-net = motion_dec.ResidualPoseTemporalComplementor(dec_args, 
+net = motion_dec.PoseGuidedTokenizer(dec_args, 
                     dec_args.nb_code,                      # nb_code
                     dec_args.code_dim,                    # code_dim
                     dec_args.output_emb_width,            # output_emb_width
@@ -197,7 +196,7 @@ for p in net.parameters():
 
 print("## Notice: args.use_keywords:", args.use_keywords)
 
-########################## Load RTransformer ##########################
+########################## Load RefineTrans ##########################
 
 r_trans_config, r_trans_checkpoint_path = get_cfg_ckpt_path(args.residual_t2m_checkpoint_folder, reference=f"{args.eval_reference}.pth")
 
@@ -209,7 +208,7 @@ with open(r_trans_config, 'r') as f:
 
 r_trans_args = argparse.Namespace(**arg_dict)
 
-res_trans_net = r_trans.RTransformer(num_vq=r_trans_args.nb_code, 
+res_trans_net = r_trans.RefineTrans(num_vq=r_trans_args.nb_code, 
                                     num_rvq=dec_args.rvq_nb_code,
                                     embed_dim=r_trans_args.embed_dim_gpt, 
                                     clip_dim=r_trans_args.clip_dim, 

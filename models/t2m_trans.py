@@ -7,7 +7,7 @@ from torch.distributions import Categorical
 import models.pos_encoding as pos_encoding 
 from utils.codebook import *
 
-class MotionTrans(nn.Module):
+class BaseTrans(nn.Module):
     def __init__(self, 
                 num_vq=1024, 
                 embed_dim=512, 

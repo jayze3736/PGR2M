@@ -8,10 +8,10 @@ from torch.distributions import Categorical
 import models.pos_encoding as pos_encoding 
 from functools import partial
 from einops import rearrange, repeat
-from models_rptc.utils.rt2m_utils import Attend
+from models.utils.rt2m_utils import Attend
 from utils.trainUtil import create_pad_mask
 
-class RTransformer(nn.Module):
+class RefineTrans(nn.Module):
 
     def __init__(self, 
                 num_vq=1024, 

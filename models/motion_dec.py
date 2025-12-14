@@ -1,6 +1,6 @@
 import torch.nn as nn
 import torch
-from models.encdec import Decoder
+from models.vq.encdec import Decoder
 
 class MotionDec(nn.Module):
     def __init__(self,

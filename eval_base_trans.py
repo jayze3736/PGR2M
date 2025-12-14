@@ -27,7 +27,7 @@ import warnings
 warnings.filterwarnings('ignore')
 
 from os.path import join as pjoin
-import models_rptc.motion_rptc as motion_rptc
+import PGR2M.models_rptc.pg_tokenizer as pg_tokenizer
 
 def fixseed(seed): # 
     torch.manual_seed(seed)
@@ -64,7 +64,7 @@ eval_wrapper = EvaluatorModelWrapper(wrapper_opt)
 
 ## load clip model and datasets
 clip_model, clip_preprocess = clip.load("ViT-B/32", device=torch.device('cuda'), jit=False)  # Must set jit=False for training
-clip_model.eval() # 평가 모드 진입: batch 정규화나 드롭아웃과 같은 출력에 있어서 영향을 주는 랜덤 요소를 제거
+clip_model.eval() 
 for p in clip_model.parameters():
     p.requires_grad = False 
 
@@ -78,8 +78,6 @@ def get_cfg_ckpt_path(folder_path): #
     
     return config_path, ckpt_path
 
-# print(f"clip model device: {next(clip_model.parameters()).device}")
-
 t2m_config, t2m_checkpoint_path = get_cfg_ckpt_path(args.t2m_checkpoint_folder)
 
 if t2m_config is None or t2m_checkpoint_path is None:
@@ -90,7 +88,7 @@ with open(t2m_config, 'r') as f:
 t2m_args = argparse.Namespace(**arg_dict)
 
 #################################            
-trans_net = trans.MotionTrans(num_vq=t2m_args.nb_code, 
+trans_net = trans.BaseTrans(num_vq=t2m_args.nb_code, 
                                 embed_dim=t2m_args.embed_dim_gpt, 
                                 clip_dim=t2m_args.clip_dim, 
                                 block_size=t2m_args.block_size, 
@@ -112,7 +110,7 @@ with open(dec_config, 'r') as f:
 dec_args = argparse.Namespace(**arg_dict)
 
 if dec_args.use_rvq:
-    net = motion_rptc.ResidualPoseTemporalComplementor(
+    net = pg_tokenizer.PoseGuidedTokenizer(
                     dec_args, 
                     dec_args.nb_code,                      # nb_code
                     dec_args.code_dim,                    # code_dim

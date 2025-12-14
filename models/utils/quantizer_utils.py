@@ -1,6 +1,5 @@
 import math
 import numbers
-
 import torch
 from torch import nn
 from torch import einsum
@@ -43,7 +42,7 @@ class RMSNorm(nn.Module):
 
         return hidden_states
 
-class QuanizerBasedAttention(nn.Module):
+class AttentionForQuantizer(nn.Module):
     def __init__(
         self,
         hidden_dim = 16,

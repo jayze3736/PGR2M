@@ -18,10 +18,10 @@ from utils.codebook import *
 
 ########################## Residual Transformer 관련 ##########################
 import options.option_residual_transformer as option_res_trans # 
-import models_rptc.motion_rptc as motion_dec
+import models_rptc.pg_tokenizer as motion_dec
 from dataset import dataset_TM_train_rtpc #
 from dataset import dataset_TM_eval_rtpc # 
-import models_rptc.rt2m_trans as r_trans
+import models.rt2m_trans as r_trans
 
 ########################## Util 관련 ##########################
 import utils.utils_model as utils_model
@@ -293,7 +293,7 @@ if args.use_keywords:
 else:
     num_keywords = 0
 
-trans_net = t2m.MotionTrans(num_vq=t2m_args.nb_code, 
+trans_net = t2m.BaseTrans(num_vq=t2m_args.nb_code, 
                                 embed_dim=t2m_args.embed_dim_gpt, 
                                 clip_dim=t2m_args.clip_dim, 
                                 block_size=t2m_args.block_size, 
@@ -355,7 +355,7 @@ with open(dec_config, 'r') as f:
     arg_dict = yaml.safe_load(f)
 
 dec_args = argparse.Namespace(**arg_dict)
-net = motion_dec.ResidualPoseTemporalComplementor(dec_args, 
+net = motion_dec.PoseGuidedTokenizer(dec_args, 
                     dec_args.nb_code,                      # nb_code
                     dec_args.code_dim,                    # code_dim
                     dec_args.output_emb_width,            # output_emb_width
@@ -429,11 +429,11 @@ train_loader = dataset_TM_train_rtpc.DATALoader(args.dataname,
 
 train_loader_iter = dataset_TM_train_rtpc.cycle(train_loader)
 
-########################## Load RTransformer ##########################
+########################## Load RefineTrans ##########################
 
 # ToDo: 점검 필요
 
-res_trans_net = r_trans.RTransformer(num_vq=args.nb_code, 
+res_trans_net = r_trans.RefineTrans(num_vq=args.nb_code, 
                                     num_rvq=dec_args.rvq_nb_code,
                                     embed_dim=args.embed_dim_gpt, 
                                     clip_dim=args.clip_dim, 

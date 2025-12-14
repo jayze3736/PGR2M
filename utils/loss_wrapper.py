@@ -4,7 +4,6 @@ from .losses import *
 from .misc import T2M_ID2JOINTNAME, T2M_CONTACT_JOINTS
 from .trainUtil import gradient_based_dynamic_weighting
 import torch
-from posescript.code_extractor import CodeExtractor
 
 class FocalFrequencyLossWrapper(BaseLossWrapper):
     def __init__(self, loss_weight=1.0, alpha=1.0, ave_spectrum=False, log_matrix=False, batch_matrix=False, use_in_loss=True):
@@ -422,42 +421,6 @@ class ReconsJointGroupLossWrapper(BaseLossWrapper):
     
     def __str__(self):
         return 'recons_jgl'
-
-
-class GroupWiseL1LossWrapper(BaseLossWrapper):
-    def __init__(self, recons_loss, weight={}, mean_by_frame=None, use_in_loss=True):
-        self.loss = GroupWiseL1Loss(recons_loss)
-        super().__init__(self.loss, use_in_loss, weight)
-        self.recons_loss = recons_loss
-        self.mean_by_frame = mean_by_frame
-        self.centroid_gram_mat = None
-        self.code_ext = CodeExtractor('t2m')
-        
-    def update(self, pred_motion, gt_codes, mask=None):
-        # forward
-        
-
-        pred_codes = self.code_ext(pred_motion)
-
-        loss = self.weight['group_wise_loss'] * self.loss(pred_codes, gt_codes, mask, self.mean_by_frame)
-        self.avg_loss += loss
-
-        losses = {} 
-        losses['group_wise_loss'] = loss
-        
-        return losses
-    
-    def state(self):
-        return {'Loss_Groupwise_Recons': self.avg_loss}
-
-    def reset(self):
-        self.avg_loss = 0
-        
-    def return_weights(self):
-        return self.weight
-
-    def __str__(self):
-        return 'group_wise_loss'
 
 class OrthogonalLossWrapper(BaseLossWrapper):
     def __init__(self, mode='group', codebook_mode='v1', weight={}, use_in_loss=True):
