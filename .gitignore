@@ -16,6 +16,7 @@ output_mx_vq/
 pretrained/
 old_logs/
 legacy/
+exp_result/
 output_residual_transformer/
 exp_eval_motion_editing_with_gpt_results/
 *.png

@@ -26,7 +26,6 @@ import pandas as pd
 import kaleido
 from dataset.dataset_TM_eval import get_subsamples_loader as get_subsamples_loader_baseline
 from dataset.dataset_RTM_eval import get_subsamples_loader as get_subsamples_loader_rptc
-from utils.graph_utils import prepare_graph_nodes
 
 def tensorboard_add_image_tsne(writer, codebook, tag, nb_iter, title="T-sne of Pose Codebook", mode = None):
     
@@ -281,7 +280,7 @@ def evaluation_enc(out_dir, val_loader, dec, enc, logger, writer, nb_iter, best_
 
 
 @torch.no_grad()        
-def evaluation_dec(args, out_dir, val_loader, net, logger, writer, nb_iter, best_fid, best_iter, best_div, best_top1, best_top2, best_top3, best_matching, best_mpjpe, best_pampjpe, best_accel, eval_wrapper, num_joints, split, use_rvq=False, max_motion_len=None, draw = True, save = True, savegif=False, savenpy=False, unit_length=4, is_test=False, eval_loss_list=None, align_root=True, drop_out_residual_quantization=False): 
+def evaluation_dec(args, out_dir, val_loader, net, logger, writer, nb_iter, best_fid, best_iter, best_div, best_top1, best_top2, best_top3, best_matching, best_mpjpe, best_pampjpe, best_accel, eval_wrapper, num_joints, split, max_motion_len=None, draw = True, save = True, savegif=False, savenpy=False, unit_length=4, is_test=False, eval_loss_list=None, align_root=True, drop_out_residual_quantization=False): 
     net.eval()
 
     nb_sample = 0
@@ -633,8 +632,6 @@ def evaluation_transformer(args, out_dir, val_loader, net, trans, logger, writer
         best_fid, best_iter = fid, nb_iter
         if save:
             torch.save({'trans': trans.state_dict(),
-                        'optimizer': optimizer.state_dict(),
-                        'scheduler': scheduler.state_dict(),
                         'nb_iter': nb_iter}, os.path.join(out_dir, 'net_best_fid.pth'))
 
     if matching_score_pred < best_matching: 
@@ -643,8 +640,6 @@ def evaluation_transformer(args, out_dir, val_loader, net, trans, logger, writer
         best_matching = matching_score_pred
         if save:
             torch.save({'trans': trans.state_dict(),
-                        'optimizer': optimizer.state_dict(),
-                        'scheduler': scheduler.state_dict(),
                         'nb_iter': nb_iter}, os.path.join(out_dir, 'net_best_matching.pth'))
 
     if abs(diversity_real - diversity) < abs(diversity_real - best_div) : 
@@ -658,8 +653,6 @@ def evaluation_transformer(args, out_dir, val_loader, net, trans, logger, writer
         best_top1 = R_precision[0]
         if save:
             torch.save({'trans': trans.state_dict(),
-                        'optimizer': optimizer.state_dict(),
-                        'scheduler': scheduler.state_dict(),
                         'nb_iter': nb_iter}, os.path.join(out_dir, 'net_best_top1.pth'))
 
     if R_precision[1] > best_top2 : 
@@ -674,8 +667,6 @@ def evaluation_transformer(args, out_dir, val_loader, net, trans, logger, writer
         
     if save:
         torch.save({'trans': trans.state_dict(),
-                    'optimizer': optimizer.state_dict(),
-                    'scheduler': scheduler.state_dict(),
                     'nb_iter': nb_iter}, os.path.join(out_dir, 'net_last.pth'))
 
     trans.train()
@@ -686,7 +677,7 @@ def evaluation_transformer(args, out_dir, val_loader, net, trans, logger, writer
 @torch.no_grad()        
 def evaluation_transformer_test(out_dir, val_loader, net, trans, logger, writer, nb_iter, best_fid, best_iter, best_div, best_top1, best_top2, best_top3, best_matching, best_multi, text_encoder, eval_wrapper, 
                                 draw = True, save = True, savegif=False, savenpy=False, unit_length = 4, 
-                                mm_mode=False, text_encoding_method='baseline', use_rptc=False,
+                                mm_mode=False, text_encoding_method='baseline',
                                 block_size=62, use_keywords=True): 
 
     trans.eval()
@@ -735,14 +726,9 @@ def evaluation_transformer_test(out_dir, val_loader, net, trans, logger, writer,
             pred_pose_eval = torch.zeros((bs, seq, pose.shape[-1])).cuda()
             pred_len = torch.ones(bs).long()
 
-            for k in tqdm(range(bs)): 
-                index_motion = trans.sample(feat_clip_text[k:k+1], True, m_length[k]//unit_length) # 1 x t x code_num -> token sequence
-
-                if use_rptc:
-                    pred_pose, *_ = net.forward(index_motion[:,:,:-2].float(), drop_out_residual_quantization=True) # (1, T, Jx3)
-                else:
-                    pred_pose, *_ = net.forward(index_motion[:,:,:-2].float()) # (1, T, Jx3)
-
+            for k in range(bs): 
+                index_motion = trans.sample(feat_clip_text[k:k+1], True, m_length[k]//unit_length) # 1 x t x code_num -> token sequence                
+                pred_pose, *_ = net.forward(index_motion[:,:,:-2].float(), drop_out_residual_quantization=True) # (1, T, Jx3)
                 cur_len = pred_pose.shape[1] 
                 pred_len[k] = min(cur_len, seq)
                 pred_pose_eval[k:k+1, :cur_len] = pred_pose[:, :seq]
@@ -838,7 +824,7 @@ def evaluation_transformer_test(out_dir, val_loader, net, trans, logger, writer,
 @torch.no_grad()        
 def evaluation_transformer_test_fast(out_dir, val_loader, net, trans, logger, writer, nb_iter, best_fid, best_iter, best_div, best_top1, best_top2, best_top3, best_matching, best_multi, text_encoder, eval_wrapper, 
                                 draw = True, save = True, savegif=False, savenpy=False, unit_length = 4, 
-                                mm_mode=False, text_encoding_method='baseline', use_rptc=False,
+                                mm_mode=False, text_encoding_method='baseline',
                                 block_size=62, max_token_len=49, end_token_id=392, use_keywords=True): 
 
     trans.eval()
@@ -901,15 +887,11 @@ def evaluation_transformer_test_fast(out_dir, val_loader, net, trans, logger, wr
             pred_mo_lens[~has_end_token] = max_token_len
             pred_mo_lens = pred_mo_lens.cpu().numpy()
 
-            for k in tqdm(range(bs)):
+            for k in range(bs):
                 index_motion = index_motions[k:k+1] # 1 x t x code_num -> token sequence
                 pred_mo_len = pred_mo_lens[k]
-
-                if use_rptc:
-                    pred_pose, *_ = net.forward(index_motion[:,:pred_mo_len,:-2].float(), drop_out_residual_quantization=True) # (1, T, Jx3)
-                else:
-                    pred_pose, *_ = net.forward(index_motion[:,:pred_mo_len,:-2].float()) # (1, T, Jx3)
-
+                pred_pose, *_ = net.forward(index_motion[:,:pred_mo_len,:-2].float(), drop_out_residual_quantization=True) # (1, T, Jx3)
+            
                 cur_len = pred_pose.shape[1] 
                 pred_len[k] = min(cur_len, seq)
                 pred_pose_eval[k:k+1, :cur_len] = pred_pose[:, :seq]
@@ -1283,12 +1265,6 @@ def evaluation_residual_transformer(args, out_dir, val_loader, net, trans, r_tra
     writer.add_scalar('./Validation/top2', R_precision[1], nb_iter)
     writer.add_scalar('./Validation/top3', R_precision[2], nb_iter)
     writer.add_scalar('./Validation/matching_score', matching_score_pred, nb_iter)
-    
-    # if log_cat_right_num:
-    #     if nb_total_pred > 0:
-    #         logger.info(f"Validation Step: {nb_iter}, nb_total_pred:{nb_total_pred}")
-    #         for group_name, acc in acc_dict.items():
-    #             writer.add_scalar(f'./Validation/Accuracy_{group_name}(only same length cases)', acc/nb_total_pred, nb_iter)
 
     if draw:
         if nb_iter % 10000 == 0 : 
@@ -1305,8 +1281,6 @@ def evaluation_residual_transformer(args, out_dir, val_loader, net, trans, r_tra
         best_fid, best_iter = fid, nb_iter
         if save:
             torch.save({'r_trans': r_trans.state_dict(),
-                        'optimizer': optimizer.state_dict(),
-                        'scheduler': scheduler.state_dict(),
                         'nb_iter': nb_iter}, os.path.join(out_dir, 'net_best_fid.pth'))
 
     if matching_score_pred < best_matching: 
@@ -1315,8 +1289,6 @@ def evaluation_residual_transformer(args, out_dir, val_loader, net, trans, r_tra
         best_matching = matching_score_pred
         if save:
             torch.save({'r_trans': r_trans.state_dict(),
-                        'optimizer': optimizer.state_dict(),
-                        'scheduler': scheduler.state_dict(),
                         'nb_iter': nb_iter}, os.path.join(out_dir, 'net_best_matching.pth'))
 
     if abs(diversity_real - diversity) < abs(diversity_real - best_div) : 
@@ -1330,8 +1302,6 @@ def evaluation_residual_transformer(args, out_dir, val_loader, net, trans, r_tra
         best_top1 = R_precision[0]
         if save:
             torch.save({'r_trans': r_trans.state_dict(),
-                        'optimizer': optimizer.state_dict(),
-                        'scheduler': scheduler.state_dict(),
                         'nb_iter': nb_iter}, os.path.join(out_dir, 'net_best_top1.pth'))
 
     if R_precision[1] > best_top2 : 
@@ -1346,8 +1316,6 @@ def evaluation_residual_transformer(args, out_dir, val_loader, net, trans, r_tra
 
     if save:
         torch.save({'r_trans': r_trans.state_dict(),
-                    'optimizer': optimizer.state_dict(),
-                    'scheduler': scheduler.state_dict(),
                     'nb_iter': nb_iter}, os.path.join(out_dir, 'net_last.pth'))
 
     r_trans.train()
@@ -1411,9 +1379,8 @@ def evaluation_residual_transformer_test(out_dir, val_loader, net, trans, r_tran
             pred_pose_eval = torch.zeros((bs, seq, pose.shape[-1])).cuda()
             pred_len = torch.ones(bs).long()
 
-            pred_p_codes, pred_r_codes = r_trans.sample(feat_clip_text[k:k+1], trans, if_categorial=True, if_residual_categorical=True, offset=offset) # 1 x t x code_num -> token sequence
-
             for k in range(bs):  
+                pred_p_codes, pred_r_codes = r_trans.sample(feat_clip_text[k:k+1], trans, if_categorial=True, if_residual_categorical=True, offset=offset) # 1 x t x code_num -> token sequence
                 pred_p_codes = pred_p_codes[:,:,:-2]
 
                 pred_pose = net.inference(pred_r_codes.float(), pred_p_codes.float()) # (1, T, Jx3) -> Decoder(token seq -> motion)

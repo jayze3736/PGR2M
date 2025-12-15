@@ -60,16 +60,11 @@ def get_args_parser():
 
     parser.add_argument('--use-keywords', action='store_true', help='whether to use fine-grained keyword')
     parser.add_argument('--use-word-only', action='store_true', help='whether to use POS in word embedding')
-    parser.add_argument('--cfg-cla-path', type=str, default=None, help='Configuration file path of category aggregator')
     parser.add_argument('--use-full-sequence', action='store_true', help='whether to use full sequence of motion sample in training')
     parser.add_argument('--val-shuffle', action='store_true', help='whether to shuffle validation set')
     parser.add_argument('--vel-loss-mode', choices=['v1', 'v2', 'v3'], default='v1', help='original vel loss or fixed vel loss')
     parser.add_argument('--meta-dir', type=str, default=None, help='meta file directory')
-    parser.add_argument('--aggregate-mode', type=str, default=None, choices=[None, 'hadamard'])
-    parser.add_argument('--randomize-window-size', action='store_true', help='randomize window size')
 
-    parser.add_argument('--use-rvq', action='store_true', help='RVQ를 사용할지 여부 (사용 시 True)')
-    parser.add_argument('--rvq-name', type=str, default='rptc')
     parser.add_argument('--rvq-num-quantizers', type=int, default=3)
     parser.add_argument('--rvq-shared-codebook', action='store_true')
     parser.add_argument('--rvq-quantize-dropout-prob', type=float, default=0.2)
@@ -77,7 +72,7 @@ def get_args_parser():
     parser.add_argument('--rvq-nb-code', type=int, default=64)
     parser.add_argument('--rvq-mu', type=float, default=0.99)
     parser.add_argument('--rvq-loss-weight', type=float, default=0.02)
-    parser.add_argument('--rvq-resi-beta', type=float, default=1.0)
+    parser.add_argument('--rvq-residual-ratio', type=float, default=1.0)
     parser.add_argument('--detach-p-latent', action='store_true')
 
     parser.add_argument('--rvq-vq-loss-beta', type=float, default=1.0)
@@ -85,12 +80,9 @@ def get_args_parser():
     parser.add_argument('--params-soft-ent-loss', type=float, default=0.0)
     parser.add_argument('--unuse-ema', action='store_true', help='disable ema when using soft quantizer')
     parser.add_argument('--rvq-init-method', type=str, default='enc', choices=['enc', 'uniform', 'xavier'], help="codebook initialization method for RVQ")
-    parser.add_argument('--pdrop-res', type=float, default=0.0, help='residual quantization을 drop할 확률 (0.0 ~ 1.0)')
+    parser.add_argument('--pdrop-res', type=float, default=0.0, help='residual drop threshold (0.0 ~ 1.0)')
     parser.add_argument("--dec-checkpoint-folder", type=str, default=None, help='./')
     parser.add_argument('--force-drop-residual-quantization', action='store_true', help='force drop residual quantization')
-    parser.add_argument('--rvq-gated-residual', action='store_true', help='gated residual 사용 여부')
-    
-    parser.add_argument('--fcm-dsl-init-sigma', type=float, default=1.0,help='Decoder Side Lambda 초기 Gaussian sigma 값')
-    parser.add_argument('--fcm-gaussian-blur', action='store_true', help='whether to use gaussian blur in FCM')
+    parser.add_argument('--loss-cfg-path', type=str, help='loss config file path')
 
     return parser.parse_args()

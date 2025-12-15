@@ -1,7 +1,7 @@
 import warnings
 warnings.filterwarnings('ignore')
 import os
-os.environ["CUDA_VISIBLE_DEVICES"] = "1" 
+os.environ["CUDA_VISIBLE_DEVICES"] = "0" 
 import json
 import torch
 import torch.optim as optim
@@ -88,12 +88,10 @@ def reset(met_dict):
 
 from utils.loss_wrapper import (
     ReConsLossWrapper,
-    OrthogonalLossWrapper,
 )
 
 WRAPPER_CLASS_MAP = {
-    'ReConsLossWrapper': ReConsLossWrapper,
-    'OrthogonalLossWrapper': OrthogonalLossWrapper,
+    'ReConsLossWrapper': ReConsLossWrapper
 }
 
 args = option_vq.get_args_parser()
@@ -127,7 +125,6 @@ logger.info(f"val_shuffle:{val_shuffle}")
 logger.info(json.dumps(vars(args), indent=4, sort_keys=True))
 logger.info(f"## args.use_full_sequence:{args.use_full_sequence} ##")
 logger.info(f"## not args.disable_align_root:{not args.disable_align_root} ##")
-logger.info(f"## args.use_rvq:{args.use_rvq} ##")
 logger.info(f"## args.params_soft_ent_loss:{args.params_soft_ent_loss} ##")
 logger.info(f"## args.rvq_init_method:{args.rvq_init_method} ##")
 
@@ -278,7 +275,6 @@ for nb_iter in range(loaded_nb_iter, args.warm_up_iter):
         use_in_loss = wrapper.is_use_in_loss()
 
         loss_ = wrapper.update(pred_motion, gt_motion)
-
         loss_dict.update(loss_) 
 
         if use_in_loss:
@@ -290,7 +286,7 @@ for nb_iter in range(loaded_nb_iter, args.warm_up_iter):
 
     loss = flatten_and_sum_losses(loss_list, is_use_in_loss)
 
-    if args.use_rvq and not p_drop_res:
+    if not p_drop_res:
         loss += args.rvq_loss_weight * rvq_loss
         loss += args.params_soft_ent_loss * ent_loss
 
@@ -353,7 +349,7 @@ for nb_iter in range(loaded_nb_iter, args.warm_up_iter):
 for name, wrapper in wrappers.items():
     avg_loss_dict = wrapper.reset()
 
-best_fid, best_iter, best_div, best_top1, best_top2, best_top3, best_matching, best_mpjpe, best_pampjpe, best_accel, writer, logger = eval_trans.evaluation_dec(args, args.out_dir, val_loader, net, logger, writer, 0, use_rvq=args.use_rvq, best_fid=1000, best_iter=0, best_div=100, best_top1=0, best_top2=0, best_top3=0, best_matching=100, best_mpjpe=0, best_pampjpe=0, best_accel=0, eval_wrapper=eval_wrapper, unit_length=2**args.down_t, max_motion_len=args.max_motion_len, split='Validation', use_aggregator=use_aggregator, num_joints=args.nb_joints, align_root=(not args.disable_align_root), drop_out_residual_quantization=False)
+best_fid, best_iter, best_div, best_top1, best_top2, best_top3, best_matching, best_mpjpe, best_pampjpe, best_accel, writer, logger = eval_trans.evaluation_dec(args, args.out_dir, val_loader, net, logger, writer, 0, best_fid=1000, best_iter=0, best_div=100, best_top1=0, best_top2=0, best_top3=0, best_matching=100, best_mpjpe=0, best_pampjpe=0, best_accel=0, eval_wrapper=eval_wrapper, unit_length=2**args.down_t, max_motion_len=args.max_motion_len, split='Validation', num_joints=args.nb_joints, align_root=(not args.disable_align_root), drop_out_residual_quantization=False)
 unit_length = 2**args.down_t
 
 avg_metrics_dict = reset(avg_metrics_dict)
@@ -367,7 +363,7 @@ for nb_iter in range(1, args.total_iter + 1):
     gt_motion = gt_motion.cuda().float() # bs, nb_joints, joints_dim, seq_len
     
     p_drop_res = drop_out_residual(args.pdrop_res)
-    pred_motion, codebook, output, proj_rel_pos = net(code_indices.cuda().float(), gt_motion.cuda().float(),  detach_p_latent=args.detach_p_latent, drop_out_residual_quantization=p_drop_res)
+    pred_motion, codebook, output = net(code_indices.cuda().float(), gt_motion.cuda().float(),  detach_p_latent=args.detach_p_latent, drop_out_residual_quantization=p_drop_res)
     
     if not p_drop_res:
         perplexity = output['perplexity']
@@ -393,7 +389,7 @@ for nb_iter in range(1, args.total_iter + 1):
     loss_list = list(loss_dict.values())
     loss = flatten_and_sum_losses(loss_list, is_use_in_loss)
 
-    if args.use_rvq and not p_drop_res:
+    if not p_drop_res:
         loss += args.rvq_loss_weight * rvq_loss
         loss += args.params_soft_ent_loss * ent_loss
 
@@ -503,15 +499,15 @@ for nb_iter in range(1, args.total_iter + 1):
                     sub_batch_ent_loss = torch.tensor(0., device=eval_gt_motion.device)
                     ent_loss = torch.tensor(0., device=eval_gt_motion.device)
 
-                    if args.use_rvq:
-                        eval_pred_motion, codebook_eval, eval_out = net(eval_code_indices[:,::unit_length,:].cuda().float(), eval_gt_motion, detach_p_latent=args.detach_p_latent, drop_out_residual_quantization=pdrop_res) 
-                        
-                        if not pdrop_res:
-                            perplexity = eval_out['perplexity']
-                            eval_rvq_loss = eval_out['vq_loss']
-                            sub_samp_ent_loss = eval_out['all_ent_sub_samp_loss']
-                            sub_batch_ent_loss = eval_out['all_ent_sub_avg_loss']
-                            ent_loss = eval_out['all_ent_loss']
+                    
+                    eval_pred_motion, codebook_eval, eval_out = net(eval_code_indices[:,::unit_length,:].cuda().float(), eval_gt_motion, detach_p_latent=args.detach_p_latent, drop_out_residual_quantization=pdrop_res) 
+                    
+                    if not pdrop_res:
+                        perplexity = eval_out['perplexity']
+                        eval_rvq_loss = eval_out['vq_loss']
+                        sub_samp_ent_loss = eval_out['all_ent_sub_samp_loss']
+                        sub_batch_ent_loss = eval_out['all_ent_sub_avg_loss']
+                        ent_loss = eval_out['all_ent_loss']
                     
                     for name, wrapper in eval_loss_wrapper.items():
                         eval_loss_name = str(wrapper)
@@ -527,7 +523,7 @@ for nb_iter in range(1, args.total_iter + 1):
                     eval_loss_list = list(eval_loss_dict.values())
                     eval_loss = flatten_and_sum_losses(eval_loss_list, is_use_in_loss)
 
-                    if args.use_rvq and not pdrop_res:
+                    if not pdrop_res:
                         eval_loss += args.rvq_loss_weight * eval_rvq_loss
                         eval_loss += args.params_soft_ent_loss * ent_loss
 
@@ -571,8 +567,8 @@ for nb_iter in range(1, args.total_iter + 1):
 
         # w/o residual dropout
         eval_loss_log_list = eval(args, net, val_loader, writer, logger, eval_loss_wrapper, pdrop_res=True, unit_length=2**args.down_t)
-        eval_trans.evaluation_dec(args, args.out_dir, val_loader, net, logger, writer, nb_iter, best_fid, best_iter, best_div, best_top1, best_top2, best_top3, best_matching, best_mpjpe, best_pampjpe, best_accel, use_rvq=args.use_rvq, eval_wrapper=eval_wrapper, unit_length=2**args.down_t, max_motion_len=args.max_motion_len, eval_loss_list=None, num_joints=args.nb_joints, align_root=(not args.disable_align_root), split='No RVQ Validation', save=False, drop_out_residual_quantization=True)
+        eval_trans.evaluation_dec(args, args.out_dir, val_loader, net, logger, writer, nb_iter, best_fid, best_iter, best_div, best_top1, best_top2, best_top3, best_matching, best_mpjpe, best_pampjpe, best_accel, eval_wrapper=eval_wrapper, unit_length=2**args.down_t, max_motion_len=args.max_motion_len, eval_loss_list=None, num_joints=args.nb_joints, align_root=(not args.disable_align_root), split='No RVQ Validation', save=False, drop_out_residual_quantization=True)
         
         # w residual dropout 
         eval_loss_log_list = eval(args, net, val_loader, writer, logger, eval_loss_wrapper, pdrop_res=False, unit_length=2**args.down_t)
-        best_fid, best_iter, best_div, best_top1, best_top2, best_top3, best_matching, best_mpjpe, best_pampjpe, best_accel, writer, logger = eval_trans.evaluation_dec(args, args.out_dir, val_loader, net, logger, writer, nb_iter, best_fid, best_iter, best_div, best_top1, best_top2, best_top3, best_matching, best_mpjpe, best_pampjpe, best_accel, use_rvq=args.use_rvq, eval_wrapper=eval_wrapper, unit_length=2**args.down_t, max_motion_len=args.max_motion_len, eval_loss_list=None, num_joints=args.nb_joints, align_root=(not args.disable_align_root), split='Validation', drop_out_residual_quantization=False)
+        best_fid, best_iter, best_div, best_top1, best_top2, best_top3, best_matching, best_mpjpe, best_pampjpe, best_accel, writer, logger = eval_trans.evaluation_dec(args, args.out_dir, val_loader, net, logger, writer, nb_iter, best_fid, best_iter, best_div, best_top1, best_top2, best_top3, best_matching, best_mpjpe, best_pampjpe, best_accel, eval_wrapper=eval_wrapper, unit_length=2**args.down_t, max_motion_len=args.max_motion_len, eval_loss_list=None, num_joints=args.nb_joints, align_root=(not args.disable_align_root), split='Validation', drop_out_residual_quantization=False)

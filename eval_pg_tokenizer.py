@@ -90,31 +90,30 @@ dec_args = argparse.Namespace(**arg_dict)
 
 ##### ---- Network ---- #####
 
-
 net = PoseGuidedTokenizer(
-                    args, 
-                    args.nb_code,                      # nb_code
-                    args.code_dim,                    # code_dim
-                    args.output_emb_width,            # output_emb_width
-                    args.down_t,                      # down_t
-                    args.stride_t,                    # stride_t
-                    args.width,                       # width
-                    args.depth,                       # depth
-                    args.dilation_growth_rate,        # dilation_growth_rate
-                    args.vq_act,                      # activation
-                    args.vq_norm,                     # norm
-                    num_quantizers=args.rvq_num_quantizers,
-                    shared_codebook=args.rvq_shared_codebook,
-                    quantize_dropout_prob=args.rvq_quantize_dropout_prob,
-                    quantize_dropout_cutoff_index=args.rvq_quantize_dropout_cutoff_index,
-                    rvq_nb_code=args.rvq_nb_code,
-                    mu=args.rvq_mu,
-                    residual_ratio=args.rvq_residual_ratio,
-                    vq_loss_beta=args.rvq_vq_loss_beta,
-                    quantizer_type=args.rvq_quantizer_type,
-                    params_soft_ent_loss=args.params_soft_ent_loss,
-                    use_ema=(not args.unuse_ema),
-                    init_method=args.rvq_init_method
+                    dec_args, 
+                    dec_args.nb_code,                      # nb_code
+                    dec_args.code_dim,                    # code_dim
+                    dec_args.output_emb_width,            # output_emb_width
+                    dec_args.down_t,                      # down_t
+                    dec_args.stride_t,                    # stride_t
+                    dec_args.width,                       # width
+                    dec_args.depth,                       # depth
+                    dec_args.dilation_growth_rate,        # dilation_growth_rate
+                    dec_args.vq_act,                      # activation
+                    dec_args.vq_norm,                     # norm
+                    num_quantizers=dec_args.rvq_num_quantizers,
+                    shared_codebook=dec_args.rvq_shared_codebook,
+                    quantize_dropout_prob=dec_args.rvq_quantize_dropout_prob,
+                    quantize_dropout_cutoff_index=dec_args.rvq_quantize_dropout_cutoff_index,
+                    rvq_nb_code=dec_args.rvq_nb_code,
+                    mu=dec_args.rvq_mu,
+                    residual_ratio=dec_args.rvq_residual_ratio,
+                    vq_loss_beta=dec_args.rvq_vq_loss_beta,
+                    quantizer_type=dec_args.rvq_quantizer_type,
+                    params_soft_ent_loss=dec_args.params_soft_ent_loss,
+                    use_ema=(not dec_args.unuse_ema),
+                    init_method=dec_args.rvq_init_method
                     )
 
 if dec_checkpoint_path is not None: 
@@ -135,9 +134,6 @@ pampjpe = []
 accel = []
 matching = []
 repeat_time = 20
-
-print("(not getattr(dec_args, 'unuse_ema', False))", (not getattr(dec_args, 'unuse_ema', False)))
-print("args.force_drop_residual_quantization: ", args.force_drop_residual_quantization)
 
 for i in range(repeat_time):
     # best_fid, best_iter, best_div, best_top1, best_top2, best_top3, best_matching, best_mpjpe, best_pampjpe, best_accel, writer, logger = eval_trans.evaluation_dec(args, args.out_dir, val_loader, net, logger, writer, 0, best_fid, best_iter, best_div, best_top1, best_top2, best_top3, best_matching, best_mpjpe, best_pampjpe, best_accel, eval_wrapper=eval_wrapper, unit_length=2**args.down_t, max_motion_len=args.max_motion_len, use_aggregator=use_aggregator, eval_loss_list=eval_loss_log_list, num_joints=args.nb_joints, align_root=(not args.disable_align_root))

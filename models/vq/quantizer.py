@@ -37,7 +37,7 @@ class QuantizeEMAReset(nn.Module):
         super(QuantizeEMAReset, self).__init__()
         self.nb_code = nb_code
         self.code_dim = code_dim
-        self.mu = mu  ##TO_DO
+        self.mu = mu  
         self.reset_codebook()
 
     def reset_codebook(self):

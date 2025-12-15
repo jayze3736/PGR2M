@@ -38,8 +38,6 @@ class PoseGuidedTokenizer(nn.Module):
         self.num_code = nb_code
         self.rvq_nb_code = rvq_nb_code
         self.nb_joints = 21 if args.dataname == 'kit' else 2
-
-        # self.register_buffer("residual_ratio", torch.tensor(residual_ratio, dtype=torch.float))
         self.residual_ratio = residual_ratio
 
         self.encoder = Encoder(251 if args.dataname == 'kit' else 263, code_dim, down_t, stride_t, width, depth, dilation_growth_rate, activation=activation, norm=norm)

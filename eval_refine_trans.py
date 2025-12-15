@@ -10,7 +10,7 @@ from tqdm import tqdm
 import argparse
 import yaml 
 import options.option_residual_transformer as option_res_trans # 
-import models.pg_tokenizer as motion_dec
+from models.pg_tokenizer import PoseGuidedTokenizer
 import utils.utils_model as utils_model
 from utils.codebook import *
 import utils.eval_trans as eval_trans
@@ -108,40 +108,14 @@ trans_net = t2m.BaseTrans(num_vq=t2m_args.nb_code,
                                 num_layers=t2m_args.num_layers, 
                                 n_head=t2m_args.n_head_gpt, 
                                 drop_out_rate=t2m_args.drop_out_rate, 
-                                fc_rate=t2m_args.ff_rate,
-                                num_key=11,
-                                mode=mode,
-                                token_emb_name=t2m_args.token_emb_layer,
-                                pos_emb_additional=getattr(
-                                    t2m_args, "pos_emb_additional",
-                                    not getattr(t2m_args, "disable_pos_emb_additional", True) 
-                                ),
-                                pos_emb_rope=getattr(
-                                    t2m_args, "pos_emb_rope",
-                                    getattr(t2m_args, "use_rope_pos_emb", False) 
-                                ),
-                                pos_emb_offset=getattr(
-                                    t2m_args, "pos_emb_offset",
-                                    getattr(t2m_args, "pos_emb_rope_offset", 11) 
-                                ),
-                                mask_only_motion_tokens=getattr(t2m_args, "mask_only_motion_tokens", False),
-                                init_prior=getattr(t2m_args, "init_prior", False),
-                                codebook=None,
-                                frozen=getattr(t2m_args, "frozen", getattr(t2m_args, "froze_codebook", True)),
-                                graph_based_reasoning=getattr(
-                                    t2m_args, "graph_based_reasoning",
-                                    (getattr(t2m_args, "text_encoding_method", "").lower() == "graph_reasoning")
-                                ),
-                                block_attend_cond2cond=getattr(t2m_args, "block_attend_cond2cond", False)) # True -> APE, False -> ROPE
+                                fc_rate=t2m_args.ff_rate)
 
 print ('loading transformer checkpoint from {}'.format(t2m_checkpoint_path))
 trans_ckpt = torch.load(t2m_checkpoint_path, map_location='cpu')
 trans_net.load_state_dict(trans_ckpt['trans'], strict=True)
 
-
 trans_net.cuda()
 trans_net.eval()
-
 
 for p in trans_net.parameters():
     p.requires_grad = False
@@ -159,7 +133,8 @@ with open(dec_config, 'r') as f:
     arg_dict = yaml.safe_load(f)
 
 dec_args = argparse.Namespace(**arg_dict)
-net = motion_dec.PoseGuidedTokenizer(dec_args, 
+net = PoseGuidedTokenizer(
+                    dec_args, 
                     dec_args.nb_code,                      # nb_code
                     dec_args.code_dim,                    # code_dim
                     dec_args.output_emb_width,            # output_emb_width
@@ -170,20 +145,19 @@ net = motion_dec.PoseGuidedTokenizer(dec_args,
                     dec_args.dilation_growth_rate,        # dilation_growth_rate
                     dec_args.vq_act,                      # activation
                     dec_args.vq_norm,                     # norm
-                    dec_args.cfg_cla,                     # cfg_cla
-                    aggregate_mode=None,    # aggregate_mode
                     num_quantizers=dec_args.rvq_num_quantizers,
                     shared_codebook=dec_args.rvq_shared_codebook,
                     quantize_dropout_prob=dec_args.rvq_quantize_dropout_prob,
                     quantize_dropout_cutoff_index=dec_args.rvq_quantize_dropout_cutoff_index,
                     rvq_nb_code=dec_args.rvq_nb_code,
                     mu=dec_args.rvq_mu,
-                    resi_beta=dec_args.rvq_resi_beta,
+                    residual_ratio=dec_args.rvq_residual_ratio,
+                    vq_loss_beta=dec_args.rvq_vq_loss_beta,
                     quantizer_type=dec_args.rvq_quantizer_type,
                     params_soft_ent_loss=dec_args.params_soft_ent_loss,
-                    use_ema=(not dec_args.unuse_ema) if dec_args.unuse_ema is not None else False,
-                    init_method=getattr(dec_args, 'rvq_init_method', 'enc'),  # 'enc', 'xavier', 'uniform',
-)
+                    use_ema=(not dec_args.unuse_ema),
+                    init_method=dec_args.rvq_init_method
+                    )
     
 print ('loading decoder checkpoint from {}'.format(dec_checkpoint_path))
 ckpt = torch.load(dec_checkpoint_path, map_location='cpu')

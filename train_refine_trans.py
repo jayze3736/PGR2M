@@ -1,5 +1,5 @@
 import os 
-os.environ["CUDA_VISIBLE_DEVICES"] = "1"  
+os.environ["CUDA_VISIBLE_DEVICES"] = "0"  
 import torch
 import numpy as np
 import yaml
@@ -282,12 +282,12 @@ net = PoseGuidedTokenizer(
                 quantize_dropout_cutoff_index=dec_args.rvq_quantize_dropout_cutoff_index,
                 rvq_nb_code=dec_args.rvq_nb_code,
                 mu=dec_args.rvq_mu,
-                resi_beta=dec_args.rvq_resi_beta,
+                residual_ratio=dec_args.rvq_residual_ratio,
                 vq_loss_beta=dec_args.rvq_vq_loss_beta,
                 quantizer_type=dec_args.rvq_quantizer_type,
                 params_soft_ent_loss=dec_args.params_soft_ent_loss,
-                use_ema= (not args.unuse_ema),
-                init_method=dec_args.init_method
+                use_ema= (not dec_args.unuse_ema),
+                init_method=dec_args.rvq_init_method
                 )
     
 print ('loading decoder checkpoint from {}'.format(dec_checkpoint_path))
@@ -313,25 +313,23 @@ val_loader = dataset_RTM_eval.DATALoader(args.dataname,
                                         32,
                                         w_vectorizer,
                                         codebook_size=dec_args.nb_code,
-                                        rtpc_net=net,
+                                        pg_tokenizer=net,
                                         rvq_codebook_size=dec_args.rvq_nb_code,
                                         num_quantizer=dec_args.rvq_num_quantizers,
                                         num_workers=args.num_workers,
                                         codes_folder_name=args.codes_folder_name,
-                                        soft_label_folder_name=args.soft_label_folder_name,
                                         cache_file_name=args.eval_cache_file_name,
                                         use_keywords=args.use_keywords)
 
 train_loader = dataset_RTM_train.DATALoader(args.dataname, 
                                            args.batch_size, 
                                            dec_args.nb_code,
-                                           rtpc_net=net,
+                                           pg_tokenizer=net,
                                            unit_length=2**args.down_t, 
                                            rvq_codebook_size=dec_args.rvq_nb_code,
                                            num_quantizer=dec_args.rvq_num_quantizers,
                                            num_workers=args.num_workers,
                                            codes_folder_name=args.codes_folder_name,
-                                           soft_label_folder_name=args.soft_label_folder_name,
                                            cache_file_name=args.train_cache_file_name,
                                            use_keywords=args.use_keywords)
 
@@ -445,7 +443,7 @@ if args.schedule_pkeep:
 else:
     scheduled_pkeep = linear_schedule(steps, int(args.total_iter/2), args.pkeep, args.pkeep)
 
-best_fid, best_iter, best_div, best_top1, best_top2, best_top3, best_matching, writer, logger, val_acc, val_loss = eval_trans.evaluation_residual_transformer(args, args.out_dir, val_loader, net, trans_net, refine_trans, logger, writer, nb_iter, best_fid, best_iter, best_div, best_top1, best_top2, best_top3, best_matching, clip_model=clip_model, eval_wrapper=eval_wrapper, optimizer=optimizer, scheduler=scheduler, log_cat_right_num=args.log_cat_right_num, cat_mode=args.codes_folder_name, num_keywords=num_keywords)
+best_fid, best_iter, best_div, best_top1, best_top2, best_top3, best_matching, writer, logger, val_acc, val_loss = eval_trans.evaluation_residual_transformer(args, args.out_dir, val_loader, net, trans_net, refine_trans, logger, writer, nb_iter, best_fid, best_iter, best_div, best_top1, best_top2, best_top3, best_matching, clip_model=clip_model, eval_wrapper=eval_wrapper, optimizer=optimizer, scheduler=scheduler, num_keywords=num_keywords)
 
 if args.resume_trans is not None:
     start_iter = loaded_nb_iter
@@ -715,7 +713,7 @@ for nb_iter in range(start_iter, args.total_iter + 1):
             refine_trans.train()
     
     if nb_iter % args.eval_iter ==  0:
-        best_fid, best_iter, best_div, best_top1, best_top2, best_top3, best_matching, writer, logger, val_acc, val_loss = eval_trans.evaluation_residual_transformer(args, args.out_dir, val_loader, net, trans_net, refine_trans, logger, writer, nb_iter, best_fid, best_iter, best_div, best_top1, best_top2, best_top3, best_matching, clip_model=clip_model, eval_wrapper=eval_wrapper, optimizer=optimizer, scheduler=scheduler, log_cat_right_num=args.log_cat_right_num, cat_mode=args.codes_folder_name, num_keywords=num_keywords)
+        best_fid, best_iter, best_div, best_top1, best_top2, best_top3, best_matching, writer, logger, val_acc, val_loss = eval_trans.evaluation_residual_transformer(args, args.out_dir, val_loader, net, trans_net, refine_trans, logger, writer, nb_iter, best_fid, best_iter, best_div, best_top1, best_top2, best_top3, best_matching, clip_model=clip_model, eval_wrapper=eval_wrapper, optimizer=optimizer, scheduler=scheduler, num_keywords=num_keywords)
             
     if nb_iter == args.total_iter: 
         msg_final = f"Train. Iter {best_iter} : FID. {best_fid:.5f}, Diversity. {best_div:.4f}, TOP1. {best_top1:.4f}, TOP2. {best_top2:.4f}, TOP3. {best_top3:.4f}"

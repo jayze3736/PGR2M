@@ -19,10 +19,11 @@ from utils.codebook import *
 import utils.eval_trans as eval_trans
 from dataset import dataset_TM_eval
 
+
 import models.motion_dec as motion_dec
 import models.t2m_trans as trans
 from models.evaluator_wrapper import EvaluatorModelWrapper
-import models.pg_tokenizer as pg_tokenizer
+from models.pg_tokenizer import PoseGuidedTokenizer
 
 import warnings
 warnings.filterwarnings('ignore')
@@ -95,8 +96,6 @@ trans_net = trans.BaseTrans(num_vq=t2m_args.nb_code,
                                 drop_out_rate=t2m_args.drop_out_rate, 
                                 fc_rate=t2m_args.ff_rate)
 
-mode = args.cat_mode
-print("# NOTE: category mode: ", mode)
 print(f"Loading decoder config and checkpoint from {args.dec_checkpoint_folder}")
 dec_config, dec_checkpoint_path = get_cfg_ckpt_path(args.dec_checkpoint_folder)
 
@@ -108,32 +107,31 @@ with open(dec_config, 'r') as f:
 dec_args = argparse.Namespace(**arg_dict)
 
 
-net = pg_tokenizer.PoseGuidedTokenizer(
-                dec_args, 
-                dec_args.nb_code,                      # nb_code
-                dec_args.code_dim,                    # code_dim
-                dec_args.output_emb_width,            # output_emb_width
-                dec_args.down_t,                      # down_t
-                dec_args.stride_t,                    # stride_t
-                dec_args.width,                       # width
-                dec_args.depth,                       # depth
-                dec_args.dilation_growth_rate,        # dilation_growth_rate
-                dec_args.vq_act,                      # activation
-                dec_args.vq_norm,                     # norm
-                aggregate_mode=None,    # aggregate_mode
-                num_quantizers=dec_args.rvq_num_quantizers,
-                shared_codebook=dec_args.rvq_shared_codebook,
-                quantize_dropout_prob=dec_args.rvq_quantize_dropout_prob,
-                quantize_dropout_cutoff_index=dec_args.rvq_quantize_dropout_cutoff_index,
-                rvq_nb_code=dec_args.rvq_nb_code,
-                mu=dec_args.rvq_mu,
-                resi_beta=dec_args.rvq_resi_beta,
-                vq_loss_beta=dec_args.rvq_vq_loss_beta,
-                quantizer_type=dec_args.rvq_quantizer_type,
-                params_soft_ent_loss=dec_args.params_soft_ent_loss,
-                use_ema=(not getattr(dec_args, 'unuse_ema', True)),
-                init_method=getattr(dec_args, 'rvq_init_method', 'enc')
-                )
+net = PoseGuidedTokenizer(
+                    dec_args, 
+                    dec_args.nb_code,                      # nb_code
+                    dec_args.code_dim,                    # code_dim
+                    dec_args.output_emb_width,            # output_emb_width
+                    dec_args.down_t,                      # down_t
+                    dec_args.stride_t,                    # stride_t
+                    dec_args.width,                       # width
+                    dec_args.depth,                       # depth
+                    dec_args.dilation_growth_rate,        # dilation_growth_rate
+                    dec_args.vq_act,                      # activation
+                    dec_args.vq_norm,                     # norm
+                    num_quantizers=dec_args.rvq_num_quantizers,
+                    shared_codebook=dec_args.rvq_shared_codebook,
+                    quantize_dropout_prob=dec_args.rvq_quantize_dropout_prob,
+                    quantize_dropout_cutoff_index=dec_args.rvq_quantize_dropout_cutoff_index,
+                    rvq_nb_code=dec_args.rvq_nb_code,
+                    mu=dec_args.rvq_mu,
+                    residual_ratio=dec_args.rvq_residual_ratio,
+                    vq_loss_beta=dec_args.rvq_vq_loss_beta,
+                    quantizer_type=dec_args.rvq_quantizer_type,
+                    params_soft_ent_loss=dec_args.params_soft_ent_loss,
+                    use_ema=(not dec_args.unuse_ema),
+                    init_method=dec_args.rvq_init_method
+                    )
 
 
 print ('loading checkpoint from {}'.format(dec_checkpoint_path))

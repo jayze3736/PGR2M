@@ -1,5 +1,5 @@
 import os 
-os.environ["CUDA_VISIBLE_DEVICES"] = "2"  
+os.environ["CUDA_VISIBLE_DEVICES"] = "0"  
 import torch
 from torch.utils.tensorboard import SummaryWriter
 from torch.distributions import Categorical
@@ -57,7 +57,6 @@ def get_dec_cfg_ckpt_path(folder_path):
 args = option_trans.get_args_parser()
 fixseed(args.seed)
 
-args.out_dir = os.path.join(args.out_dir, f'{args.exp_name}')
 args.vq_dir= os.path.join("./dataset/KIT-ML" if args.dataname == 'kit' else "./dataset/HumanML3D", f'{args.vq_name}')
 
 ####### save configs #######
@@ -120,12 +119,12 @@ net = PoseGuidedTokenizer(
                 quantize_dropout_cutoff_index=dec_args.rvq_quantize_dropout_cutoff_index,
                 rvq_nb_code=dec_args.rvq_nb_code,
                 mu=dec_args.rvq_mu,
-                resi_beta=dec_args.rvq_resi_beta,
+                residual_ratio=dec_args.rvq_residual_ratio,
                 vq_loss_beta=dec_args.rvq_vq_loss_beta,
                 quantizer_type=dec_args.rvq_quantizer_type,
                 params_soft_ent_loss=dec_args.params_soft_ent_loss,
-                use_ema= (not args.unuse_ema),
-                init_method=dec_args.init_method
+                use_ema= (not dec_args.unuse_ema),
+                init_method=dec_args.rvq_init_method
                 )
 
 print ('loading decoder checkpoint from {}'.format(dec_checkpoint_path))
@@ -174,7 +173,7 @@ best_top1=0
 best_top2=0
 best_top3=0
 best_matching=100
-best_fid, best_iter, best_div, best_top1, best_top2, best_top3, best_matching, writer, logger, val_acc, val_loss = eval_trans.evaluation_transformer(args, args.out_dir, val_loader, net, trans_net, logger, writer, nb_iter, best_fid, best_iter, best_div, best_top1, best_top2, best_top3, best_matching, text_encoder=text_encoder, eval_wrapper=eval_wrapper, optimizer=optimizer, scheduler=scheduler, log_cat_right_num=args.log_cat_right_num, cat_mode=args.codes_folder_name, use_rptc=dec_args.use_rvq)
+best_fid, best_iter, best_div, best_top1, best_top2, best_top3, best_matching, writer, logger, val_acc, val_loss = eval_trans.evaluation_transformer(args, args.out_dir, val_loader, net, trans_net, logger, writer, nb_iter, best_fid, best_iter, best_div, best_top1, best_top2, best_top3, best_matching, text_encoder=text_encoder, eval_wrapper=eval_wrapper, optimizer=optimizer, scheduler=scheduler)
         
 
 # Define the exponential decay schedule parameters
@@ -291,8 +290,7 @@ while nb_iter <= args.total_iter:
                                                                                                                                                              text_encoder=text_encoder, 
                                                                                                                                                              eval_wrapper=eval_wrapper,
                                                                                                                                                              optimizer=optimizer, 
-                                                                                                                                                             scheduler=scheduler, 
-                                                                                                                                                             cat_mode=args.codes_folder_name)
+                                                                                                                                                             scheduler=scheduler)
         
     if nb_iter == args.total_iter: 
         msg_final = f"Train. Iter {best_iter} : FID. {best_fid:.5f}, Diversity. {best_div:.4f}, TOP1. {best_top1:.4f}, TOP2. {best_top2:.4f}, TOP3. {best_top3:.4f}"
