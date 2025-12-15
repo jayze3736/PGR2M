@@ -25,7 +25,7 @@ The resulting file directory should look like this:
 
 ### Fine-grained Descriptions & Pose Codes
 
-For the fine-grained description and pose codes, please follow the instructions for downloadling and preprocessing [here](https://github.com/yh2371/CoMo/tree/main)
+For the fine-grained description and pose codes, please follow the instructions for downloading and preprocessing [here](https://github.com/yh2371/CoMo/tree/main)
 
 ### Pre-trained Models
 
@@ -145,7 +145,7 @@ python train_refine_trans.py \
 --use-keywords
 ```
 
-## Eval PG(PoseGuided) Tokenizer
+## Evaluate PG(PoseGuided) Tokenizer
 
 ```
 python eval_pg_tokenizer.py \
@@ -166,7 +166,7 @@ python eval_pg_tokenizer.py \
 --output-emb-width 392
 ```
 
-## Eval Base Transformer
+## Evaluate Base Transformer
 
 ```
 python eval_base_trans.py \
@@ -198,7 +198,7 @@ python eval_base_trans.py \
 --use-keywords
 ```
 
-## Eval Refine Transformer
+## Evaluate Refine Transformer
 
 ```
 python eval_refine_trans.py \
