@@ -1,5 +1,5 @@
 # Pose-Guided Residual Refinement for Interpretable Text-to-Motion Generation and Editing
-This is code repository for "Pose-Guided Residual Refinement for Interpretable Text-to-Motion Generation and Editing"
+This is official implementation for "Pose-Guided Residual Refinement for Interpretable Text-to-Motion Generation and Editing"
 
 ## Getting Started
 
@@ -23,20 +23,39 @@ The resulting file directory should look like this:
 └── all.txt
 ```
 
-### Fine-grained Descriptions & Pose Codes
+### Dependencies
 
-For the fine-grained description and pose codes, please follow the instructions for downloading and preprocessing [here](https://github.com/yh2371/CoMo/tree/main)
-
-### Pre-trained Models
-
+Run the following commands to download the required components
 ```
-
+bash dataset/prepare/download_glove.sh
+bash dataset/prepare/download_extractor.sh
+bash dataset/prepare/download_smpl.sh
 ```
-
-## Dependencies
 
 ```
 pip install -r requirements.txt
+```
+
+### Fine-grained Descriptions & Pose Codes
+
+For the fine-grained description and pose codes, please follow the instructions for downloading and preprocessing [here](https://github.com/yh2371/CoMo/tree/main)   
+
+You can use the following command to convert the motion into pose codes
+```
+bash dataset/prepare/parse_motion.sh
+```
+
+and you can use the following command to download the fine-grained keywords.
+```
+bash dataset/prepare/download_keywords.sh
+```
+
+
+### Pre-trained Models
+
+If you want to download the pretrained model weights, run the following:
+```
+
 ```
 
 ## Train PG(PoseGuided) Tokenizer
@@ -232,7 +251,13 @@ python eval_refine_trans.py \
 --use-keywords
 ```
 
+## Inference
+
+You can run inference with the model by referring to "inference.ipynb". Please see the notebook for detailed instructions and code.
+
 ## Motion Editing
+
+For code that performs motion editing using the ChatGPT API, please refer to "motion_editing_with_gpt.ipynb"
 
 ## References
 

@@ -32,6 +32,9 @@ build/
 develop-eggs/
 dist/
 downloads/
+inference/
+motion_editing_result/
+glove/
 eggs/
 .eggs/
 lib/
@@ -63,6 +66,7 @@ eval_residual_trans_output/
 *.spec
 /eval_output/
 output_evaluation/
+./command_all.txt
 /running_test/
 /dataset/
 EXP_analysis/
@@ -82,7 +86,8 @@ coverage.xml
 *.cover
 .hypothesis/
 .pytest_cache/
-
+/command_all.txt
+command.txt
 # Translations
 *.mo
 *.pot
