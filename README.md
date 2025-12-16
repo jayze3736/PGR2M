@@ -3,7 +3,7 @@ This is official implementation for "Pose-Guided Residual Refinement for Interpr
 
 ## Demo Pages
 
-[here](https://jayze3736.github.io/PGR2M_Demo/)
+You can find demo page about motion generation and editing result[here](https://jayze3736.github.io/PGR2M_Demo/)
 
 ## Getting Started
 
