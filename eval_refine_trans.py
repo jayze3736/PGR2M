@@ -59,8 +59,6 @@ dataset_opt_path = 'checkpoints/kit/Comp_v6_KLD005/opt.txt' if args.dataname == 
 wrapper_opt = get_opt(dataset_opt_path, torch.device('cuda'))
 eval_wrapper = EvaluatorModelWrapper(wrapper_opt)
 
-
-
 ##### ---- Network ---- #####
 
 ## load clip model and datasets
@@ -102,13 +100,13 @@ else:
     num_keywords = 0
 
 trans_net = t2m.BaseTrans(num_vq=t2m_args.nb_code, 
-                                embed_dim=t2m_args.embed_dim_gpt, 
-                                clip_dim=t2m_args.clip_dim, 
-                                block_size=t2m_args.block_size, 
-                                num_layers=t2m_args.num_layers, 
-                                n_head=t2m_args.n_head_gpt, 
-                                drop_out_rate=t2m_args.drop_out_rate, 
-                                fc_rate=t2m_args.ff_rate)
+                            embed_dim=t2m_args.embed_dim_gpt, 
+                            clip_dim=t2m_args.clip_dim, 
+                            block_size=t2m_args.block_size, 
+                            num_layers=t2m_args.num_layers, 
+                            n_head=t2m_args.n_head_gpt, 
+                            drop_out_rate=t2m_args.drop_out_rate, 
+                            fc_rate=t2m_args.ff_rate)
 
 print ('loading transformer checkpoint from {}'.format(t2m_checkpoint_path))
 trans_ckpt = torch.load(t2m_checkpoint_path, map_location='cpu')
@@ -237,7 +235,12 @@ for i in tqdm(range(repeat_time)):
                                                                                                                                                                 clip_model=clip_model,
                                                                                                                                                                 best_fid=1000, best_iter=0, best_div=100, best_top1=0, best_top2=0, best_top3=0, best_matching=100, best_multi=0, 
                                                                                                                                                                 eval_wrapper=eval_wrapper, 
-                                                                                                                                                                draw=False, savegif=False, save=False, savenpy=False, mm_mode=args.mm_mode)
+                                                                                                                                                                draw=False, 
+                                                                                                                                                                savegif=False, 
+                                                                                                                                                                save=False, 
+                                                                                                                                                                savenpy=False, 
+                                                                                                                                                                mm_mode=args.mm_mode,
+                                                                                                                                                                use_keywords=args.use_keywords)
     else:
         print("## Normal evaluation mode ##")
         best_fid, best_iter, best_div, best_top1, best_top2, best_top3, best_matching, best_multi, writer, logger = eval_trans.evaluation_residual_transformer_test(args.out_dir, 
@@ -251,7 +254,12 @@ for i in tqdm(range(repeat_time)):
                                                                                                                                                                 clip_model=clip_model,
                                                                                                                                                                 best_fid=1000, best_iter=0, best_div=100, best_top1=0, best_top2=0, best_top3=0, best_matching=100, best_multi=0, 
                                                                                                                                                                 eval_wrapper=eval_wrapper, 
-                                                                                                                                                                draw=False, savegif=False, save=False, savenpy=False, mm_mode=args.mm_mode)
+                                                                                                                                                                draw=False, 
+                                                                                                                                                                savegif=False, 
+                                                                                                                                                                save=False, 
+                                                                                                                                                                savenpy=False, 
+                                                                                                                                                                mm_mode=args.mm_mode,
+                                                                                                                                                                use_keywords=args.use_keywords)
     
     fid.append(best_fid)
     div.append(best_div)
@@ -268,7 +276,10 @@ print('top1: ', sum(top1)/repeat_time)
 print('top2: ', sum(top2)/repeat_time)
 print('top3: ', sum(top3)/repeat_time)
 print('matching: ', sum(matching)/repeat_time)
-print('multi: ', sum(multi)/repeat_time)
+
+if args.mm_mode:
+    print('multi: ', sum(multi)/repeat_time)
+    multi = np.array(multi)
 
 fid = np.array(fid)
 div = np.array(div)
@@ -276,6 +287,10 @@ top1 = np.array(top1)
 top2 = np.array(top2)
 top3 = np.array(top3)
 matching = np.array(matching)
-multi = np.array(multi)
-msg_final = f"FID. {np.mean(fid):.3f}, conf. {np.std(fid)*1.96/np.sqrt(repeat_time):.3f}, Diversity. {np.mean(div):.3f}, conf. {np.std(div)*1.96/np.sqrt(repeat_time):.3f}, TOP1. {np.mean(top1):.3f}, conf. {np.std(top1)*1.96/np.sqrt(repeat_time):.3f}, TOP2. {np.mean(top2):.3f}, conf. {np.std(top2)*1.96/np.sqrt(repeat_time):.3f}, TOP3. {np.mean(top3):.3f}, conf. {np.std(top3)*1.96/np.sqrt(repeat_time):.3f}, Matching. {np.mean(matching):.3f}, conf. {np.std(matching)*1.96/np.sqrt(repeat_time):.3f}, Multi. {np.mean(multi):.3f}, conf. {np.std(multi)*1.96/np.sqrt(repeat_time):.3f}"
+
+if args.mm_mode:
+    msg_final = f"FID. {np.mean(fid):.3f}, conf. {np.std(fid)*1.96/np.sqrt(repeat_time):.3f}, Diversity. {np.mean(div):.3f}, conf. {np.std(div)*1.96/np.sqrt(repeat_time):.3f}, TOP1. {np.mean(top1):.3f}, conf. {np.std(top1)*1.96/np.sqrt(repeat_time):.3f}, TOP2. {np.mean(top2):.3f}, conf. {np.std(top2)*1.96/np.sqrt(repeat_time):.3f}, TOP3. {np.mean(top3):.3f}, conf. {np.std(top3)*1.96/np.sqrt(repeat_time):.3f}, Matching. {np.mean(matching):.3f}, conf. {np.std(matching)*1.96/np.sqrt(repeat_time):.3f}, Multi. {np.mean(multi):.3f}, conf. {np.std(multi)*1.96/np.sqrt(repeat_time):.3f}"
+else:
+    msg_final = f"FID. {np.mean(fid):.3f}, conf. {np.std(fid)*1.96/np.sqrt(repeat_time):.3f}, Diversity. {np.mean(div):.3f}, conf. {np.std(div)*1.96/np.sqrt(repeat_time):.3f}, TOP1. {np.mean(top1):.3f}, conf. {np.std(top1)*1.96/np.sqrt(repeat_time):.3f}, TOP2. {np.mean(top2):.3f}, conf. {np.std(top2)*1.96/np.sqrt(repeat_time):.3f}, TOP3. {np.mean(top3):.3f}, conf. {np.std(top3)*1.96/np.sqrt(repeat_time):.3f}, Matching. {np.mean(matching):.3f}, conf. {np.std(matching)*1.96/np.sqrt(repeat_time):.3f}"
+
 logger.info(msg_final)
