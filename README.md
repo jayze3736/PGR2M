@@ -3,7 +3,7 @@ This is official implementation for "Pose-Guided Residual Refinement for Interpr
 
 ## Demo Pages
 
-You can find demo page about motion generation and editing result[here](https://jayze3736.github.io/PGR2M_Demo/)
+You can find demo page about motion generation and editing result in [here](https://jayze3736.github.io/PGR2M_Demo/)
 
 ## Getting Started
 
@@ -58,8 +58,24 @@ bash dataset/prepare/download_keywords.sh
 ### Pre-trained Models
 
 If you want to download the pretrained model weights, run the following:
+
+```
+bash dataset/prepare/download_model.sh
 ```
 
+then you can find pretrained model and some arguments in "pretrained/" folder and looks like
+
+```
+./pretrained/
+├── exp_base_transformer/
+│    ├── arguments.yaml
+│    └── net_best_fid.pth
+├── exp_pg_tokenizer/
+│    ├── arguments.yaml
+│    └── net_best_fid.pth
+└── exp_refine_transformer/
+     ├── arguments.yaml
+     └── net_best_fid.pth
 ```
 
 ## Train PG(PoseGuided) Tokenizer
@@ -265,5 +281,33 @@ For code that performs motion editing using the ChatGPT API, please refer to "mo
 
 ## References
 
-### Codes
+```bibtex
+@inproceedings{huang2024controllable,
+  title={Como: Controllable motion generation through language guided pose code editing},
+  author={Huang, Yiming and Wan, Weilin and Yang, Yue and Callison-Burch, Chris and Yatskar, Mark and Liu, Lingjie},
+  booktitle={European Conference on Computer Vision},
+  pages={180--196},
+  year={2024},
+  organization={Springer}
+}
+```
 
+```bibtex
+@inproceedings{guo2024momask,
+  title={Momask: Generative masked modeling of 3d human motions},
+  author={Guo, Chuan and Mu, Yuxuan and Javed, Muhammad Gohar and Wang, Sen and Cheng, Li},
+  booktitle={Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition},
+  pages={1900--1910},
+  year={2024}
+}
+```
+
+```bibtex
+@inproceedings{zhang2023generating,
+  title={Generating human motion from textual descriptions with discrete representations},
+  author={Zhang, Jianrong and Zhang, Yangsong and Cun, Xiaodong and Zhang, Yong and Zhao, Hongwei and Lu, Hongtao and Shen, Xi and Shan, Ying},
+  booktitle={Proceedings of the IEEE/CVF conference on computer vision and pattern recognition},
+  pages={14730--14740},
+  year={2023}
+}
+```

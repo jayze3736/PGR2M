@@ -108,7 +108,7 @@ n_raw_offsets = torch.from_numpy(t2m_raw_offsets)
 kinematic_chain = t2m_kinematic_chain
 
 # Get offsets of target skeleton
-position = np.load('/data/CoMo/dataset/HumanML3D/new_joints/000021.npy')
+position = np.load('./dataset/HumanML3D/new_joints/000021.npy')
 position = position.reshape(len(position), -1, 3)
 example_data = torch.from_numpy(position)
 
