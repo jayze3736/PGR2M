@@ -1,5 +1,5 @@
 # Pose-Guided Residual Refinement for Interpretable Text-to-Motion Generation and Editing
-This is official implementation for "Pose-Guided Residual Refinement for Interpretable Text-to-Motion Generation and Editing" [paper](https://arxiv.org/abs/2512.22464)
+This is official implementation for paper ["Pose-Guided Residual Refinement for Interpretable Text-to-Motion Generation and Editing"](https://arxiv.org/abs/2512.22464)
 
 ## Demo Pages
 
