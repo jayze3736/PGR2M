@@ -1,0 +1,14 @@
+{
+  "final_train_iter": 150000,
+  "run_dir": "exp_result_revision_refine_transformer/exp_refine_trans_revision_seed123/2026-10-04_05-15-33",
+  "best_fid_checkpoint": "exp_result_revision_refine_transformer/exp_refine_trans_revision_seed123/2026-10-04_05-15-33/net_best_fid.pth",
+  "checkpoint_nb_iter": 10000,
+  "parsed_best_val_iter": 10000,
+  "parsed_best_val_fid": 0.18,
+  "checkpoint_sha256": "426bc07499090268292611829c47eb62db2672f2b7b308c169d95d76dc1625be",
+  "arguments_sha256": "77d9e07a2354c4b01aa80b4aa76b0f1a184c2b6abf78ac97b8b5e5bd44b25af0",
+  "base_dir": "exp_result_revision_base_transformer/exp_base_trans_revision_seed123/2026-10-02_04-56-08",
+  "base_checkpoint_sha256": "71ba76ed9042e0c3d54b89babf26f6c26965c7f5327eecb50e9063b712f7f620",
+  "tokenizer_dir": "exp_result_revision_tau_sensitivity/exp_pg_tokenizer_tau_0p1_seed123/2026-09-27_13-58-06",
+  "tokenizer_checkpoint_sha256": "b012913f8446e1f985fb6fb750444490037dbb3a749bf5fbdc0fce25f2eaf00f"
+}

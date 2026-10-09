@@ -1,0 +1,25 @@
+{
+  "experiment": "Exp05B residual re-encoding policy",
+  "n_samples": 400,
+  "seed": 123,
+  "source_exp05_rows": "revision_results/exp05_editing/production/exp05_per_sample.csv",
+  "source_exp05_rows_sha256": "11005f6385aa825de6a88f5f0256e22fe9af858ae5f8135153a2e1f8b70c5efb",
+  "tokenizer_checkpoint": "exp_result_revision_tau_sensitivity/exp_pg_tokenizer_tau_0p1_seed123/2026-09-27_13-58-06/net_best_fid.pth",
+  "tokenizer_sha256": "b012913f8446e1f985fb6fb750444490037dbb3a749bf5fbdc0fce25f2eaf00f",
+  "tokenizer_checkpoint_iter": 104000,
+  "strategies": [
+    "pose_only",
+    "retain_residual",
+    "reencode_residual"
+  ],
+  "baseline_recon_mean_abs_diff_vs_exp05_retain": 2.033928581113287e-15,
+  "baseline_recon_max_abs_diff_vs_exp05_retain": 5.684341886080802e-14,
+  "elapsed_minutes": 0.696079425017039,
+  "outputs": {
+    "reencode_per_sample": "revision_results/exp05b_reencode/production/exp05b_reencode_per_sample.csv",
+    "all_three_per_sample": "revision_results/exp05b_reencode/production/exp05b_all_three_per_sample.csv",
+    "summary": "revision_results/exp05b_reencode/production/exp05b_three_policy_summary.csv",
+    "by_target": "revision_results/exp05b_reencode/production/exp05b_three_policy_by_target.csv",
+    "paired": "revision_results/exp05b_reencode/production/exp05b_three_policy_paired.csv"
+  }
+}

@@ -182,3 +182,6 @@ logs/
 *.orig
 
 env.sh
+# Revision artifacts (small CSV/JSON results and audits are intentionally tracked)
+!revision_2026/**/*.csv
+!revision_2026/**/*.json

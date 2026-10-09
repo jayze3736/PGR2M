@@ -1,0 +1,7 @@
+loss_wrappers:
+  - type: CEWithLogitsLossWrapper
+    name: ce
+    params:
+      weight:
+        loss_ce: 1.0
+      use_in_loss: true

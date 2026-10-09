@@ -279,6 +279,21 @@ You can run inference with the model by referring to "inference.ipynb". Please s
 
 For code that performs motion editing using the ChatGPT API, please refer to "motion_editing_with_gpt.ipynb"
 
+## 2026 Major-Revision Experiments
+
+Additional experiments and reproducibility artifacts for the 2026 major revision are
+available in [`revision_2026/`](revision_2026/README.md). They include residual-depth,
+dropout-threshold, entropy, refinement-conditioning, and quantitative motion-editing
+analyses.
+
+Licensed datasets and large model checkpoints are not redistributed in the repository.
+The revision directory includes environment/provenance notes and checkpoint hashes.
+
+Several dataset loaders and loss configs that were missing from the public release were
+reconstructed to run the revision experiments. These files are operational reconstructions
+derived from released interfaces/public upstream code and are not claimed to be byte-identical
+copies of unreleased originals. See [`revision_2026/provenance/RECONSTRUCTION_NOTES.md`](revision_2026/provenance/RECONSTRUCTION_NOTES.md).
+
 ## References
 
 ```bibtex

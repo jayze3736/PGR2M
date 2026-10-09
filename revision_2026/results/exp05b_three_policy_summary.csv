@@ -1,0 +1,4 @@
+strategy,n,strict_success_rate_mean,toward_target_rate_mean,category_error_reduction_mean,signed_angle_progress_deg_mean,outside_window_mpjpe_mm_mean,inside_nontarget_mpjpe_mm_mean,inside_target_mpjpe_mm_mean,locality_ratio_mean,baseline_recon_mpjpe_mm_mean
+pose_only,400,0.12689,0.95222,2.49234,24.83568,53.52824,58.5931,79.35088,1.86167,198.99511
+retain_residual,400,0.08143,0.94502,2.23683,22.27442,24.25373,29.16039,51.52615,2.54271,143.29978
+reencode_residual,400,0.04525,0.91729,1.64017,16.26892,25.20791,29.48852,43.3067,1.84654,143.29978

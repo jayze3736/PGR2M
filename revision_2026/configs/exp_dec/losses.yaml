@@ -1,0 +1,12 @@
+loss_wrappers:
+- type: ReConsLossWrapper
+  name: recons
+  params:
+    recons_loss: l1_smooth
+    nb_joints: 22
+    weight:
+      loss_recons: 1.0
+      loss_vel: 1.0
+    vel_mode: v1
+    mean_by_sample: null
+    use_in_loss: true

@@ -1,0 +1,47 @@
+{
+  "protocol": "PGR2M public eval_pg_tokenizer.py; best-validation-FID checkpoint; 20 repeats",
+  "ci_formula": "1.96 * np.std(x, ddof=0) / sqrt(20)",
+  "eval_source_sha256": "1d652332f2c80e540d3e8e922b09ec197bb3a92d9dc78541b6a6cd5d1d0381f6",
+  "conditions": [
+    {
+      "tau": 0.1,
+      "run_dir": "exp_result_revision_tau_sensitivity/exp_pg_tokenizer_tau_0p1_seed123/2026-09-27_13-58-06",
+      "checkpoint": "exp_result_revision_tau_sensitivity/exp_pg_tokenizer_tau_0p1_seed123/2026-09-27_13-58-06/net_best_fid.pth",
+      "checkpoint_sha256": "b012913f8446e1f985fb6fb750444490037dbb3a749bf5fbdc0fce25f2eaf00f",
+      "arguments_sha256": "bdc43ff9b636a5b36fd5338c25ce2721229f7f7dbf383ad1e8116c4e69eba49b",
+      "best_val_fid_iter": 104000,
+      "best_val_fid_logged": 0.01126,
+      "orthogonality": 0.0257136076688766
+    },
+    {
+      "tau": 0.3,
+      "run_dir": "exp_result_revision_tau_sensitivity/exp_pg_tokenizer_tau_0p3_seed123/2026-09-27_23-44-48",
+      "checkpoint": "exp_result_revision_tau_sensitivity/exp_pg_tokenizer_tau_0p3_seed123/2026-09-27_23-44-48/net_best_fid.pth",
+      "checkpoint_sha256": "9e327312dcec0de220d4c7438128a803503b853fecb61c371ca9305ad71121f9",
+      "arguments_sha256": "6934ee2b56c50aca7e8e4789135645db168b990896bc90a9755dbdd99ea23a9b",
+      "best_val_fid_iter": 133000,
+      "best_val_fid_logged": 0.01168,
+      "orthogonality": 0.0208277236670255
+    },
+    {
+      "tau": 0.7,
+      "run_dir": "exp_result_revision_tau_sensitivity/exp_pg_tokenizer_tau_0p7_seed123/2026-09-28_09-09-18",
+      "checkpoint": "exp_result_revision_tau_sensitivity/exp_pg_tokenizer_tau_0p7_seed123/2026-09-28_09-09-18/net_best_fid.pth",
+      "checkpoint_sha256": "7281ec7382ab5c6d3b1090b2112d8cbdcfea99434161573611030cb034239b28",
+      "arguments_sha256": "65207748a5853aa6f89f27eed4942d9133cefc6350a36a24922af042e3c0e49c",
+      "best_val_fid_iter": 169000,
+      "best_val_fid_logged": 0.02239,
+      "orthogonality": 0.014570752158761
+    },
+    {
+      "tau": 0.9,
+      "run_dir": "exp_result_revision_tau_sensitivity/exp_pg_tokenizer_tau_0p9_seed123/2026-09-28_17-55-10",
+      "checkpoint": "exp_result_revision_tau_sensitivity/exp_pg_tokenizer_tau_0p9_seed123/2026-09-28_17-55-10/net_best_fid.pth",
+      "checkpoint_sha256": "b929ba8df3f30b16f796a402307e0eba6cc21be74f289c7b6530efd87997153a",
+      "arguments_sha256": "383f387d35da0aea614019b92e9dbedf1228c0e5b10f322f961a569ea4d3b8c2",
+      "best_val_fid_iter": 155000,
+      "best_val_fid_logged": 0.02882,
+      "orthogonality": 0.0118974382057785
+    }
+  ]
+}

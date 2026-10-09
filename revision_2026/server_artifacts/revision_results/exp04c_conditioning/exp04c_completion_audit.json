@@ -1,0 +1,18 @@
+{
+  "conditions": [
+    "full",
+    "no_text",
+    "no_pose",
+    "no_stage",
+    "no_history"
+  ],
+  "repeats": 20,
+  "seed": 123,
+  "eval_mode": "fast",
+  "common_random_numbers": true,
+  "refine_checkpoint": "exp_result_revision_refine_transformer/exp_refine_trans_revision_seed123/2026-10-04_05-15-33/net_best_fid.pth",
+  "refine_checkpoint_sha256": "426bc07499090268292611829c47eb62db2672f2b7b308c169d95d76dc1625be",
+  "repeat_metrics_csv": "revision_results/exp04c_conditioning/exp04c_repeat_metrics.csv",
+  "summary_csv": "revision_results/exp04c_conditioning/exp04c_summary.csv",
+  "paired_degradation_csv": "revision_results/exp04c_conditioning/exp04c_paired_degradation.csv"
+}

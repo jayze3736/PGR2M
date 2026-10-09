@@ -1,0 +1,51 @@
+{
+  "protocol": "PGR2M public eval_pg_tokenizer.py; best-validation-FID checkpoint; 20 repeats",
+  "ci_formula": "1.96 * np.std(x, ddof=0) / sqrt(20)",
+  "eval_source_sha256": "1d652332f2c80e540d3e8e922b09ec197bb3a92d9dc78541b6a6cd5d1d0381f6",
+  "conditions": [
+    {
+      "entropy_weight": 0.0,
+      "run_dir": "exp_result_revision_entropy_sensitivity/exp_pg_tokenizer_ent_0_seed123/2026-09-29_10-44-16",
+      "checkpoint": "exp_result_revision_entropy_sensitivity/exp_pg_tokenizer_ent_0_seed123/2026-09-29_10-44-16/net_best_fid.pth",
+      "checkpoint_sha256": "edf6ff3688fe75225aeba28bc046446505e017ced04933283673ca54060ac0b8",
+      "arguments_sha256": "36339befc7aa4003087f6edcce7f9fd1c29628945003df6247a78e711cfba83c",
+      "best_val_fid_iter": 81000,
+      "best_val_fid": 0.0129,
+      "val_perplexity_at_best": 87.09745,
+      "source": "Exp.03 new matched run"
+    },
+    {
+      "entropy_weight": 0.005,
+      "run_dir": "exp_result_revision_entropy_sensitivity/exp_pg_tokenizer_ent_0p005_seed123/2026-09-29_20-12-10",
+      "checkpoint": "exp_result_revision_entropy_sensitivity/exp_pg_tokenizer_ent_0p005_seed123/2026-09-29_20-12-10/net_best_fid.pth",
+      "checkpoint_sha256": "6b4f67964c3d407c4d460f90f2316d34206e235d7a5dea49e1af0f493911b3da",
+      "arguments_sha256": "b3f0eb023fe3303fb2f053ac5696cd87b68dd9290a102174b87f3005c8369ad0",
+      "best_val_fid_iter": 151000,
+      "best_val_fid": 0.0121,
+      "val_perplexity_at_best": 231.61993,
+      "source": "Exp.03 new matched run"
+    },
+    {
+      "entropy_weight": 0.01,
+      "run_dir": "exp_result_revision_tau_sensitivity/exp_pg_tokenizer_tau_0p1_seed123/2026-09-27_13-58-06",
+      "checkpoint": "exp_result_revision_tau_sensitivity/exp_pg_tokenizer_tau_0p1_seed123/2026-09-27_13-58-06/net_best_fid.pth",
+      "checkpoint_sha256": "b012913f8446e1f985fb6fb750444490037dbb3a749bf5fbdc0fce25f2eaf00f",
+      "arguments_sha256": "bdc43ff9b636a5b36fd5338c25ce2721229f7f7dbf383ad1e8116c4e69eba49b",
+      "best_val_fid_iter": 104000,
+      "best_val_fid": 0.0113,
+      "val_perplexity_at_best": 233.98148,
+      "source": "Exp.02 \u03c4=0.1 reused baseline"
+    },
+    {
+      "entropy_weight": 0.02,
+      "run_dir": "exp_result_revision_entropy_sensitivity/exp_pg_tokenizer_ent_0p02_seed123/2026-09-30_05-51-30",
+      "checkpoint": "exp_result_revision_entropy_sensitivity/exp_pg_tokenizer_ent_0p02_seed123/2026-09-30_05-51-30/net_best_fid.pth",
+      "checkpoint_sha256": "740eb15fa376bad9910ad905a8f64e85e935c44e0f22699690e390909aa62e99",
+      "arguments_sha256": "50747c0f9c4425935b001007b5d55baa00a13ba1e3c4690135bb4ddeb91246de",
+      "best_val_fid_iter": 81000,
+      "best_val_fid": 0.0111,
+      "val_perplexity_at_best": 234.96615,
+      "source": "Exp.03 new matched run"
+    }
+  ]
+}

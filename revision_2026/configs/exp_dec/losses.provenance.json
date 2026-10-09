@@ -1,0 +1,33 @@
+{
+  "status": "RECONSTRUCTED_FROM_CODE_AND_MANUSCRIPT",
+  "source": null,
+  "author_original_claim": false,
+  "notes": [
+    "If status is RECONSTRUCTED_FROM_CODE_AND_MANUSCRIPT, this file must not be described as the unpublished author-original YAML.",
+    "Current train_pg_tokenizer.py registers only ReConsLossWrapper.",
+    "RVQ loss and entropy regularization are added separately in train_pg_tokenizer.py and are intentionally not duplicated here."
+  ],
+  "selected_config": {
+    "loss_wrappers": [
+      {
+        "type": "ReConsLossWrapper",
+        "name": "recons",
+        "params": {
+          "recons_loss": "l1_smooth",
+          "nb_joints": 22,
+          "weight": {
+            "loss_recons": 1.0,
+            "loss_vel": 1.0
+          },
+          "vel_mode": "v1",
+          "mean_by_sample": null,
+          "use_in_loss": true
+        }
+      }
+    ]
+  },
+  "candidate_present": true,
+  "candidate_equal_selected": false,
+  "backup": null,
+  "sha256": "71706945893ca967cf1cdfc3fbf6a3810bd4050d8b219cb9f5dacf46ed0c1254"
+}

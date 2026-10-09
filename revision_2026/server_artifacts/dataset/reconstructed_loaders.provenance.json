@@ -1,0 +1,34 @@
+{
+  "status": "OPERATIONAL_RECONSTRUCTION",
+  "source": null,
+  "author_original_claim": false,
+  "statement": "These files are operational reconstructions derived from released interfaces/public upstream code and are not claimed to be byte-identical copies of unreleased originals.",
+  "notes": [
+    "Missing from the public PGR2M repository (the /dataset/ folder is git-ignored upstream).",
+    "Rebuilt during the 2026 revision from released training/evaluation code interfaces and public upstream code.",
+    "Use the author's canonical loaders instead if they become available, and update this file.",
+    "File bytes are kept unmodified so that the SHA256 values recorded in the config-freeze JSONs remain valid."
+  ],
+  "files": {
+    "dataset/dataset_PC.py": {
+      "sha256": "053bd0369dd146d3cb50951bc2b58c893db681886304cb28f08be0d80fa0ce0c",
+      "bytes": 4799
+    },
+    "dataset/dataset_RTM_eval.py": {
+      "sha256": "978e9a23a0b4f71c27a25db73f1e74a7cc0a5e251b1c8a43e2f218e57ddf82d3",
+      "bytes": 3514
+    },
+    "dataset/dataset_RTM_train.py": {
+      "sha256": "aba5f21e2f8d7fd2f54534ba9fcc0e5216c573d0472ddfbf33ffb4ac8862e3ac",
+      "bytes": 3026
+    },
+    "dataset/dataset_TM_eval.py": {
+      "sha256": "1d4d57e1902ff392bcb7e276e0f84dea7f20c104aeb76210ba641a987cf7dab9",
+      "bytes": 10201
+    },
+    "dataset/dataset_TM_train.py": {
+      "sha256": "bab592a6d99c8b613287d702c5fa4888f8779f04c53e138265acc59794e0e7c1",
+      "bytes": 8382
+    }
+  }
+}

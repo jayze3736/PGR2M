@@ -1,0 +1,12 @@
+metric,difference,mean_diff,ci95_lo,ci95_hi
+strict_success_rate,retain_residual - pose_only,-0.04546185064935065,-0.058993655866702736,-0.03213456738573926
+toward_target_rate,retain_residual - pose_only,-0.007194140928515927,-0.011079986723346097,-0.003275781380078256
+not_worse_rate,retain_residual - pose_only,0.0006017541486291488,-0.0013231883567821066,0.0023345514294733053
+category_error_reduction,retain_residual - pose_only,-0.2555154082029082,-0.28675122785200907,-0.22135165164696413
+signed_angle_progress_deg,retain_residual - pose_only,-2.5612587356567382,-2.870437767982483,-2.2768816990852354
+direction_success,retain_residual - pose_only,0.0,0.0,0.0
+outside_window_mpjpe_mm,retain_residual - pose_only,-29.274510151445867,-33.60684051737934,-25.36437978125364
+inside_nontarget_mpjpe_mm,retain_residual - pose_only,-29.43270690500736,-33.81759493270516,-25.735125373661518
+inside_target_mpjpe_mm,retain_residual - pose_only,-27.824731788635255,-31.74977295935154,-24.056219980597497
+locality_ratio,retain_residual - pose_only,0.6810416505952245,0.5951242672137471,0.7634261282694041
+baseline_recon_mpjpe_mm,retain_residual - pose_only,-55.69532661437988,-68.00843397915364,-43.7339721481204

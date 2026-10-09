@@ -1,0 +1,76 @@
+{
+  "experiment": "Exp05 quantitative controlled editing",
+  "n_samples": 400,
+  "seed": 123,
+  "shift_bins": 4,
+  "nominal_shift_deg": 40,
+  "window_frac": 0.3,
+  "max_frames": 196,
+  "min_frames": 64,
+  "targets": [
+    {
+      "group_id": 0,
+      "name": "left_knee",
+      "triplet": [
+        1,
+        4,
+        7
+      ],
+      "target_joints": [
+        1,
+        4,
+        7
+      ]
+    },
+    {
+      "group_id": 1,
+      "name": "right_knee",
+      "triplet": [
+        2,
+        5,
+        8
+      ],
+      "target_joints": [
+        2,
+        5,
+        8
+      ]
+    },
+    {
+      "group_id": 2,
+      "name": "left_elbow",
+      "triplet": [
+        16,
+        18,
+        20
+      ],
+      "target_joints": [
+        16,
+        18,
+        20
+      ]
+    },
+    {
+      "group_id": 3,
+      "name": "right_elbow",
+      "triplet": [
+        17,
+        19,
+        21
+      ],
+      "target_joints": [
+        17,
+        19,
+        21
+      ]
+    }
+  ],
+  "strategies": [
+    "pose_only",
+    "retain_residual"
+  ],
+  "tokenizer_checkpoint": "exp_result_revision_tau_sensitivity/exp_pg_tokenizer_tau_0p1_seed123/2026-09-27_13-58-06/net_best_fid.pth",
+  "tokenizer_sha256": "b012913f8446e1f985fb6fb750444490037dbb3a749bf5fbdc0fce25f2eaf00f",
+  "mean_path": "dataset/HumanML3D/Mean.npy",
+  "std_path": "dataset/HumanML3D/Std.npy"
+}

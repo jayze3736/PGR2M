@@ -1,0 +1,13 @@
+strategy,target_name,n,strict_success_rate_mean,toward_target_rate_mean,signed_angle_progress_deg_mean,outside_window_mpjpe_mm_mean,inside_nontarget_mpjpe_mm_mean,inside_target_mpjpe_mm_mean,locality_ratio_mean
+pose_only,left_knee,100,0.14159,0.92526,24.87091,68.90453,76.95358,95.24437,1.41815
+pose_only,right_knee,100,0.20764,0.9395,26.28234,71.43095,87.43994,105.75621,1.41458
+pose_only,left_elbow,100,0.05799,0.96699,22.74142,40.59027,34.05598,54.84136,2.29439
+pose_only,right_elbow,100,0.10034,0.97712,25.44803,33.18722,35.92289,61.56157,2.31954
+retain_residual,left_knee,100,0.10095,0.91652,21.39527,30.71931,38.83618,58.56562,1.69668
+retain_residual,right_knee,100,0.10414,0.93348,22.30956,30.69751,43.10214,62.9933,1.67747
+retain_residual,left_elbow,100,0.03841,0.95857,21.44451,17.52198,16.49679,39.74186,3.37061
+retain_residual,right_elbow,100,0.08222,0.97152,23.94832,18.07613,18.20645,44.80382,3.42607
+reencode_residual,left_knee,100,0.05392,0.86532,11.93356,26.33182,31.18224,40.40785,1.48909
+reencode_residual,right_knee,100,0.05202,0.89664,14.83612,28.53366,36.64589,48.41646,1.50755
+reencode_residual,left_elbow,100,0.02499,0.94194,17.47785,22.82967,24.71485,39.83487,2.11334
+reencode_residual,right_elbow,100,0.05009,0.96526,20.82815,23.13647,25.41112,44.56763,2.2762
