@@ -2,3 +2,4 @@ component,checkpoint_name,iteration,sha256,note
 Tokenizer tau=0.1 gamma=0.01,net_best_fid.pth,104000,b012913f8446e1f985fb6fb750444490037dbb3a749bf5fbdc0fce25f2eaf00f,Do not commit checkpoint; manifest only
 Base Transformer,net_best_fid.pth,290000,71ba76ed9042e0c3d54b89babf26f6c26965c7f5327eecb50e9063b712f7f620,Do not commit checkpoint; manifest only
 Refine Transformer,net_best_fid.pth,10000,426bc07499090268292611829c47eb62db2672f2b7b308c169d95d76dc1625be,Do not commit checkpoint; manifest only
+Tokenizer tau=0.0 gamma=0.01 (Exp02C matched control),net_best_fid.pth,39000,c1761ac08c32a8ae249118d6827eb68e461940029822ad17f102de6497df6ad8,Independent seed-123 best-validation-FID checkpoint; checkpoint is not redistributed

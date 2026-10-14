@@ -13,7 +13,8 @@ large checkpoints, TensorBoard logs, or other machine-specific artifacts to Git.
 | Experiment | Purpose |
 |---|---|
 | Exp.01 | Residual-depth and temporal-detail analysis |
-| Exp.02 / Exp.02B | Residual-dropout threshold sensitivity and 20-repeat test evaluation |
+| Exp.02 / Exp.02B | Four-condition residual-dropout sensitivity (τ=0.1/0.3/0.7/0.9) and 20-repeat test evaluation |
+| **Exp.02C** | **Matched τ=0.0 control, SHA256-verified checkpoint orthogonality and 20-repeat evaluation; completes Table V** |
 | Exp.03 / Exp.03B | Entropy-regularization sensitivity and test evaluation |
 | Exp.04A | Base Transformer recovery/retraining used by revision analysis |
 | Exp.04B | Refine Transformer recovery/retraining used by revision analysis |
@@ -21,8 +22,22 @@ large checkpoints, TensorBoard logs, or other machine-specific artifacts to Git.
 | Exp.05 | Quantitative editing success and spatial/temporal preservation |
 | Exp.05B | Residual policy comparison (`pose_only`, `retain_residual`, `reencode_residual`) |
 
-All notebooks in this public handoff have execution outputs removed. The code and protocol
-cells are preserved.
+All **11** notebooks in this public handoff have execution outputs removed. The code and protocol
+cells are preserved. **Exp02C was added on 2026-10-10** after the original student handoff.
+
+### Exp02C verified result (added after original handoff)
+
+- Training uses `--pdrop-res 0.0`, retains **RVQ quantizer dropout 0.2**, seed 123 and 300,000 iterations.
+- Best-validation-FID checkpoint at **39,000** (`net_best_fid.pth`); SHA256
+  `c1761ac08c32a8ae249118d6827eb68e461940029822ad17f102de6497df6ad8`.
+- Pose codebook `(392, 512)`; orthogonality **0.109110** (squared off-diagonal cosine similarity).
+- 20 test repeats: FID **0.006540 ± 0.000197**; MPJPE **0.027437 ± 0.000033**;
+  PA-MPJPE **0.014018 ± 0.000003**; ACCEL **0.005174 ± 0.000002**.
+- `results/exp02_tau_test_summary.csv` intentionally remains the original **four-condition** artifact.
+  The new `results/exp02c_five_tau_test_summary.csv` holds all **five** conditions.
+  An independent Exp02C-only summary and provenance JSON are also provided.
+- The CI is over test evaluation repeats **at one training seed**; do not equate with multi-seed training uncertainty.
+- These runs must not be confused or numerically pooled with the legacy paper Table III ablation.
 
 ### Result summaries
 
@@ -39,8 +54,9 @@ public original files and operational reconstructions.
 
 `tools/collect_server_revision_artifacts.py` can be run on the revision server to export the
 exact small runtime-support files, config-freeze JSONs, audit JSONs, and CSV results that
-exist under the PGR2M root directory (`--pgr-root`, default `.`). It deliberately excludes
-checkpoints, datasets, raw logs, and third-party source trees.
+exist under the PGR2M root directory (`--pgr-root`, default `.`), including the Exp02C-specific
+compatibility wrappers and `revision_results/exp02c_tau0/` result/audit exports where present.
+It deliberately excludes checkpoints, datasets, raw logs, and third-party source trees.
 
 ### Server artifacts
 

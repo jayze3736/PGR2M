@@ -1,0 +1,34 @@
+{
+  "experiment": "Exp02C",
+  "description": "Matched no-residual-dropout tokenizer control added after the 2026-10-07 handoff",
+  "pdrop_res": 0.0,
+  "rvq_quantize_dropout_prob": 0.2,
+  "seed": 123,
+  "total_training_iterations": 300000,
+  "checkpoint_selection": "lowest validation FID",
+  "checkpoint_name": "net_best_fid.pth",
+  "best_validation_fid_iteration": 39000,
+  "best_checkpoint_sha256": "c1761ac08c32a8ae249118d6827eb68e461940029822ad17f102de6497df6ad8",
+  "pose_codebook_key": "pc_encoder.codebook.weight",
+  "pose_codebook_shape": [
+    392,
+    512
+  ],
+  "orthogonality": 0.10911,
+  "orthogonality_definition": "mean squared off-diagonal cosine similarity across 392 L2-normalized pose-codebook vectors",
+  "test_evaluation_repeats": 20,
+  "fid_mean": 0.00654,
+  "fid_ci95": 0.000197,
+  "mpjpe_m": 0.027437,
+  "mpjpe_ci95": 3.3e-05,
+  "pa_mpjpe_m": 0.014018,
+  "pa_mpjpe_ci95": 3e-06,
+  "accel": 0.005174,
+  "accel_ci95": 2e-06,
+  "evidence_sources": [
+    "executed Exp02C_PGR2M_tau0_matched_control (1).ipynb",
+    "subsequent checkpoint orthogonality calculation reported by the authors"
+  ],
+  "caution": "CI reflects 20 evaluation repeats of one trained seed; no multiseed-training inference; Table III not pooled",
+  "checkpoint_binary_included": false
+}

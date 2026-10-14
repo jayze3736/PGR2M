@@ -1,0 +1,2 @@
+tau,orthogonality,best_val_iter,fid_mean,fid_ci95,diversity_mean,diversity_ci95,top1_mean,top3_mean,top3_ci95,matching_mean,matching_ci95,mpjpe_m,mpjpe_ci95,pa_mpjpe_m,pa_mpjpe_ci95,accel,accel_ci95
+0.0,0.109110,39000,0.006540,0.000197,8.173470,0.065820,0.410733,0.716358,0.002091,3.636614,0.007284,0.027437,0.000033,0.014018,0.000003,0.005174,0.000002

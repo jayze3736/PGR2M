@@ -283,8 +283,8 @@ For code that performs motion editing using the ChatGPT API, please refer to "mo
 
 Additional experiments and reproducibility artifacts for the 2026 major revision are
 available in [`revision_2026/`](revision_2026/README.md). They include residual-depth,
-dropout-threshold, entropy, refinement-conditioning, and quantitative motion-editing
-analyses.
+dropout-threshold (including the matched no-dropout Exp02C control), entropy,
+refinement-conditioning, and quantitative motion-editing analyses.
 
 Licensed datasets and large model checkpoints are not redistributed in the repository.
 The revision directory includes environment/provenance notes and checkpoint hashes.
