@@ -48,6 +48,12 @@ The file contents are kept byte-identical to what ran on the revision server, so
 values recorded inside the config-freeze JSONs still match. The reconstruction label therefore
 lives in the `*.provenance.json` files next to them instead of inside the files.
 
+Compatibility wrappers (revision code, not reconstructions of unreleased originals) are also
+published under `server_artifacts/revision_preflight/`, including the Exp.02 family wrappers
+`train_pg_tokenizer_exp02_seeded_compat.py` and `eval_pg_tokenizer_exp02b_compat.py`. Their
+SHA256 values were recorded by `exp02c_train_manifest.json` and match the server copies listed
+in `SANITIZATION_MAP.csv`.
+
 Known non-files: `revision_preflight/train_pg_tokenizer_exp00s12_compat.py` appears in the
 collection tool's file list but never existed on the revision server.
 
